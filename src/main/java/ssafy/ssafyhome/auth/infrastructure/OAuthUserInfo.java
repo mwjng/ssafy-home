@@ -1,13 +1,13 @@
 package ssafy.ssafyhome.auth.infrastructure;
 
 import ssafy.ssafyhome.member.domain.Member;
+import ssafy.ssafyhome.member.domain.MemberRole;
 
 public interface OAuthUserInfo {
 
-    Long getUserId();
-    String getNickname();
+    Long getSocialLoginId();
     String getImageUrl();
     String getName();
     String getEmail();
-    Member toMember();
+    Member toMember(MemberRole memberRole);
 }

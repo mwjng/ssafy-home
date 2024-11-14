@@ -7,7 +7,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import ssafy.ssafyhome.auth.exception.AuthException;
-import ssafy.ssafyhome.common.client.KakaoProperties;
+import ssafy.ssafyhome.common.client.GoogleProperties;
 
 import java.util.Optional;
 
@@ -18,12 +18,12 @@ import static ssafy.ssafyhome.common.exception.ErrorCode.INVALID_AUTHORIZATION_C
 
 @RequiredArgsConstructor
 @Component
-public class KakaoOAuthProvider implements OAuthProvider {
+public class GoogleOAuthProvider implements OAuthProvider {
 
-    private static final String PROVIDER_NAME = "kakao";
+    private static final String PROVIDER_NAME = "google";
 
     private final RestClient restClient;
-    private final KakaoProperties properties;
+    private final GoogleProperties properties;
 
     @Override
     public boolean is(final String name) {
@@ -32,12 +32,12 @@ public class KakaoOAuthProvider implements OAuthProvider {
 
     @Override
     public OAuthUserInfo getOAuthUserInfo(final String code) {
-        final String accessToken = requestKakaoAccessToken(code);
-        final ResponseEntity<KakaoOAuthUserInfo> response = restClient.get()
+        final String accessToken = requestGoogleAccessToken(code);
+        final ResponseEntity<GoogleOAuthUserInfo> response = restClient.get()
             .uri(properties.getInfoUri())
             .header(AUTHORIZATION, "Bearer " + accessToken)
             .retrieve()
-            .toEntity(KakaoOAuthUserInfo.class);
+            .toEntity(GoogleOAuthUserInfo.class);
 
         if(response.getStatusCode().is2xxSuccessful()) {
             return response.getBody();
@@ -45,7 +45,7 @@ public class KakaoOAuthProvider implements OAuthProvider {
         throw new AuthException(FAIL_OAUTH_USERINFO_RETRIEVAL);
     }
 
-    private String requestKakaoAccessToken(final String code) {
+    private String requestGoogleAccessToken(final String code) {
         final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("code", code);
         params.add("grant_type", properties.getGrantType());

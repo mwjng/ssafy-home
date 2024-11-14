@@ -5,8 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
 
 @Getter
-@ConfigurationProperties(prefix = "oauth.kakao")
-public class KakaoProperties {
+@ConfigurationProperties(prefix = "oauth.google")
+public class GoogleProperties {
 
     private final String grantType;
     private final String clientId;
@@ -16,7 +16,7 @@ public class KakaoProperties {
     private final String infoUri;
 
     @ConstructorBinding
-    public KakaoProperties(
+    public GoogleProperties(
         final String grantType,
         final String clientId,
         final String redirectUri,

@@ -9,7 +9,7 @@ import ssafy.ssafyhome.auth.application.AccessTokenResponse;
 import ssafy.ssafyhome.auth.application.AuthService;
 import ssafy.ssafyhome.auth.application.AuthToken;
 import ssafy.ssafyhome.auth.presentation.request.LoginMember;
-import ssafy.ssafyhome.auth.presentation.request.TokenRequest;
+import ssafy.ssafyhome.auth.presentation.request.LoginRequest;
 import ssafy.ssafyhome.member.application.MemberService;
 import ssafy.ssafyhome.member.application.response.MemberNicknameResponse;
 
@@ -19,18 +19,18 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RequiredArgsConstructor
-@RequestMapping("/oauth")
+@RequestMapping("/auth")
 @RestController
 public class AuthController {
 
     private final AuthService authService;
     private final MemberService memberService;
 
-    @PostMapping("/auth")
-    public ResponseEntity<AccessTokenResponse> generateAccessAndRefreshToken(
-        @Valid @RequestBody final TokenRequest tokenRequest
+    @PostMapping("/login")
+    public ResponseEntity<AccessTokenResponse> login(
+        @Valid @RequestBody final LoginRequest loginRequest
     ) {
-        final AuthToken authToken = authService.login(tokenRequest.code(), now());
+        final AuthToken authToken = authService.login(loginRequest, now());
         final ResponseCookie cookie = ResponseCookie.from("refreshToken", authToken.refreshToken())
             .maxAge(3600)
             .httpOnly(true)

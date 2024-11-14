@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    @Query("select m from Member m where m.userId = :userId and m.status != 'DELETED'")
-    Optional<Member> findByUserId(final Long userId);
+    @Query("select m from Member m where m.socialLoginId = :socialLoginId and m.status != 'DELETED'")
+    Optional<Member> findBySocialLoginId(final Long socialLoginId);
 
     @Query("select new ssafy.ssafyhome.member.application.response.MemberNicknameResponse" +
         "(m.nickname) from Member m where m.id = :memberId and m.status = 'ACTIVE'")

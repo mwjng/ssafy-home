@@ -23,7 +23,7 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nickname;
 
     private String name;
@@ -31,9 +31,15 @@ public class Member extends BaseEntity {
     private String email;
 
     @Column(nullable = false, unique = true)
-    private Long userId;
+    private Long socialLoginId;
 
     private String imageUrl;
+
+    @Enumerated(STRING)
+    private MemberRole memberRole;
+
+    @Enumerated(STRING)
+    private SocialType socialType;
 
     @Enumerated(STRING)
     private MemberStatus status;
@@ -46,19 +52,29 @@ public class Member extends BaseEntity {
         final String nickname,
         final String name,
         final String email,
-        final Long userId,
-        final String imageUrl
+        final Long socialLoginId,
+        final String imageUrl,
+        final MemberRole memberRole,
+        final SocialType socialType,
+        final MemberStatus status,
+        final LocalDateTime lastLogin
     ) {
         this.nickname = nickname;
         this.name = name;
         this.email = email;
-        this.userId = userId;
+        this.socialLoginId = socialLoginId;
         this.imageUrl = imageUrl;
+        this.memberRole = memberRole;
+        this.socialType = socialType;
         this.status = ACTIVE;
         this.lastLogin = now();
     }
 
     public void updateLoginDate(LocalDateTime loginDateTime) {
         this.lastLogin = loginDateTime;
+    }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
