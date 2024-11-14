@@ -5,7 +5,7 @@ import ssafy.ssafyhome.member.domain.MemberRole;
 
 public interface OAuthUserInfo {
 
-    Long getSocialLoginId();
+    String getSocialLoginId();
     String getImageUrl();
     String getName();
     String getEmail();

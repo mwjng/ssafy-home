@@ -16,7 +16,7 @@ import static ssafy.ssafyhome.member.domain.SocialType.GOOGLE;
 public class GoogleOAuthUserInfo implements OAuthUserInfo {
 
     @JsonProperty("id")
-    private Long socialLoginId;
+    private String socialLoginId;
 
     @JsonProperty("email")
     private String email;
@@ -28,7 +28,7 @@ public class GoogleOAuthUserInfo implements OAuthUserInfo {
     private String imageUrl;
 
     @Override
-    public Long getSocialLoginId() {
+    public String getSocialLoginId() {
         return socialLoginId;
     }
 

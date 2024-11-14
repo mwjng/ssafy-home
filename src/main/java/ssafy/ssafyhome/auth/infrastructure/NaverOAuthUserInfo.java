@@ -1,60 +1,59 @@
 package ssafy.ssafyhome.auth.infrastructure;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.NoArgsConstructor;
 import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.domain.MemberRole;
 
 import java.util.UUID;
 
-import static java.time.LocalDateTime.*;
-import static lombok.AccessLevel.PRIVATE;
+import static java.time.LocalDateTime.now;
 import static ssafy.ssafyhome.member.domain.MemberStatus.ACTIVE;
-import static ssafy.ssafyhome.member.domain.SocialType.KAKAO;
+import static ssafy.ssafyhome.member.domain.SocialType.NAVER;
 
-@NoArgsConstructor(access = PRIVATE)
-public class KakaoOAuthUserInfo implements OAuthUserInfo {
+public class NaverOAuthUserInfo implements OAuthUserInfo {
 
     @JsonProperty("id")
     private String socialLoginId;
 
-    @JsonProperty("kakao_account")
-    private KakaoAccount account;
+    @JsonProperty("email")
+    private String email;
+
+    @JsonProperty("name")
+    private String name;
+
+    @JsonProperty("profile_image")
+    private String imageUrl;
 
     @Override
-    public String  getSocialLoginId() {
+    public String getSocialLoginId() {
         return socialLoginId;
-    }
-
-    public String getNickname() {
-        return account.getProfile().getNickname();
     }
 
     @Override
     public String getImageUrl() {
-        return account.getProfile().getImageUrl();
+        return imageUrl;
     }
 
     @Override
     public String getName() {
-        return account.getName();
+        return name;
     }
 
     @Override
     public String getEmail() {
-        return account.getEmail();
+        return email;
     }
 
     @Override
     public Member toMember(MemberRole memberRole) {
         return Member.builder()
             .nickname(UUID.randomUUID().toString().substring(0, 8))
-            .name(getNickname())
-            .email(getEmail())
+            .name(name)
+            .email(email)
             .socialLoginId(socialLoginId)
-            .imageUrl(getImageUrl())
+            .imageUrl(imageUrl)
             .memberRole(memberRole)
-            .socialType(KAKAO)
+            .socialType(NAVER)
             .status(ACTIVE)
             .lastLogin(now())
             .build();

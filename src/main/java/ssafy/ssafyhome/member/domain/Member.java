@@ -21,6 +21,7 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -30,8 +31,10 @@ public class Member extends BaseEntity {
 
     private String email;
 
+    private String password;
+
     @Column(nullable = false, unique = true)
-    private Long socialLoginId;
+    private String socialLoginId;
 
     private String imageUrl;
 
@@ -52,7 +55,7 @@ public class Member extends BaseEntity {
         final String nickname,
         final String name,
         final String email,
-        final Long socialLoginId,
+        final String socialLoginId,
         final String imageUrl,
         final MemberRole memberRole,
         final SocialType socialType,
