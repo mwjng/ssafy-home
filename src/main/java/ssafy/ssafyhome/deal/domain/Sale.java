@@ -12,6 +12,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 public class Sale extends Deal{
 
-    @Column(nullable = false, name = "sale_price")
+    @Column(name = "sale_price")
     private Long price;
 }
