@@ -1,5 +1,6 @@
 package ssafy.ssafyhome.deal.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,5 +12,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 public class Rent extends Deal{
 
+    @Column(nullable = false)
     private Long price;
 }
