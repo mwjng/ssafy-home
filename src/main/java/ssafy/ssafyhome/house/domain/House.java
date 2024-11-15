@@ -42,10 +42,10 @@ public class House extends BaseEntity {
     private String bubun;
 
     @Column(nullable = false)
-    private BigDecimal latitude;
+    private String latitude;
 
     @Column(nullable = false)
-    private BigDecimal longitude;
+    private String longitude;
 
     @Enumerated(STRING)
     @Column(nullable = false)
