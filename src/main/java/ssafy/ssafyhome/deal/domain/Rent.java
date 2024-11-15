@@ -11,4 +11,5 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 public class Rent extends Deal{
 
+    private Long price;
 }

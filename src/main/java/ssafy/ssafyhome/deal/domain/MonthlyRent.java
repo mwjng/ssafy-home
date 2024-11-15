@@ -12,4 +12,5 @@ import static lombok.AccessLevel.PROTECTED;
 public class MonthlyRent extends Deal{
 
     private Long deposit;
+    private Long price;
 }

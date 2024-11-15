@@ -27,8 +27,6 @@ public abstract class Deal extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal exclusiveArea;
 
-    private Long price;
-
     private int floor;
 
     private int views;
