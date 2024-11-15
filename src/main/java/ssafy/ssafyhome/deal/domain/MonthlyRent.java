@@ -15,6 +15,6 @@ public class MonthlyRent extends Deal {
     @Column(nullable = false)
     private Long deposit;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "monthly_rent_price")
     private Long price;
 }

@@ -12,6 +12,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 public class Rent extends Deal{
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "rent_price")
     private Long price;
 }
