@@ -9,15 +9,15 @@ import ssafy.ssafyhome.member.domain.Member;
 
 import java.math.BigDecimal;
 
-import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor(access = PROTECTED)
 @Entity
-public class Deal extends BaseEntity {
+public abstract class Deal extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -27,18 +27,9 @@ public class Deal extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal exclusiveArea;
 
+    private Long price;
+
     private int floor;
-
-    private int salePrice;
-
-    private int rentPrice;
-
-    private int deposit;
-
-    private int monthlyRentPrice;
-
-    @Enumerated(STRING)
-    private DealStatus status;
 
     private int views;
 
