@@ -31,10 +31,13 @@ public class AuthService {
     @Transactional
     public AuthToken socialLogin(final LoginRequest request, final LocalDateTime time) {
         validateMemberRole(request);
+
         final OAuthProvider provider = providers.getProvider(request.provider());
         final OAuthUserInfo userInfo = provider.getOAuthUserInfo(request.code());
+
         final Member member = findOrCreateMember(userInfo, request.getMemberRole());
         member.updateLoginDate(time);
+
         final AuthToken authToken = jwtProvider.generateAccessAndRefreshToken(member.getId().toString());
         saveRefreshToken(authToken, member);
         return authToken;
@@ -58,6 +61,7 @@ public class AuthService {
 
     public AccessTokenResponse renewalAccessToken(final String refreshToken) {
         jwtProvider.validateRefreshToken(refreshToken);
+
         final String memberId = refreshTokenRepository.findById(refreshToken)
             .orElseThrow(() -> new InvalidTokenException(INVALID_REFRESH_TOKEN))
             .getMemberId().toString();

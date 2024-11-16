@@ -4,9 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import ssafy.ssafyhome.auth.infrastructure.PasswordEncoder;
 import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.domain.MemberRole;
+import ssafy.ssafyhome.member.domain.SocialType;
 
 import static ssafy.ssafyhome.member.domain.MemberRole.ADMIN;
 import static ssafy.ssafyhome.member.domain.MemberRole.getMemberRole;
+import static ssafy.ssafyhome.member.domain.SocialType.*;
 
 public record AdminCreateRequest(
     @NotBlank(message = "닉네임을 입력해주세요.")
@@ -30,6 +32,7 @@ public record AdminCreateRequest(
             .socialLoginId(loginId)
             .password(encoder.encode(password))
             .memberRole(ADMIN)
+            .socialType(NONE)
             .build();
     }
 }

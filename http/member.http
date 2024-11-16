@@ -20,10 +20,23 @@ Content-Type: application/json
 }
 
 ###
+POST localhost:8080/member/admin
+Content-Type: application/json
+Authorization: Bearer
+
+{
+  "nickname": "admin",
+  "name": "admin",
+  "email": "abc@abc",
+  "loginId": "admin",
+  "password": "abc123"
+}
+
+###
 POST localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "loginId": "abcde",
+  "loginId": "master",
   "password": "abc123"
 }
