@@ -9,6 +9,7 @@ import ssafy.ssafyhome.member.domain.Member;
 
 import java.math.BigDecimal;
 
+import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -30,6 +31,9 @@ public abstract class Deal extends BaseEntity {
     private int floor;
 
     private int views;
+
+    @Enumerated(STRING)
+    private DealStatus status;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "house_id")
