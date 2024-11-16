@@ -1,2 +1,29 @@
 ###
-GET localhost:8080/member
+GET localhost:8080/member/nickname
+Authorization: Bearer
+
+###
+GET localhost:8080/member/myinfo
+Authorization: Bearer
+
+###
+POST localhost:8080/member
+Content-Type: application/json
+
+{
+  "nickname": "ssafy",
+  "name": "ssafyhome",
+  "email": "abc@abc",
+  "loginId": "abcde",
+  "password": "abc123",
+  "memberRole": "user"
+}
+
+###
+POST localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "loginId": "abcde",
+  "password": "abc123"
+}

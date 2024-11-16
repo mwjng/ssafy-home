@@ -72,7 +72,7 @@ public class JwtProvider {
 
         return Jwts.builder()
             .subject(subject)
-            .issuedAt(new Date())
+            .issuedAt(now)
             .expiration(validity)
             .signWith(secretKey)
             .compact();

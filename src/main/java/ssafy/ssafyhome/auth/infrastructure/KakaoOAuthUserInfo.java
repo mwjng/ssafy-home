@@ -7,9 +7,7 @@ import ssafy.ssafyhome.member.domain.MemberRole;
 
 import java.util.UUID;
 
-import static java.time.LocalDateTime.*;
 import static lombok.AccessLevel.PRIVATE;
-import static ssafy.ssafyhome.member.domain.MemberStatus.ACTIVE;
 import static ssafy.ssafyhome.member.domain.SocialType.KAKAO;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -55,8 +53,6 @@ public class KakaoOAuthUserInfo implements OAuthUserInfo {
             .imageUrl(getImageUrl())
             .memberRole(memberRole)
             .socialType(KAKAO)
-            .status(ACTIVE)
-            .lastLogin(now())
             .build();
     }
 }

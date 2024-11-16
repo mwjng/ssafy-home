@@ -25,15 +25,25 @@ public class AccessContext {
         return new AccessContext(memberId, ADMIN);
     }
 
+    public static AccessContext master(final Long memberId) {
+        return new AccessContext(memberId, MASTER);
+    }
+
     public boolean isUser() {
-        return USER.equals(authority) || AGENT.equals(authority) || ADMIN.equals(authority);
+        return USER.equals(authority) || AGENT.equals(authority) ||
+            ADMIN.equals(authority) || MASTER.equals(authority);
     }
 
     public boolean isAgent() {
-        return AGENT.equals(authority) || ADMIN.equals(authority);
+        return AGENT.equals(authority) || ADMIN.equals(authority) ||
+            MASTER.equals(authority);
     }
 
     public boolean isAdmin() {
-        return ADMIN.equals(authority);
+        return ADMIN.equals(authority) || MASTER.equals(authority);
+    }
+
+    public boolean isMaster() {
+        return MASTER.equals(authority);
     }
 }

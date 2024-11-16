@@ -47,7 +47,6 @@ public class Member extends BaseEntity {
     @Enumerated(STRING)
     private MemberStatus status;
 
-    @Column(nullable = false)
     private LocalDateTime lastLogin;
 
     @Builder
@@ -55,29 +54,34 @@ public class Member extends BaseEntity {
         final String nickname,
         final String name,
         final String email,
+        final String password,
         final String socialLoginId,
         final String imageUrl,
         final MemberRole memberRole,
         final SocialType socialType,
-        final MemberStatus status,
         final LocalDateTime lastLogin
     ) {
         this.nickname = nickname;
         this.name = name;
         this.email = email;
+        this.password = password;
         this.socialLoginId = socialLoginId;
         this.imageUrl = imageUrl;
         this.memberRole = memberRole;
         this.socialType = socialType;
         this.status = ACTIVE;
-        this.lastLogin = now();
+        this.lastLogin = lastLogin;
     }
 
     public void updateLoginDate(LocalDateTime loginDateTime) {
         this.lastLogin = loginDateTime;
     }
 
-    public void changeNickname(String nickname) {
-        this.nickname = nickname;
+    public boolean isChangedNickname(String newNickname) {
+        return !this.nickname.equals(newNickname);
+    }
+
+    public void changeNickname(String newNickname) {
+        this.nickname = newNickname;
     }
 }

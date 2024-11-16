@@ -30,9 +30,10 @@ public class AuthService {
 
     @Transactional
     public AuthToken socialLogin(final LoginRequest request, final LocalDateTime time) {
+        validateMemberRole(request);
         final OAuthProvider provider = providers.getProvider(request.provider());
         final OAuthUserInfo userInfo = provider.getOAuthUserInfo(request.code());
-        final Member member = findOrCreateMember(userInfo, validateMemberRole(request));
+        final Member member = findOrCreateMember(userInfo, request.getMemberRole());
         member.updateLoginDate(time);
         final AuthToken authToken = jwtProvider.generateAccessAndRefreshToken(member.getId().toString());
         saveRefreshToken(authToken, member);
@@ -42,11 +43,11 @@ public class AuthService {
     @Transactional
     public AuthToken login(final LoginRequest request, final LocalDateTime time) {
         final Member member = memberRepository
-            .findBySocialLoginId(request.socialLoginId())
+            .findBySocialLoginId(request.loginId())
             .orElseThrow(() -> new AuthException(INVALID_USER_ID));
-        member.updateLoginDate(time);
 
         if(passwordEncoder.matches(request.password(), member.getPassword())) {
+            member.updateLoginDate(time);
             final AuthToken authToken = jwtProvider.generateAccessAndRefreshToken(member.getId().toString());
             saveRefreshToken(authToken, member);
             return authToken;
@@ -68,13 +69,15 @@ public class AuthService {
         refreshTokenRepository.deleteById(refreshToken);
     }
 
+    private void validateMemberRole(final LoginRequest request) {
+        if(request.isAdmin()) {
+            throw new AuthException(INVALID_MEMBER_ROLE);
+        }
+    }
+
     private Member findOrCreateMember(final OAuthUserInfo userInfo, final MemberRole memberRole) {
         return memberRepository.findBySocialLoginId(userInfo.getSocialLoginId())
             .orElseGet(() -> memberRepository.save(userInfo.toMember(memberRole)));
-    }
-
-    private MemberRole validateMemberRole(final LoginRequest request) {
-        return MemberRole.getMemberRole(request.memberRole());
     }
 
     private void saveRefreshToken(final AuthToken authToken, final Member member) {

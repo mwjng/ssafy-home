@@ -48,6 +48,15 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         final Member member = memberRepository.findMemberById(memberId)
             .orElseThrow(() -> new AuthException(INVALID_AUTHORITY));
 
+        final AccessContext accessContext = getAccessContext(member, memberId);
+        if (accessContext != null) {
+            return accessContext;
+        }
+
+        throw new AuthException(INVALID_AUTHORITY);
+    }
+
+    private AccessContext getAccessContext(final Member member, final Long memberId) {
         if(member.getMemberRole().equals(USER)) {
             return AccessContext.user(memberId);
         }
@@ -57,7 +66,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         if (member.getMemberRole().equals(ADMIN)) {
             return AccessContext.admin(memberId);
         }
-
-        throw new AuthException(INVALID_AUTHORITY);
+        if (member.getMemberRole().equals(MASTER)) {
+            return AccessContext.master(memberId);
+        }
+        return null;
     }
 }

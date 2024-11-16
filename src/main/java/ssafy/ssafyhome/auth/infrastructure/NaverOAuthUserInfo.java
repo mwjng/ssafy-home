@@ -6,8 +6,6 @@ import ssafy.ssafyhome.member.domain.MemberRole;
 
 import java.util.UUID;
 
-import static java.time.LocalDateTime.now;
-import static ssafy.ssafyhome.member.domain.MemberStatus.ACTIVE;
 import static ssafy.ssafyhome.member.domain.SocialType.NAVER;
 
 public class NaverOAuthUserInfo implements OAuthUserInfo {
@@ -54,8 +52,6 @@ public class NaverOAuthUserInfo implements OAuthUserInfo {
             .imageUrl(imageUrl)
             .memberRole(memberRole)
             .socialType(NAVER)
-            .status(ACTIVE)
-            .lastLogin(now())
             .build();
     }
 }

@@ -10,7 +10,8 @@ public enum MemberRole {
 
     USER,
     ADMIN,
-    AGENT;
+    AGENT,
+    MASTER;
 
     public static MemberRole getMemberRole(String memberRole) {
         return Arrays.stream(MemberRole.values())

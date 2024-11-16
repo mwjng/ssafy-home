@@ -14,6 +14,7 @@ public enum ErrorCode {
     INVALID_IMAGE_FORMAT(1001, BAD_REQUEST, "지원하지 않는 이미지 형식입니다."),
     EXCEED_IMAGE_CAPACITY(1002, BAD_REQUEST, "이미지 크기가 허용된 최대 용량을 초과했습니다."),
     FAIL_IMAGE_UPLOAD(1003, BAD_REQUEST, "이미지 업로드에 실패했습니다."),
+    DUPLICATED_USER_NICKNAME(1004, BAD_REQUEST, "이미 존재하는 닉네임입니다."),
 
     INVALID_AUTHORITY(2001, FORBIDDEN, "해당 리소스에 접근할 권한이 없습니다."),
     INVALID_USER_ID(2002, UNAUTHORIZED, "아이디가 존재하지 않습니다."),
