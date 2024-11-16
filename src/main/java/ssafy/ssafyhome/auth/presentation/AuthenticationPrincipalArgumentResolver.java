@@ -8,11 +8,15 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import ssafy.ssafyhome.auth.application.AuthService;
+import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.exception.AuthException;
 import ssafy.ssafyhome.auth.infrastructure.JwtProvider;
-import ssafy.ssafyhome.auth.presentation.request.LoginMember;
+import ssafy.ssafyhome.member.domain.Member;
+import ssafy.ssafyhome.member.domain.repository.MemberRepository;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static ssafy.ssafyhome.common.exception.ErrorCode.INVALID_AUTHORITY;
+import static ssafy.ssafyhome.member.domain.MemberRole.*;
 
 @RequiredArgsConstructor
 @Component
@@ -20,7 +24,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     private final AuthorizationTokenExtractor extractor;
     private final JwtProvider jwtProvider;
-    private final AuthService authService;
+    private final MemberRepository memberRepository;
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
@@ -28,17 +32,32 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     }
 
     @Override
-    public Object resolveArgument(
+    public AccessContext resolveArgument(
         final MethodParameter parameter,
         final ModelAndViewContainer mavContainer,
         final NativeWebRequest webRequest,
         final WebDataBinderFactory binderFactory
     ) {
         final HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+
         final String authorizationHeader = request.getHeader(AUTHORIZATION);
         final String accessToken = extractor.extract(authorizationHeader);
         jwtProvider.validateAccessToken(accessToken);
+
         final Long memberId = Long.valueOf(jwtProvider.getSubject(accessToken));
-        return new LoginMember(memberId);
+        final Member member = memberRepository.findMemberById(memberId)
+            .orElseThrow(() -> new AuthException(INVALID_AUTHORITY));
+
+        if(member.getMemberRole().equals(USER)) {
+            return AccessContext.user(memberId);
+        }
+        if (member.getMemberRole().equals(AGENT)) {
+            return AccessContext.agent(memberId);
+        }
+        if (member.getMemberRole().equals(ADMIN)) {
+            return AccessContext.admin(memberId);
+        }
+
+        throw new AuthException(INVALID_AUTHORITY);
     }
 }

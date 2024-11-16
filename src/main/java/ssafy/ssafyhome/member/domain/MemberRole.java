@@ -8,7 +8,9 @@ import static ssafy.ssafyhome.common.exception.ErrorCode.INVALID_MEMBER_ROLE;
 
 public enum MemberRole {
 
-    USER, ADMIN, AGENT;
+    USER,
+    ADMIN,
+    AGENT;
 
     public static MemberRole getMemberRole(String memberRole) {
         return Arrays.stream(MemberRole.values())
