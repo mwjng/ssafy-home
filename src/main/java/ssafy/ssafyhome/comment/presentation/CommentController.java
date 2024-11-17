@@ -12,8 +12,9 @@ import ssafy.ssafyhome.comment.presentation.request.CommentUpdateRequest;
 @RestController
 @RequestMapping("/comment")
 public class CommentController implements CommentControllerDocs{
+
     @Override
-    public ResponseEntity<CommentsResponse> searchAll(final Long articleId) {
+    public ResponseEntity<CommentsResponse> searchAll(final Long articleId, final int size, final Long cursorId) {
         return null;
     }
 

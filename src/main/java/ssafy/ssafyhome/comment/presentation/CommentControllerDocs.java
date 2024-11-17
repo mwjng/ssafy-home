@@ -28,7 +28,11 @@ public interface CommentControllerDocs {
             @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
     })
     @GetMapping("/{articleId}")
-    ResponseEntity<CommentsResponse> searchAll(@Parameter(name = "게시글 아이디") @PathVariable Long articleId);
+    ResponseEntity<CommentsResponse> searchAll(
+            @Parameter(name = "게시글 아이디") @PathVariable final Long articleId,
+            @Parameter(name = "페이징 개수") @RequestParam(required = false, defaultValue = "10") int size,
+            @Parameter(name = "마지막 댓글 ID") @RequestParam(required = false, defaultValue = "0") Long cursorId
+    );
 
     @Operation(summary = "댓글 조회", description = "해당 댓글의 정보를 반환한다.")
     @ApiResponses(value = {
@@ -38,7 +42,7 @@ public interface CommentControllerDocs {
             @ApiResponse(responseCode = "404", description = "해당 댓글을 찾을 수 없다.")
     })
     @GetMapping("/{commentId}")
-    ResponseEntity<CommentResponse> search(@Parameter(name = "댓글 아이디") @PathVariable Long commentId);
+    ResponseEntity<CommentResponse> search(@Parameter(name = "댓글 아이디") @PathVariable final Long commentId);
 
     @Operation(summary = "댓글 생성", description = "게시글에 해당하는 댓글을 생성한다.")
     @ApiResponses(value = {
@@ -47,8 +51,8 @@ public interface CommentControllerDocs {
     @PostMapping("/{articleId}")
     ResponseEntity<Void> create(
             @AuthenticationPrincipal final AccessContext accessContext,
-            @Parameter(name = "게시글 아이디") @PathVariable Long articleId,
-            @Parameter(name = "댓글") @RequestBody CommentCreateRequest commentCreateRequest
+            @Parameter(name = "게시글 아이디") @PathVariable final Long articleId,
+            @Parameter(name = "댓글") @RequestBody final CommentCreateRequest commentCreateRequest
     );
 
     @Operation(summary = "댓글 수정", description = "해당하는 댓글을 수정한다.")
@@ -59,8 +63,8 @@ public interface CommentControllerDocs {
     @PatchMapping("/{commentId}")
     ResponseEntity<Void> update(
             @AuthenticationPrincipal final AccessContext accessContext,
-            @Parameter(name = "게시글 아이디") @PathVariable Long commentId,
-            @Parameter(name = "댓글") @RequestBody CommentUpdateRequest commentUpdateRequest
+            @Parameter(name = "게시글 아이디") @PathVariable final Long commentId,
+            @Parameter(name = "댓글") @RequestBody final CommentUpdateRequest commentUpdateRequest
     );
 
     @Operation(summary = "댓글 삭제", description = "해당하는 댓글을 삭제한다.")
@@ -71,6 +75,6 @@ public interface CommentControllerDocs {
     @DeleteMapping("/{commentId}")
     ResponseEntity<Void> delete(
             @AuthenticationPrincipal final AccessContext accessContext,
-            @Parameter(name = "게시글 아이디") @PathVariable Long commentId
+            @Parameter(name = "게시글 아이디") @PathVariable final Long commentId
     );
 }
