@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ssafy.ssafyhome.auth.domain.AccessContext;
-import ssafy.ssafyhome.notice.application.NoticeResponse;
-import ssafy.ssafyhome.notice.application.NoticesResponse;
+import ssafy.ssafyhome.notice.application.response.NoticeResponse;
+import ssafy.ssafyhome.notice.application.response.NoticesResponse;
 import ssafy.ssafyhome.notice.presentation.request.NoticeCreateRequest;
 import ssafy.ssafyhome.notice.presentation.request.NoticeUpdateRequest;
 

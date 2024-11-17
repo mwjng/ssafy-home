@@ -1,4 +1,4 @@
-package ssafy.ssafyhome.notice.application;
+package ssafy.ssafyhome.notice.application.response;
 
 import java.time.LocalDateTime;
 

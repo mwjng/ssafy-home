@@ -11,8 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
-import ssafy.ssafyhome.notice.application.NoticeResponse;
-import ssafy.ssafyhome.notice.application.NoticesResponse;
+import ssafy.ssafyhome.notice.application.response.NoticeResponse;
+import ssafy.ssafyhome.notice.application.response.NoticesResponse;
 import ssafy.ssafyhome.notice.presentation.request.NoticeCreateRequest;
 import ssafy.ssafyhome.notice.presentation.request.NoticeUpdateRequest;
 
@@ -24,8 +24,7 @@ public interface NoticeControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = NoticesResponse.class))),
-            @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
+                            schema = @Schema(implementation = NoticesResponse.class)))
     })
     @GetMapping
     ResponseEntity<NoticesResponse> searchAll(
@@ -46,6 +45,7 @@ public interface NoticeControllerDocs {
     @Operation(summary = "공지사항 생성", description = "공지사항을 생성한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "요청이 처리되어서 새로운 리소스가 생성되었다."),
+            @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다.")
     })
     @PostMapping
     ResponseEntity<Void> create(
@@ -55,6 +55,7 @@ public interface NoticeControllerDocs {
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다."),
+            @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
     @PatchMapping("/{noticeId}")
@@ -65,6 +66,7 @@ public interface NoticeControllerDocs {
     @Operation(summary = "공지사항 삭제", description = "공지사항을 삭제한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "처리를 성공하였지만, 클라이언트에게 돌려줄 콘텐츠가 없다."),
+            @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
     @DeleteMapping("/{noticeId}")
