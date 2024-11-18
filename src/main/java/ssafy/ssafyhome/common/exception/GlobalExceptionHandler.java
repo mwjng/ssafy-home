@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ssafy.ssafyhome.auth.exception.AuthException;
+import ssafy.ssafyhome.image.exception.ImageException;
 import ssafy.ssafyhome.member.exception.UserNotFoundException;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -51,6 +52,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ExceptionResponse> handleBadRequestException(final BadRequestException e) {
+        log.warn(e.getMessage(), e);
+        return ResponseEntity.badRequest()
+            .body(new ExceptionResponse(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(ImageException.class)
+    public ResponseEntity<ExceptionResponse> handleImageException(final ImageException e) {
         log.warn(e.getMessage(), e);
         return ResponseEntity.badRequest()
             .body(new ExceptionResponse(e.getErrorCode()));

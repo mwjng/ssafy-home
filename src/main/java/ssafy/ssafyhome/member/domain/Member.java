@@ -4,14 +4,15 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 import ssafy.ssafyhome.common.auditing.BaseEntity;
 
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static java.time.LocalDateTime.now;
 import static lombok.AccessLevel.PROTECTED;
+import static org.springframework.util.StringUtils.*;
 import static ssafy.ssafyhome.member.domain.MemberStatus.ACTIVE;
 
 @Getter
@@ -78,10 +79,42 @@ public class Member extends BaseEntity {
     }
 
     public boolean isChangedNickname(String newNickname) {
-        return !this.nickname.equals(newNickname);
+        return !this.nickname.equals(newNickname) && hasText(newNickname);
+    }
+
+    public boolean isChangedLoginId(String newLoginId) {
+        return !this.socialLoginId.equals(newLoginId);
+    }
+
+    public boolean isOAuthLogin() {
+        return !SocialType.NONE.equals(this.socialType);
+    }
+
+    public void changeMemberInfo(String nickname, String name, String email) {
+        if(hasText(nickname)) {
+            changeNickname(nickname);
+        }
+        if(hasText(name)) {
+            this.name = name;
+        }
+        if(hasText(email)) {
+            this.email = email;
+        }
+    }
+
+    public void changeProfileImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void changeNickname(String newNickname) {
         this.nickname = newNickname;
+    }
+
+    public void changeLoginId(String newLoginId) {
+        this.socialLoginId = newLoginId;
+    }
+
+    public void changePassword(String newHashedPassword) {
+        this.password = newHashedPassword;
     }
 }
