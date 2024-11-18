@@ -24,4 +24,9 @@ public class RegionController implements RegionControllerDocs{
     public ResponseEntity<List<String>> searchDong(final String sido, final String gugun) {
         return null;
     }
+
+    @Override
+    public ResponseEntity<Long> searchRegionId(final String sido, final String gugun, final String dong) {
+        return null;
+    }
 }
