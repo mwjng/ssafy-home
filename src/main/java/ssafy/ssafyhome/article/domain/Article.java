@@ -22,12 +22,7 @@ public class Article extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
     private String content;
-
-    private int views;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")

@@ -10,14 +10,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
-import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.notice.application.response.NoticeResponse;
 import ssafy.ssafyhome.notice.application.response.NoticesResponse;
 import ssafy.ssafyhome.notice.presentation.request.NoticeCreateRequest;
 import ssafy.ssafyhome.notice.presentation.request.NoticeUpdateRequest;
 
 @Tag(name = "공지사항 컨트롤러", description = "공지사항에 대한 생성, 조회, 수정, 삭제를 처리 하는 클래스.")
-@RequestMapping("/notice")
+@RequestMapping("/notices")
 public interface NoticeControllerDocs {
 
     @Operation(summary = "모든 공지사항 조회", description = "모든 공지사항의 정보를 반환한다.")
@@ -28,8 +27,8 @@ public interface NoticeControllerDocs {
     })
     @GetMapping
     ResponseEntity<NoticesResponse> searchAll(
-            @Parameter(name = "페이징 개수") @RequestParam(required = false, defaultValue = "10") int size,
-            @Parameter(name = "마지막 댓글 ID") @RequestParam(required = false, defaultValue = "0") Long cursorId
+            @Parameter(name = "페이징 개수") int size,
+            @Parameter(name = "마지막 댓글 ID") Long cursorId
     );
 
     @Operation(summary = "공지사항 조회", description = "해당 공지사항의 정보를 반환한다.")
@@ -39,8 +38,8 @@ public interface NoticeControllerDocs {
                             schema = @Schema(implementation = NoticeResponse.class))),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @GetMapping("/{noticeId}")
-    ResponseEntity<NoticeResponse> search(@Parameter(name = "공지사항 ID") @PathVariable final Long noticeId);
+    @GetMapping("/{id}")
+    ResponseEntity<NoticeResponse> search(@Parameter(name = "id") final Long id);
 
     @Operation(summary = "공지사항 생성", description = "공지사항을 생성한다.")
     @ApiResponses(value = {
@@ -49,8 +48,8 @@ public interface NoticeControllerDocs {
     })
     @PostMapping
     ResponseEntity<Void> create(
-            @AuthenticationPrincipal final AccessContext accessContext,
-            @Parameter(name = "공지사항") @RequestBody NoticeCreateRequest noticeCreateRequest);
+            final AccessContext accessContext,
+            @Parameter(name = "공지사항") NoticeCreateRequest noticeCreateRequest);
 
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정한다.")
     @ApiResponses(value = {
@@ -58,10 +57,12 @@ public interface NoticeControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @PatchMapping("/{noticeId}")
+    @PatchMapping("/{id}")
     ResponseEntity<Void> update(
-            @AuthenticationPrincipal final AccessContext accessContext,
-            @Parameter(name = "공지사항") @RequestBody NoticeUpdateRequest noticeUpdateRequest);
+            final AccessContext accessContext,
+            @Parameter(name = "id") final Long id,
+            @Parameter(name = "공지사항") NoticeUpdateRequest noticeUpdateRequest
+    );
 
     @Operation(summary = "공지사항 삭제", description = "공지사항을 삭제한다.")
     @ApiResponses(value = {
@@ -69,6 +70,9 @@ public interface NoticeControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @DeleteMapping("/{noticeId}")
-    ResponseEntity<Void> delete(@AuthenticationPrincipal final AccessContext accessContext);
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> delete(
+            final AccessContext accessContext,
+            @Parameter(name = "id") final Long id
+    );
 }

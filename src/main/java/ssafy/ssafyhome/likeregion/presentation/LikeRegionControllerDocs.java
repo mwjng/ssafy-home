@@ -10,11 +10,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
-import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.likeregion.application.response.LikeRegionsResponse;
 
 @Tag(name = "관심 지역 컨트롤러", description = "관심 지역에 대한 조회, 생성 삭제를 처리 하는 클래스.")
-@RequestMapping("/like/region")
+@RequestMapping("/like/regions")
 public interface LikeRegionControllerDocs {
 
     @Operation(summary = "관심 지역 조회", description = "관심 지역에 해당하는 지역 정보를 반환한다.")
@@ -25,10 +24,10 @@ public interface LikeRegionControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다.")
     })
     @GetMapping
-    ResponseEntity<LikeRegionsResponse> search(
-            @AuthenticationPrincipal final AccessContext accessContext,
-            @Parameter(name = "페이징 개수") @RequestParam(required = false, defaultValue = "10") int size,
-            @Parameter(name = "마지막 관심 지역 ID") @RequestParam(required = false, defaultValue = "0") Long cursorId
+    ResponseEntity<LikeRegionsResponse> searchAll(
+            final AccessContext accessContext,
+            @Parameter(name = "페이징 개수") int size,
+            @Parameter(name = "마지막 관심 지역 ID") Long cursorId
     );
 
     @Operation(summary = "관심 지역 생성", description = "관심 지역을 생성한다.")
@@ -37,10 +36,10 @@ public interface LikeRegionControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @PostMapping("/{regionId}")
+    @PostMapping("/{id}")
     ResponseEntity<Void> create(
-            @AuthenticationPrincipal final AccessContext accessContext,
-            @Parameter(name = "Region ID") @PathVariable final Long regionId
+            final AccessContext accessContext,
+            @Parameter(name = "id") final Long id
     );
 
     @Operation(summary = "관심 지역 삭제", description = "관심 지역을 삭제한다.")
@@ -49,9 +48,9 @@ public interface LikeRegionControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @DeleteMapping("/{regionId}")
+    @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(
-            @AuthenticationPrincipal final AccessContext accessContext,
-            @Parameter(name = "Region ID") @PathVariable final Long regionId
+            final AccessContext accessContext,
+            @Parameter(name = "id") final Long id
     );
 }

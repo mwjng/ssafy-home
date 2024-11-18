@@ -1,17 +1,17 @@
-package ssafy.ssafyhome.likeregion.presentation;
+package ssafy.ssafyhome.likedeal.presentation;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ssafy.ssafyhome.auth.domain.AccessContext;
-import ssafy.ssafyhome.likeregion.application.response.LikeRegionsResponse;
+import ssafy.ssafyhome.likedeal.application.response.LikeDealsResponse;
 
 @RestController
-@RequestMapping("/like/regions")
-public class LikeRegionController implements LikeRegionControllerDocs{
+@RequestMapping("/like/deals")
+public class LikeDealController implements LikeDealControllerDocs{
 
     @Override
-    public ResponseEntity<LikeRegionsResponse> searchAll(final AccessContext accessContext, final int size, final Long cursorId) {
+    public ResponseEntity<LikeDealsResponse> searchAll(final AccessContext accessContext, final int size, final Long cursorId) {
         return null;
     }
 

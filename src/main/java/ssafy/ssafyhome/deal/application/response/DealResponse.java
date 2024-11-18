@@ -1,6 +1,7 @@
 package ssafy.ssafyhome.deal.application.response;
 
 import ssafy.ssafyhome.deal.domain.DealStatus;
+import ssafy.ssafyhome.deal.domain.DealType;
 
 import java.math.BigDecimal;
 
@@ -10,8 +11,8 @@ public record DealResponse(
         int floor,
         int views,
         DealStatus status,
+        DealType type,
         Long houseId,
         Long memberId,
         String registrant) {
-
 }

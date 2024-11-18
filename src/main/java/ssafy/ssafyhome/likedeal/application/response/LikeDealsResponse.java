@@ -1,4 +1,8 @@
 package ssafy.ssafyhome.likedeal.application.response;
 
-public record LikeDealsResponse() {
+import ssafy.ssafyhome.deal.application.response.DealResponse;
+
+import java.util.List;
+
+public record LikeDealsResponse(List<DealResponse> likeDeals) {
 }

@@ -10,15 +10,16 @@ import ssafy.ssafyhome.notice.presentation.request.NoticeCreateRequest;
 import ssafy.ssafyhome.notice.presentation.request.NoticeUpdateRequest;
 
 @RestController
-@RequestMapping("/notice")
+@RequestMapping("/notices")
 public class NoticeController implements NoticeControllerDocs{
+
     @Override
     public ResponseEntity<NoticesResponse> searchAll(final int size, final Long cursorId) {
         return null;
     }
 
     @Override
-    public ResponseEntity<NoticeResponse> search(final Long noticeId) {
+    public ResponseEntity<NoticeResponse> search(final Long id) {
         return null;
     }
 
@@ -28,12 +29,12 @@ public class NoticeController implements NoticeControllerDocs{
     }
 
     @Override
-    public ResponseEntity<Void> update(final AccessContext accessContext, final NoticeUpdateRequest noticeUpdateRequest) {
+    public ResponseEntity<Void> update(final AccessContext accessContext, final Long id, final NoticeUpdateRequest noticeUpdateRequest) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Void> delete(final AccessContext accessContext) {
+    public ResponseEntity<Void> delete(final AccessContext accessContext, final Long id) {
         return null;
     }
 }

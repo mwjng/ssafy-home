@@ -10,14 +10,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
-import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.likehouse.application.response.LikeHousesResponse;
 
 @Tag(name = "관심 House 컨트롤러", description = "관심 House에 대한 조회, 생성, 삭제를 처리 하는 클래스.")
-@RequestMapping("/like/region")
+@RequestMapping("/like/houses")
 public interface LikeHouseControllerDocs {
 
-    // TODO 관심 House 검색 할 때, 필터링 할건지
     @Operation(summary = "관심 House 조회", description = "관심 House에 해당하는 House 정보를 반환한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
@@ -26,10 +24,10 @@ public interface LikeHouseControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다.")
     })
     @GetMapping
-    ResponseEntity<LikeHousesResponse> search(
-            @AuthenticationPrincipal final AccessContext accessContext,
-            @Parameter(name = "페이징 개수") @RequestParam(required = false, defaultValue = "10") int size,
-            @Parameter(name = "마지막 관심 지역 ID") @RequestParam(required = false, defaultValue = "0") Long cursorId
+    ResponseEntity<LikeHousesResponse> searchAll(
+            final AccessContext accessContext,
+            @Parameter(name = "페이징 개수") int size,
+            @Parameter(name = "마지막 관심 지역 ID") Long cursorId
     );
 
     @Operation(summary = "관심 House 생성", description = "관심 House를 생성한다.")
@@ -38,10 +36,10 @@ public interface LikeHouseControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @PostMapping("/{houseId}")
+    @PostMapping("/{id}")
     ResponseEntity<Void> create(
-            @AuthenticationPrincipal final AccessContext accessContext,
-            @Parameter(name = "House ID") @PathVariable final Long houseId
+            final AccessContext accessContext,
+            @Parameter(name = "id") final Long id
     );
 
     @Operation(summary = "관심 House 삭제", description = "관심 House를 삭제한다.")
@@ -50,9 +48,9 @@ public interface LikeHouseControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @DeleteMapping("/{houseId}")
+    @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(
-            @AuthenticationPrincipal final AccessContext accessContext,
-            @Parameter(name = "House ID") @PathVariable final Long houseId
+            final AccessContext accessContext,
+            @Parameter(name = "id") final Long id
     );
 }

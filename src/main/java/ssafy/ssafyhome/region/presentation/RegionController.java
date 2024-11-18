@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/region")
+@RequestMapping("/regions")
 public class RegionController implements RegionControllerDocs{
 
     @Override
