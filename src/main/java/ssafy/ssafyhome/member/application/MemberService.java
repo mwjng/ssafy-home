@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.auth.infrastructure.PasswordEncoder;
 import ssafy.ssafyhome.common.exception.BadRequestException;
 import ssafy.ssafyhome.image.application.ImageService;
+import ssafy.ssafyhome.image.domain.ImageEvent;
 import ssafy.ssafyhome.member.application.response.MemberNicknameResponse;
 import ssafy.ssafyhome.member.application.response.MyInfoResponse;
 import ssafy.ssafyhome.member.domain.Member;
@@ -23,7 +24,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static ssafy.ssafyhome.common.exception.ErrorCode.*;
-import static ssafy.ssafyhome.member.domain.SocialType.NONE;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -47,7 +47,7 @@ public class MemberService {
 
     public MyInfoResponse getMyInfo(final Long memberId, final String baseUrl) {
         final Member member = findMember(memberId);
-        final List<String> imageFileNames = imageService.getImagePaths(member, PROFILE_IMG_DIR);
+        final List<String> imageFileNames = imageService.getImageFileNames(member, PROFILE_IMG_DIR);
         final List<String> imageUrlList = imageService.getImageUrlList(
             baseUrl, PROFILE_IMG_DIR, member, imageFileNames);
         return MyInfoResponse.of(member, imageUrlList);
@@ -122,7 +122,10 @@ public class MemberService {
     @Transactional
     public void updateProfileImage(final Long memberId, final MultipartFile image) {
         final Member member = findMember(memberId);
-        String imagePath = imageService.save(List.of(image), PROFILE_IMG_DIR).getFirst();
+        final String imagePath = imageService.save(List.of(image), PROFILE_IMG_DIR).getFirst();
+        final List<String> imgFilePaths = imageService.getImageFilePaths(member, PROFILE_IMG_DIR);
+        final String imageFileDirPath = imageService.getImageFileDirPath(member, PROFILE_IMG_DIR);
+        eventPublisher.publishEvent(new ImageEvent(imageFileDirPath, imgFilePaths));
         member.changeProfileImageUrl(imagePath);
     }
 

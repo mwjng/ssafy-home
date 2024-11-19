@@ -1,6 +1,7 @@
 package ssafy.ssafyhome.member.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ssafy.ssafyhome.verification.infrastructure.MailSendClient;
 
@@ -13,10 +14,12 @@ public class MailService {
 
     private final MailSendClient mailSendClient;
 
+    @Async
     public void sendVerificationCode(final String to, final String code) {
         mailSendClient.sendMail(to, VERIFICATION_CODE_SUBJECT, code);
     }
 
+    @Async
     public void sendTemporaryPassword(final String to, final String temporaryPassword) {
         mailSendClient.sendMail(to, TEMPORARY_PASSWORD_SUBJECT, temporaryPassword);
     }
