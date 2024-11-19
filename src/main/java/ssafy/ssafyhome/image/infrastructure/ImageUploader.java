@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ImageUploader {
 
-    List<String> uploadImages(List<MultipartFile> imageFiles, String dirName);
+    List<String> uploadImages(List<MultipartFile> imageFiles, String dirName, String imageDirPath);
 }

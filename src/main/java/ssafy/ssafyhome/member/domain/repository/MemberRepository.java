@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    boolean existsByNickname(String nickname);
+    boolean existsByNickname(final String nickname);
 
-    boolean existsBySocialLoginId(String socialLoginId);
+    boolean existsBySocialLoginId(final String socialLoginId);
 
     @Query("select m from Member m where m.id = :id and m.status != 'DELETED'")
     Optional<Member> findMemberById(final Long id);

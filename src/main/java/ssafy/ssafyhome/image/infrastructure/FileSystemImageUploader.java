@@ -1,10 +1,10 @@
 package ssafy.ssafyhome.image.infrastructure;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.image.exception.ImageException;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,32 +18,35 @@ import static ssafy.ssafyhome.common.exception.ErrorCode.INVALID_IMAGE_FORMAT;
 @Component
 public class FileSystemImageUploader implements ImageUploader {
 
-    @Value("${file.image.dir}")
-    private String uploadDir;
-
     @Override
-    public List<String> uploadImages(final List<MultipartFile> images, final String dirName) {
+    public List<String> uploadImages(final List<MultipartFile> images, final String dirName, final String imageDirPath) {
         return images.stream()
-            .map(image -> uploadImage(image, dirName))
+            .map(image -> uploadImage(image, dirName, imageDirPath))
             .toList();
     }
 
-    private String uploadImage(final MultipartFile image, final String dirName) {
+    private String uploadImage(final MultipartFile image, final String dirName, String imageFileDir) {
         final String originalName = image.getOriginalFilename();
-        final String imagePath = getImageFullPath(originalName, uploadDir + dirName);
+        final String imageFileName = generateShortUUID();
+        final String imageFullPath = getImageFullPath(originalName, imageFileDir + dirName, imageFileName);
         try {
-            Path path = Path.of(imagePath);
+            Path path = Path.of(imageFullPath);
             Files.createDirectories(path.getParent());
             Files.copy(image.getInputStream(), path, REPLACE_EXISTING);
+            return imageFileName;
         } catch (IOException e) {
             throw new ImageException(FAIL_IMAGE_UPLOAD, e);
         }
-        return imagePath;
     }
 
-    private String getImageFullPath(final String originalName, final String imagePath) {
+    private String getImageFullPath(final String originalName, final String imagePath, String imageFileName) {
         final String extension = getExtension(originalName);
-        return imagePath + UUID.randomUUID().toString().substring(0, 8) + extension;
+        return imagePath + imageFileName +
+            File.separator + generateShortUUID() + extension;
+    }
+
+    private static String generateShortUUID() {
+        return UUID.randomUUID().toString().substring(0, 8);
     }
 
     private String getExtension(final String originalName) {
