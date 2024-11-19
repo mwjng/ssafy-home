@@ -11,55 +11,33 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ssafy.ssafyhome.region.application.response.*;
+import ssafy.ssafyhome.region.presentation.request.RegionSearchCondition;
 
 @Tag(name = "지역 컨트롤러", description = "지역에 대한 조회를 처리 하는 클래스.")
 @RequestMapping("/regions")
 public interface RegionControllerDocs {
 
-    @Operation(summary = "시,도 조회", description = "모든 시, 도 정보를 반환한다.")
+    @Operation(summary = "시, 도, 구, 군, 동 조회", description = "시, 도, 구, 군, 동 정보를 반환한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = SidosResponse.class))),
+                            schema = @Schema(implementation = RegionResponse.class))),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @GetMapping("/sido")
-    ResponseEntity<SidosResponse> searchSidos();
+    @GetMapping
+    ResponseEntity<RegionResponse> search(@Parameter(name = "검색 조건") final RegionSearchCondition regionSearchCondition);
 
-    @Operation(summary = "구,군 조회", description = "시, 도에 해당하는 모든 구, 군 정보를 반환한다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = GugunsResponse.class))),
-            @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
-    })
-    @GetMapping("/gugun")
-    ResponseEntity<GugunsResponse> searchGuguns(@Parameter(name = "시,도") final String sido);
-
-    @Operation(summary = "동 조회", description = "시, 도, 구, 군에 해당하는 모든 동 정보를 반환한다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = DongsResponse.class))),
-            @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
-    })
-    @GetMapping("/dong")
-    ResponseEntity<DongsResponse> searchDongs(
-            @Parameter(name = "시,도") final String sido,
-            @Parameter(name = "구,군") final String gugun
-    );
-
-    @Operation(summary = "regionId 조회", description = "시, 도, 구, 군, 동에 해당하는 regionId를 반환한다.")
+    @Operation(summary = "regionId 조회", description = "regionId를 반환한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = RegionIdResponse.class))),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @GetMapping
-    ResponseEntity<RegionIdResponse> searchRegionId(
-            @Parameter(name = "시,도") final String sido,
-            @Parameter(name = "구,군") final String gugun,
-            @Parameter(name = "동") final String dong
+    @GetMapping("/id")
+    ResponseEntity<RegionIdResponse> searchId(
+            @Parameter(name = "sido") final String sido,
+            @Parameter(name = "gugun") final String gugun,
+            @Parameter(name = "dong") final String dong
     );
 }

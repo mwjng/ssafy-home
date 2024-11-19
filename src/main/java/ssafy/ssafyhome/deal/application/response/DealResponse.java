@@ -16,6 +16,5 @@ public record DealResponse(
         Long houseId,
         Long memberId,
         String registrant,
-        String dirName,
-        List<String> imageNames) {
+        List<String> imageUrl) {
 }

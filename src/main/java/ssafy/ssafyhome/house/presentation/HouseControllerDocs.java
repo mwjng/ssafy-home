@@ -114,7 +114,8 @@ public interface HouseControllerDocs {
     ResponseEntity<Void> createDeal(
             final AccessContext accessContext,
             @Parameter(name = "houseId") final Long houseId,
-            @Parameter(name = "deal") final DealCreateRequest dealCreateRequest
+            @Parameter(name = "deal") final DealCreateRequest dealCreateRequest,
+            @Parameter(name = "image") List<MultipartFile> images
     );
 
 
@@ -141,6 +142,7 @@ public interface HouseControllerDocs {
     ResponseEntity<Void> createArticle(
             final AccessContext accessContext,
             @Parameter(name = "houseId") final Long houseId,
-            @Parameter(name = "article") final ArticleCreateRequest articleCreateRequest
+            @Parameter(name = "article") final ArticleCreateRequest articleCreateRequest,
+            @Parameter(name = "image") List<MultipartFile> images
     );
 }

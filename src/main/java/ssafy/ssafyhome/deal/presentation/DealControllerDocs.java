@@ -9,10 +9,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.deal.application.response.DealResponse;
 import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
+import ssafy.ssafyhome.deal.presentation.request.DealUpdateRequest;
+
+import java.util.List;
 
 @Tag(name = "Deal 컨트롤러", description = "deal에 대한 등록, 수정, 삭제, 목록, 상세보기등 전반적인 처리를 하는 클래스.")
 @RequestMapping("/deals")
@@ -45,7 +49,8 @@ public interface DealControllerDocs {
     @PostMapping
     ResponseEntity<Void> create(
             final AccessContext accessContext,
-            @Parameter(name = "deal") final DealCreateRequest dealCreateRequest
+            @Parameter(name = "deal") final DealCreateRequest dealCreateRequest,
+            @Parameter(name = "image") List<MultipartFile> images
     );
 
     @Operation(summary = "deal 수정", description = "deal을 수정한다.")
@@ -58,7 +63,8 @@ public interface DealControllerDocs {
     ResponseEntity<Void> update(
             final AccessContext accessContext,
             @Parameter(name = "id") final Long id,
-            @Parameter(name = "deal") final DealCreateRequest dealCreateRequest
+            @Parameter(name = "deal") final DealUpdateRequest dealUpdateRequest,
+            @Parameter(name = "image") List<MultipartFile> images
     );
 
     @Operation(summary = "deal 삭제", description = "deal을 삭제한다.")

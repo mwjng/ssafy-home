@@ -17,7 +17,6 @@ public record HouseResponse(
         String longitude,
         HouseType houseType,
         RegionResponse region,
-        String dirName,
-        List<String> imageNames) {
+        List<String> imageUrl) {
 
 }

@@ -12,7 +12,6 @@ public record HouseUpdateRequest(
         String latitude,
         String longitude,
         HouseType houseType,
-        Long regionId,
-        String dirName
+        Long regionId
 ) {
 }

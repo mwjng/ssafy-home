@@ -8,8 +8,7 @@ public record CommentResponse(
         String writer,
         String content,
         Long articleId,
-        String dirName,
-        String imageName,
+        String imageUrl,
         LocalDateTime createdAt,
         LocalDateTime modifiedAt) {
 }

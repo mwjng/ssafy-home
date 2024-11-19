@@ -54,7 +54,7 @@ public class HouseController implements HouseControllerDocs{
     }
 
     @Override
-    public ResponseEntity<Void> createDeal(final AccessContext accessContext, final Long houseId, final DealCreateRequest dealCreateRequest) {
+    public ResponseEntity<Void> createDeal(final AccessContext accessContext, final Long houseId, final DealCreateRequest dealCreateRequest, final List<MultipartFile> images) {
         return null;
     }
 
@@ -64,7 +64,7 @@ public class HouseController implements HouseControllerDocs{
     }
 
     @Override
-    public ResponseEntity<Void> createArticle(final AccessContext accessContext, final Long houseId, final ArticleCreateRequest articleCreateRequest) {
+    public ResponseEntity<Void> createArticle(final AccessContext accessContext, final Long houseId, final ArticleCreateRequest articleCreateRequest, final List<MultipartFile> images) {
         return null;
     }
 }

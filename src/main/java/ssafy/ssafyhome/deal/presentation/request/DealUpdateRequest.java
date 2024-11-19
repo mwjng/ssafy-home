@@ -12,8 +12,7 @@ public record DealUpdateRequest(
         Integer deposit,
         Integer price,
         DealStatus status,
-        DealType type,
-        String dirName
+        DealType type
 ) {
 }
 

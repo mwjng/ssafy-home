@@ -1,8 +1,6 @@
 package ssafy.ssafyhome.region.application.response;
 
-public record RegionResponse(
-        Long regionId,
-        String sido,
-        String gugun,
-        String dong) {
+import java.util.List;
+
+public record RegionResponse(List<String> data) {
 }

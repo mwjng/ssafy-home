@@ -7,6 +7,5 @@ public record ArticleResponse(
         Long memberId,
         String writer,
         String content,
-        String dirName,
-        List<String> imageNames) {
+        List<String> imageUrl) {
 }
