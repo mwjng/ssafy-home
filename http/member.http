@@ -7,6 +7,9 @@ GET localhost:8080/member/myinfo
 Authorization: Bearer
 
 ###
+GET localhost:8080/auth/reissue
+
+###
 POST localhost:8080/member
 Content-Type: application/json
 

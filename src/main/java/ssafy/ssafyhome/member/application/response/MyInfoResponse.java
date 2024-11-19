@@ -30,13 +30,13 @@ public record MyInfoResponse(
         );
     }
 
-    public static MyInfoResponse of(final Member member, final List<String> imagePaths) {
+    public static MyInfoResponse of(final Member member, final String imagePath) {
         return new MyInfoResponse(
             member.getNickname(),
             member.getName(),
             member.getEmail(),
             member.getSocialLoginId(),
-            imagePaths.getFirst(),
+            imagePath,
             member.getMemberRole().name(),
             member.getSocialType().name(),
             member.getStatus().name(),
