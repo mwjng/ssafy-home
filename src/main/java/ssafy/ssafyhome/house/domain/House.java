@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import ssafy.ssafyhome.common.auditing.BaseEntity;
 import ssafy.ssafyhome.region.domain.Region;
 
-import java.math.BigDecimal;
-
 import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
