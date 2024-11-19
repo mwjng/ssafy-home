@@ -49,7 +49,6 @@ public class NaverOAuthUserInfo implements OAuthUserInfo {
             .name(name)
             .email(email)
             .socialLoginId(socialLoginId)
-            .imageUrl(imageUrl)
             .memberRole(memberRole)
             .socialType(NAVER)
             .build();

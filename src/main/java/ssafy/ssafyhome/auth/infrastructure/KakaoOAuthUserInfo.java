@@ -50,7 +50,6 @@ public class KakaoOAuthUserInfo implements OAuthUserInfo {
             .name(getNickname())
             .email(getEmail())
             .socialLoginId(socialLoginId)
-            .imageUrl(getImageUrl())
             .memberRole(memberRole)
             .socialType(KAKAO)
             .build();

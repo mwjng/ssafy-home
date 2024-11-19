@@ -12,8 +12,8 @@ Content-Type: application/json
 
 {
   "nickname": "ssafy",
-  "name": "ssafyhome",
-  "email": "abc@abc",
+  "name": "ssafy",
+  "email": "dbtjsdn980818@naver.com",
   "loginId": "abcde",
   "password": "abc123",
   "memberRole": "user"
@@ -38,5 +38,14 @@ Content-Type: application/json
 
 {
   "loginId": "master",
+  "password": "abc123"
+}
+
+###
+POST localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "loginId": "abcde",
   "password": "abc123"
 }

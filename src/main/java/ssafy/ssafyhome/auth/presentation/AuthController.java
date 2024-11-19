@@ -22,6 +22,8 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RestController
 public class AuthController {
 
+    private static final int COOKIE_MAX_AGE_SECONDS = 3600;
+
     private final AuthService authService;
 
     @PostMapping("/oauth-login")
@@ -30,7 +32,7 @@ public class AuthController {
     ) {
         final AuthToken authToken = authService.socialLogin(loginRequest, now());
         final ResponseCookie cookie = ResponseCookie.from("refreshToken", authToken.refreshToken())
-            .maxAge(3600)
+            .maxAge(COOKIE_MAX_AGE_SECONDS)
             .httpOnly(true)
             .sameSite("none")
             .secure(true)
@@ -47,7 +49,7 @@ public class AuthController {
     ) {
         final AuthToken authToken = authService.login(loginRequest, now());
         final ResponseCookie cookie = ResponseCookie.from("refreshToken", authToken.refreshToken())
-            .maxAge(3600)
+            .maxAge(COOKIE_MAX_AGE_SECONDS)
             .httpOnly(true)
             .sameSite("none")
             .secure(true)
@@ -66,7 +68,7 @@ public class AuthController {
             .body(authService.renewalAccessToken(refreshToken));
     }
 
-    @PostMapping("/logout")
+    @DeleteMapping("/logout")
     @UserAccess
     public ResponseEntity<Void> logout(
         @AuthenticationPrincipal final AccessContext accessContext,

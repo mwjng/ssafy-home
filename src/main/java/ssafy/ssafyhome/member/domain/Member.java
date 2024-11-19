@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 import ssafy.ssafyhome.common.auditing.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -37,7 +36,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String socialLoginId;
 
-    private String imageUrl;
+    private String dirName;
 
     @Enumerated(STRING)
     private MemberRole memberRole;
@@ -57,7 +56,7 @@ public class Member extends BaseEntity {
         final String email,
         final String password,
         final String socialLoginId,
-        final String imageUrl,
+        final String dirName,
         final MemberRole memberRole,
         final SocialType socialType,
         final LocalDateTime lastLogin
@@ -67,7 +66,7 @@ public class Member extends BaseEntity {
         this.email = email;
         this.password = password;
         this.socialLoginId = socialLoginId;
-        this.imageUrl = imageUrl;
+        this.dirName = dirName;
         this.memberRole = memberRole;
         this.socialType = socialType;
         this.status = ACTIVE;
@@ -103,7 +102,7 @@ public class Member extends BaseEntity {
     }
 
     public void changeProfileImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+        this.dirName = imageUrl;
     }
 
     public void changeNickname(String newNickname) {

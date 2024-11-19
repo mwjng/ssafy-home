@@ -1,11 +1,11 @@
 package ssafy.ssafyhome.member.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ssafy.ssafyhome.auth.exception.AuthException;
 import ssafy.ssafyhome.auth.infrastructure.PasswordEncoder;
 import ssafy.ssafyhome.common.exception.BadRequestException;
 import ssafy.ssafyhome.image.application.ImageService;
@@ -20,29 +20,42 @@ import ssafy.ssafyhome.member.presentation.request.MemberUpdateRequest;
 import ssafy.ssafyhome.member.presentation.request.PasswordUpdateRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 import static ssafy.ssafyhome.common.exception.ErrorCode.*;
+import static ssafy.ssafyhome.member.domain.SocialType.NONE;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class MemberService {
 
-    private static final String PROFILE_IMG_DIR = "profile/profile_img";
+    private static final String PROFILE_IMG_DIR = "member/";
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final ImageService imageService;
     private final ApplicationEventPublisher eventPublisher;
 
+    @Value("${file.image.dir}")
+    private String imageDirPath;
+
     public MemberNicknameResponse getNicknameById(final Long memberId) {
         return memberRepository.findNicknameById(memberId)
             .orElseThrow(() -> new UserNotFoundException(NOT_FOUND_USER_ID));
     }
 
-    public MyInfoResponse getMyInfo(final Long memberId) {
-        final Member member = getMember(memberId);
-        return MyInfoResponse.from(member);
+    public MyInfoResponse getMyInfo(final Long memberId, final String baseUrl) {
+        final Member member = findMember(memberId);
+        final List<String> imageFileNames = imageService.getImagePaths(member, PROFILE_IMG_DIR);
+        final List<String> imageUrlList = imageService.getImageUrlList(
+            baseUrl, PROFILE_IMG_DIR, member, imageFileNames);
+        return MyInfoResponse.of(member, imageUrlList);
+    }
+
+    public Member getMemberByLoginId(final String loginId) {
+        return memberRepository.findBySocialLoginId(loginId)
+            .orElseThrow(() -> new UserNotFoundException(NOT_FOUND_USER_LOGIN_ID));
     }
 
     @Transactional
@@ -61,7 +74,7 @@ public class MemberService {
 
     @Transactional
     public void updateNickname(final Long memberId, final String nickname) {
-        final Member member = getMember(memberId);
+        final Member member = findMember(memberId);
         if(member.isChangedNickname(nickname)) {
             checkDuplicatedNickname(nickname);
         }
@@ -70,7 +83,7 @@ public class MemberService {
 
     @Transactional
     public void updateMyInfo(final Long memberId, final MemberUpdateRequest request) {
-        final Member member = getMember(memberId);
+        final Member member = findMember(memberId);
         if(member.isChangedNickname(request.nickname())) {
             checkDuplicatedNickname(request.nickname());
         }
@@ -79,7 +92,7 @@ public class MemberService {
 
     @Transactional
     public void updateLoginId(final Long memberId, final String loginId) {
-        final Member member = getMember(memberId);
+        final Member member = findMember(memberId);
         checkSocialType(member);
         if (member.isChangedLoginId(loginId)) {
             checkDuplicatedLoginId(loginId);
@@ -89,23 +102,33 @@ public class MemberService {
 
     @Transactional
     public void updatePassword(final Long memberId, final PasswordUpdateRequest request) {
-        final Member member = getMember(memberId);
+        final Member member = findMember(memberId);
+        checkSocialType(member);
         if(!passwordEncoder.matches(request.currentPassword(), member.getPassword())) {
-            throw new AuthException(INVALID_PASSWORD);
+            throw new BadRequestException(INVALID_PASSWORD);
         }
         member.changePassword(passwordEncoder.encode(request.newPassword()));
     }
 
     @Transactional
+    public String createTemporaryPassword(final String loginId) {
+        final Member member = getMemberByLoginId(loginId);
+        checkSocialType(member);
+        final String temporaryPassword = UUID.randomUUID().toString().substring(0, 8);
+        member.changePassword(passwordEncoder.encode(temporaryPassword));
+        return temporaryPassword;
+    }
+
+    @Transactional
     public void updateProfileImage(final Long memberId, final MultipartFile image) {
-        final Member member = getMember(memberId);
+        final Member member = findMember(memberId);
         String imagePath = imageService.save(List.of(image), PROFILE_IMG_DIR).getFirst();
         member.changeProfileImageUrl(imagePath);
     }
 
     private void checkMemberRole(final MemberCreateRequest request) {
         if(request.isAdmin()) {
-            throw new AuthException(INVALID_MEMBER_ROLE);
+            throw new BadRequestException(INVALID_MEMBER_ROLE);
         }
     }
 
@@ -127,7 +150,7 @@ public class MemberService {
         }
     }
 
-    private Member getMember(final Long memberId) {
+    private Member findMember(final Long memberId) {
         return memberRepository
             .findMemberById(memberId)
             .orElseThrow(() -> new UserNotFoundException(NOT_FOUND_USER_ID));

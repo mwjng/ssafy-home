@@ -3,6 +3,7 @@ package ssafy.ssafyhome.member.application.response;
 import ssafy.ssafyhome.member.domain.Member;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record MyInfoResponse(
     String nickname,
@@ -21,7 +22,21 @@ public record MyInfoResponse(
             member.getName(),
             member.getEmail(),
             member.getSocialLoginId(),
-            member.getImageUrl(),
+            member.getDirName(),
+            member.getMemberRole().name(),
+            member.getSocialType().name(),
+            member.getStatus().name(),
+            member.getLastLogin()
+        );
+    }
+
+    public static MyInfoResponse of(final Member member, final List<String> imagePaths) {
+        return new MyInfoResponse(
+            member.getNickname(),
+            member.getName(),
+            member.getEmail(),
+            member.getSocialLoginId(),
+            imagePaths.getFirst(),
             member.getMemberRole().name(),
             member.getSocialType().name(),
             member.getStatus().name(),

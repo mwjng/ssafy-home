@@ -52,7 +52,6 @@ public class GoogleOAuthUserInfo implements OAuthUserInfo {
             .name(name)
             .email(email)
             .socialLoginId(socialLoginId)
-            .imageUrl(imageUrl)
             .memberRole(memberRole)
             .socialType(GOOGLE)
             .build();

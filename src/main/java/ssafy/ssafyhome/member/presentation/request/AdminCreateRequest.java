@@ -17,6 +17,7 @@ public record AdminCreateRequest(
     @Size(min = 2, max = 5, message = "이름은 2자 이상 5자 이하여야 합니다.")
     String name,
 
+    @NotBlank(message = "이메일을 입력해주세요.")
     @Pattern(regexp = "^$|^[A-Za-z0-9+_.-]+@(.+)$", message = "이메일 형식이 올바르지 않습니다.")
     String email,
 
