@@ -18,6 +18,9 @@ public enum ErrorCode {
     DUPLICATED_USER_LOGIN_ID(1005, BAD_REQUEST, "이미 존재하는 아이디입니다."),
     INVALID_VERIFICATION_CODE(1006, BAD_REQUEST, "올바르지 않은 인증 코드입니다."),
 
+    INVALID_REGION_FIELD(1010, BAD_REQUEST, "유효하지 않은 지역 필드 요청입니다."),
+    INVALID_REGION(1011, BAD_REQUEST, "유효하지 않은 지역 요청입니다."),
+
     INVALID_AUTHORITY(2001, FORBIDDEN, "해당 리소스에 접근할 권한이 없습니다."),
     INVALID_USER_ID(2002, UNAUTHORIZED, "아이디가 존재하지 않습니다."),
     INVALID_PASSWORD(2003, UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
