@@ -21,11 +21,11 @@ public interface RegionControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RegionResponse.class))),
+                            schema = @Schema(implementation = RegionSearchResponse.class))),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
     @GetMapping
-    ResponseEntity<RegionResponse> search(@Parameter(name = "검색 조건") final RegionSearchCondition regionSearchCondition);
+    ResponseEntity<RegionSearchResponse> search(@Parameter(name = "검색 조건") final RegionSearchCondition regionSearchCondition);
 
     @Operation(summary = "regionId 조회", description = "regionId를 반환한다.")
     @ApiResponses(value = {

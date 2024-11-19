@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ssafy.ssafyhome.region.application.RegionService;
 import ssafy.ssafyhome.region.application.response.RegionIdResponse;
-import ssafy.ssafyhome.region.application.response.RegionResponse;
+import ssafy.ssafyhome.region.application.response.RegionSearchResponse;
 import ssafy.ssafyhome.region.presentation.request.RegionSearchCondition;
 
 @RequiredArgsConstructor
@@ -20,8 +20,8 @@ public class RegionController implements RegionControllerDocs{
 
     @Override
     @GetMapping
-    public ResponseEntity<RegionResponse> search(final RegionSearchCondition regionSearchCondition) {
-        final RegionResponse response = regionService.search(regionSearchCondition);
+    public ResponseEntity<RegionSearchResponse> search(final RegionSearchCondition regionSearchCondition) {
+        final RegionSearchResponse response = regionService.search(regionSearchCondition);
         return ResponseEntity.ok().body(response);
     }
 

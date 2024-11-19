@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ssafy.ssafyhome.region.application.response.RegionIdResponse;
 import ssafy.ssafyhome.region.application.response.RegionResponse;
+import ssafy.ssafyhome.region.application.response.RegionSearchResponse;
 import ssafy.ssafyhome.region.domain.repository.RegionRepository;
 import ssafy.ssafyhome.region.exception.RegionException;
 import ssafy.ssafyhome.region.presentation.request.RegionSearchCondition;
@@ -21,8 +22,8 @@ public class RegionServiceImpl implements RegionService {
     private final RegionRepository regionRepository;
 
     @Override
-    public RegionResponse search(final RegionSearchCondition regionSearchCondition) {
-        return new RegionResponse(regionRepository.findBySearchCondition(regionSearchCondition));
+    public RegionSearchResponse search(final RegionSearchCondition regionSearchCondition) {
+        return new RegionSearchResponse(regionRepository.findBySearchCondition(regionSearchCondition));
     }
 
     @Override
