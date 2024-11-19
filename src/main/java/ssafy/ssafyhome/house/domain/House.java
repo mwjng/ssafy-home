@@ -47,9 +47,11 @@ public class House extends BaseEntity {
     @Column(nullable = false)
     private String longitude;
 
+    private String dirName;
+
     @Enumerated(STRING)
     @Column(nullable = false)
-    private HouseType houseType;
+    private HouseType Type;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "region_id")

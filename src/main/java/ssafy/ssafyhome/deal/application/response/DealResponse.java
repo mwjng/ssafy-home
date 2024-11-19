@@ -4,6 +4,7 @@ import ssafy.ssafyhome.deal.domain.DealStatus;
 import ssafy.ssafyhome.deal.domain.DealType;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public record DealResponse(
         Long dealId,
@@ -14,5 +15,7 @@ public record DealResponse(
         DealType type,
         Long houseId,
         Long memberId,
-        String registrant) {
+        String registrant,
+        String dirName,
+        List<String> imageNames) {
 }

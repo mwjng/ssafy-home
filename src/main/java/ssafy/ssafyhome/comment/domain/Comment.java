@@ -24,6 +24,8 @@ public class Comment extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
+    private String dirName;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "article_id")
     private Article article;

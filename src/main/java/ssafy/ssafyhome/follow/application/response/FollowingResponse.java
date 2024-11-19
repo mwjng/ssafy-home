@@ -7,5 +7,5 @@ public record FollowingResponse(
         String name,
         String nickname,
         MemberRole role,
-        String profileImageUrl) {
+        String imageUrl) {
 }

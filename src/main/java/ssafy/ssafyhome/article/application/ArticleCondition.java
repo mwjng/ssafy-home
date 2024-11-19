@@ -10,14 +10,14 @@ public class ArticleCondition {
     private Long cursorId;
     private Long houseId;
     private Long memberId;
-    private String sortCondition;
+    private ArticleSortCondition articleSortCondition;
 
     @Builder
-    public ArticleCondition(int size, Long cursorId, Long houseId, Long memberId, String sortCondition) {
+    public ArticleCondition(int size, Long cursorId, Long houseId, Long memberId, ArticleSortCondition articleSortCondition) {
         this.size = size;
         this.cursorId = cursorId;
         this.houseId = houseId;
         this.memberId = memberId;
-        this.sortCondition = sortCondition;
+        this.articleSortCondition = articleSortCondition;
     }
 }

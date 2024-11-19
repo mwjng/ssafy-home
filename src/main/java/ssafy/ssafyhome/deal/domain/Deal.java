@@ -39,6 +39,8 @@ public class Deal extends BaseEntity {
     @Column(nullable = false)
     private Integer price;
 
+    private String dirName;
+
     @Enumerated(STRING)
     private DealStatus status;
 

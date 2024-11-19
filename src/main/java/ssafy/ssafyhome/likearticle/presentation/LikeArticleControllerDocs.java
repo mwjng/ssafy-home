@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ssafy.ssafyhome.article.presentation.request.ArticleSearchCondition;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.likearticle.application.response.LikeArticlesResponse;
 
@@ -26,8 +27,7 @@ public interface LikeArticleControllerDocs {
     @GetMapping
     ResponseEntity<LikeArticlesResponse> searchAll(
             final AccessContext accessContext,
-            @Parameter(name = "페이징 개수") int size,
-            @Parameter(name = "마지막 관심 지역 ID") Long cursorId
+            @Parameter(name = "검색 조건") ArticleSearchCondition articleSearchCondition
     );
 
     @Operation(summary = "관심 Article 생성", description = "관심 Article을 생성한다.")

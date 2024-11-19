@@ -1,4 +1,4 @@
 package ssafy.ssafyhome.article.presentation.request;
 
-public record ArticleRequest(String content) {
+public record ArticleCreateRequest(String content) {
 }
