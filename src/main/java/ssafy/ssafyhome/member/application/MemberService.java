@@ -50,7 +50,10 @@ public class MemberService {
         final List<String> imageFileNames = imageService.getImageFileNames(member, PROFILE_IMG_DIR);
         final List<String> imageUrlList = imageService.getImageUrlList(
             baseUrl, PROFILE_IMG_DIR, member, imageFileNames);
-        return MyInfoResponse.of(member, imageUrlList);
+
+        return MyInfoResponse.of(
+            member,
+            imageUrlList.stream().findFirst().orElse(null));
     }
 
     public Member getMemberByLoginId(final String loginId) {
