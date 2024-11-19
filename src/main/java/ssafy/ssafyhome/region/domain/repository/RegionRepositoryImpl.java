@@ -32,11 +32,10 @@ public class RegionRepositoryImpl implements RegionRepositoryCustom {
         return queryFactory
                 .selectDistinct(getFieldPath(regionSearchCondition.getField()))
                 .from(region)
-                .where(
-                        eqSido(regionSearchCondition.getSido()),
-                        eqGugun(regionSearchCondition.getGugun()),
-                        eqDong(regionSearchCondition.getDong())
-                )
+                .where(eqCondition(
+                        regionSearchCondition.getSido(),
+                        regionSearchCondition.getGugun(),
+                        regionSearchCondition.getDong()))
                 .fetch();
     }
 
@@ -45,11 +44,7 @@ public class RegionRepositoryImpl implements RegionRepositoryCustom {
         return queryFactory
                 .select(region.id)
                 .from(region)
-                .where(
-                        eqSido(sido),
-                        eqGugun(gugun),
-                        eqDong(dong)
-                )
+                .where(eqCondition(sido, gugun, dong))
                 .fetchOne();
     }
 
@@ -61,6 +56,22 @@ public class RegionRepositoryImpl implements RegionRepositoryCustom {
         return fieldPath;
     }
 
+    private BooleanExpression eqCondition(String sido, String gugun, String dong) {
+        BooleanExpression predicate = null;
+
+        if (hasText(sido)) {
+            predicate = region.sido.eq(sido);
+        }
+        if (hasText(gugun)) {
+            predicate = predicate == null ? region.gugun.eq(gugun) : predicate.and(region.gugun.eq(gugun));
+        }
+        if (hasText(dong)) {
+            predicate = predicate == null ? region.dong.eq(dong) : predicate.and(region.dong.eq(dong));
+        }
+
+        return predicate;
+    }
+
     private BooleanExpression eqSido(String sido) {
         return hasText(sido) ? region.sido.eq(sido) : null;
     }
@@ -69,5 +80,7 @@ public class RegionRepositoryImpl implements RegionRepositoryCustom {
         return hasText(gugun) ? region.gugun.eq(gugun) : null;
     }
 
-    private BooleanExpression eqDong(String dong) { return hasText(dong) ? region.dong.eq(dong) : null; }
+    private BooleanExpression eqDong(String dong) {
+        return hasText(dong) ? region.dong.eq(dong) : null;
+    }
 }
