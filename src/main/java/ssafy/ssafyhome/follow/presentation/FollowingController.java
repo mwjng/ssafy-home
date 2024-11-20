@@ -1,31 +1,54 @@
 package ssafy.ssafyhome.follow.presentation;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
+import ssafy.ssafyhome.follow.application.FollowService;
 import ssafy.ssafyhome.follow.application.response.FollowingsResponse;
 
-@RestController
+import static org.springframework.http.HttpStatus.*;
+import static ssafy.ssafyhome.common.util.UrlUtil.*;
+
+@RequiredArgsConstructor
 @RequestMapping("/followings")
+@RestController
 public class FollowingController implements FollowingControllerDocs{
 
+    private final FollowService followService;
+
     @Override
     @UserAccess
-    public ResponseEntity<FollowingsResponse> searchFollower(final AccessContext accessContext, final int size, final Long cursorId) {
-        return null;
+    @GetMapping
+    public ResponseEntity<FollowingsResponse> searchFollowings(
+            @AuthenticationPrincipal final AccessContext accessContext,
+            @RequestParam(required = false, defaultValue = "10") int size,
+            @RequestParam(required = false) Long cursorId,
+            HttpServletRequest request) {
+        FollowingsResponse response = followService.searchFollowings(accessContext.getMemberId(), size, cursorId, getBaseUrl(request));
+        return ResponseEntity.ok().body(response);
     }
 
     @Override
     @UserAccess
-    public ResponseEntity<Void> create(final AccessContext accessContext, final Long memberId) {
-        return null;
+    @PostMapping("/{memberId}")
+    public ResponseEntity<Void> create(
+            @AuthenticationPrincipal final AccessContext accessContext,
+            @PathVariable final Long memberId) {
+        followService.createFollow(accessContext.getMemberId(), memberId);
+        return ResponseEntity.status(CREATED).build();
     }
 
     @Override
     @UserAccess
-    public ResponseEntity<Void> delete(final AccessContext accessContext, final Long memberId) {
-        return null;
+    @DeleteMapping("/{followId}")
+    public ResponseEntity<Void> delete(
+            @AuthenticationPrincipal final AccessContext accessContext,
+            @PathVariable final Long followId) {
+        followService.deleteFollowing(accessContext.getMemberId(), followId);
+        return ResponseEntity.noContent().build();
     }
 }

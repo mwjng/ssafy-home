@@ -36,10 +36,12 @@ public interface LikeRegionControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @PostMapping("/{id}")
+    @PostMapping
     ResponseEntity<Void> create(
             final AccessContext accessContext,
-            @Parameter(name = "id") final Long id
+            @Parameter(name = "sido") final String sido,
+            @Parameter(name = "gugun") final String gugun,
+            @Parameter(name = "dong") final String dong
     );
 
     @Operation(summary = "관심 지역 삭제", description = "관심 지역을 삭제한다.")
@@ -48,9 +50,9 @@ public interface LikeRegionControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{likeRegionId}")
     ResponseEntity<Void> delete(
             final AccessContext accessContext,
-            @Parameter(name = "id") final Long id
+            @Parameter(name = "likeRegionId") final Long likeRegionId
     );
 }

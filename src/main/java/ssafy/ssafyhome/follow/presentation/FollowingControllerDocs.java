@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
@@ -24,10 +25,11 @@ public interface FollowingControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다.")
     })
     @GetMapping
-    ResponseEntity<FollowingsResponse> searchFollower(
+    ResponseEntity<FollowingsResponse> searchFollowings(
             final AccessContext accessContext,
             @Parameter(name = "페이징 개수") int size,
-            @Parameter(name = "마지막 관심 지역 ID") Long cursorId
+            @Parameter(name = "마지막 관심 지역 ID") Long cursorId,
+            HttpServletRequest request
     );
 
     @Operation(summary = "following 생성", description = "following을 생성한다.")
@@ -48,9 +50,9 @@ public interface FollowingControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @DeleteMapping("/{memberId}")
+    @DeleteMapping("/{followId}")
     ResponseEntity<Void> delete(
             final AccessContext accessContext,
-            @Parameter(name = "memberId") final Long memberId
+            @Parameter(name = "followId") final Long followId
     );
 }

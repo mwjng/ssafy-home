@@ -1,7 +1,6 @@
 package ssafy.ssafyhome.notice.domain;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.ssafyhome.common.auditing.BaseEntity;
@@ -31,12 +30,12 @@ public class Notice extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Builder
-    public Notice(final Long id, final String title, final String content, final Member member) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.member = member;
+    public static Notice create(final String title, final String content, final Member member) {
+        Notice notice = new Notice();
+        notice.title = title;
+        notice.content = content;
+        notice.member = member;
+        return notice;
     }
 
     public void changeTitle(final String title){

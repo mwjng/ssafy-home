@@ -20,11 +20,20 @@ public class Follow extends BaseEntity {
     @Column(name = "follow_id")
     private Long id;
 
+    // 팔로우 하는 사용자
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "follower")
+    private Member follower;
+
+    // 팔로우 당하는 사용자
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "following")
     private Member following;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "follower")
-    private Member follower;
+    public static Follow create(Member follower, Member following){
+        Follow follow = new Follow();
+        follow.follower = follower;
+        follow.following = following;
+        return follow;
+    }
 }

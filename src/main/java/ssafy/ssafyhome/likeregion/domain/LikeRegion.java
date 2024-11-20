@@ -28,4 +28,11 @@ public class LikeRegion extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "region_id")
     private Region region;
+
+    public static LikeRegion create(final Region region, final Member member) {
+        LikeRegion likeRegion = new LikeRegion();
+        likeRegion.region = region;
+        likeRegion.member = member;
+        return likeRegion;
+    }
 }

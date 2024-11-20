@@ -1,25 +1,44 @@
 package ssafy.ssafyhome.follow.presentation;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
+import ssafy.ssafyhome.follow.application.FollowService;
 import ssafy.ssafyhome.follow.application.response.FollowersResponse;
 
-@RestController
+import static ssafy.ssafyhome.common.util.UrlUtil.*;
+
+@RequiredArgsConstructor
 @RequestMapping("/followers")
+@RestController
 public class FollowerController implements FollowerControllerDocs{
+
+    private final FollowService followService;
 
     @Override
     @UserAccess
-    public ResponseEntity<FollowersResponse> searchFollower(final AccessContext accessContext, final int size, final Long cursorId) {
-        return null;
+    @GetMapping
+    public ResponseEntity<FollowersResponse> searchFollowers(
+            @AuthenticationPrincipal final AccessContext accessContext,
+            @RequestParam(required = false, defaultValue = "10") int size,
+            @RequestParam(required = false) Long cursorId,
+            HttpServletRequest request) {
+
+        FollowersResponse response = followService.searchFollowers(accessContext.getMemberId(), size, cursorId, getBaseUrl(request));
+        return ResponseEntity.ok().body(response);
     }
 
     @Override
     @UserAccess
-    public ResponseEntity<Void> delete(final AccessContext accessContext, final Long memberId) {
-        return null;
+    @DeleteMapping("/{followId}")
+    public ResponseEntity<Void> delete(
+            @AuthenticationPrincipal final AccessContext accessContext,
+            @PathVariable final Long followId) {
+        followService.deleteFollower(accessContext.getMemberId(), followId);
+        return ResponseEntity.noContent().build();
     }
 }

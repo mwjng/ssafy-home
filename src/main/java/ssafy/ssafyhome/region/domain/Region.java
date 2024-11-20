@@ -26,4 +26,12 @@ public class Region extends BaseEntity {
 
     @Column(nullable = false)
     private String dong;
+
+    public static Region create(final String sido, final String gugun, final String dong) {
+        Region region = new Region();
+        region.sido = sido;
+        region.gugun = gugun;
+        region.dong = dong;
+        return region;
+    }
 }
