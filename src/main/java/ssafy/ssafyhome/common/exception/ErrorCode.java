@@ -20,6 +20,7 @@ public enum ErrorCode {
     INVALID_REGION_FIELD(1010, BAD_REQUEST, "유효하지 않은 지역 필드 요청입니다."),
     INVALID_REGION(1011, BAD_REQUEST, "유효하지 않은 지역 요청입니다."),
     INVALID_HOUSE_TYPE(1020, BAD_REQUEST, "올바르지 않은 주거 타입입니다."),
+    INVALID_SELF_FOLLOW_REQUEST(1041, BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다."),
 
     INVALID_AUTHORITY(2001, FORBIDDEN, "해당 리소스에 접근할 권한이 없습니다."),
     INVALID_USER_ID(2002, UNAUTHORIZED, "아이디가 존재하지 않습니다."),
@@ -44,7 +45,6 @@ public enum ErrorCode {
     NOT_FOUND_NOTICE(3020, NOT_FOUND, "요청한 ID에 해당하는 공지사항이 없습니다."),
     NOT_FOUND_LIKE_REGION(3030, NOT_FOUND, "요청한 ID에 해당하는 관심 지역이 없습니다."),
     NOT_FOUND_FOLLOW(3040, NOT_FOUND, "요청한 ID에 해당하는 Follow가 없습니다."),
-    INVALID_SELF_FOLLOW_REQUEST(3041, BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다."),
 
     SERVER_ERROR(4000, INTERNAL_SERVER_ERROR, "서버 에러가 발생하였습니다."),
     DIRECTORY_ACCESS_ERROR(4001, INTERNAL_SERVER_ERROR, "디렉토리에서 파일을 읽는 중 문제가 발생했습니다.");

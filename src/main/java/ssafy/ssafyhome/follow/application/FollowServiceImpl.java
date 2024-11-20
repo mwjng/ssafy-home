@@ -91,7 +91,7 @@ public class FollowServiceImpl implements FollowService{
     @Transactional
     public void createFollow(final Long followerId, final Long followingId) {
         if(Objects.equals(followerId, followingId)){
-            // TODO throw new FollowException(SELF_FOLLOW_NOT_ALLOWED); INVALID_SELF_FOLLOW_REQUEST(3050, BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다.");
+            throw new FollowException(INVALID_SELF_FOLLOW_REQUEST);
         }
 
         if(!memberRepository.existsById(followerId) || !memberRepository.existsById(followingId)){
