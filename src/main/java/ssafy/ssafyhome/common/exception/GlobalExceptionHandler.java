@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ssafy.ssafyhome.auth.exception.AuthException;
+import ssafy.ssafyhome.follow.exception.FollowException;
 import ssafy.ssafyhome.image.exception.ImageException;
+import ssafy.ssafyhome.likeregion.exception.LikeRegionException;
 import ssafy.ssafyhome.member.exception.UserNotFoundException;
+import ssafy.ssafyhome.notice.exception.NoticeException;
 import ssafy.ssafyhome.region.exception.RegionException;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -67,6 +70,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RegionException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidRegionFieldException(final RegionException e) {
+        log.warn(e.getMessage(), e);
+        return ResponseEntity.badRequest()
+                .body(new ExceptionResponse(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(NoticeException.class)
+    public ResponseEntity<ExceptionResponse> handleNoticeException(final NoticeException e) {
+        log.warn(e.getMessage(), e);
+        return ResponseEntity.badRequest()
+                .body(new ExceptionResponse(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(LikeRegionException.class)
+    public ResponseEntity<ExceptionResponse> handleLikeRegionException(final LikeRegionException e) {
+        log.warn(e.getMessage(), e);
+        return ResponseEntity.badRequest()
+                .body(new ExceptionResponse(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(FollowException.class)
+    public ResponseEntity<ExceptionResponse> handleFollowException(final FollowException e) {
         log.warn(e.getMessage(), e);
         return ResponseEntity.badRequest()
                 .body(new ExceptionResponse(e.getErrorCode()));
