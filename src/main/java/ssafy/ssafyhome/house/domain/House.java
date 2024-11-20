@@ -25,10 +25,10 @@ public class House extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private String jibum;
+    private Long buildYear;
 
     @Column(nullable = false)
-    private Long buildYear;
+    private String jibun;
 
     @Column(nullable = false)
     private String road;
@@ -49,7 +49,7 @@ public class House extends BaseEntity {
 
     @Enumerated(STRING)
     @Column(nullable = false)
-    private HouseType Type;
+    private HouseType type;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "region_id")

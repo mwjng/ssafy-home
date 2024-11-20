@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.common.exception.FileException;
 import ssafy.ssafyhome.image.domain.ImageEvent;
 import ssafy.ssafyhome.image.infrastructure.ImageUploader;
-import ssafy.ssafyhome.member.domain.Member;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,15 +56,15 @@ public class ImageService {
         }
     }
 
-    public List<String> getImageFilePaths(final Member member, final String imgDir) {
-        final List<String> imageFileNames = getImageFileNames(member, imgDir);
+    public List<String> getImageFilePaths(String dirName, final String imgDir) {
+        final List<String> imageFileNames = getImageFileNames(dirName, imgDir);
         return imageFileNames.stream()
-            .map(imageFileName -> getImageFileDirPath(member, imgDir) + File.separator + imageFileName)
+            .map(imageFileName -> getImageFileDirPath(dirName, imgDir) + File.separator + imageFileName)
             .toList();
     }
 
-    public List<String> getImageFileNames(final Member member, final String imgDir) {
-        try (Stream<Path> paths = Files.list(Path.of(getImageFileDirPath(member, imgDir)))) {
+    public List<String> getImageFileNames(final String dirName, final String imgDir) {
+        try (Stream<Path> paths = Files.list(Path.of(getImageFileDirPath(dirName, imgDir)))) {
             return paths.filter(Files::isRegularFile)
                 .map(path -> path.getFileName().toString())
                 .toList();
@@ -76,17 +75,17 @@ public class ImageService {
         }
     }
 
-    public String getImageFileDirPath(final Member member, final String imgDir) {
-        return imageDirPath + imgDir + member.getDirName();
+    public String getImageFileDirPath(final String dirName, final String imgDir) {
+        return imageDirPath + imgDir + dirName;
     }
 
     public List<String> getImageUrlList(
         final String baseUrl,
         final String profileImgDir,
-        final Member member,
-        final List<String> imageFileNames
-    ) {
-        final String imageBaseUrl = baseUrl + COMMON_IMG_PATH + profileImgDir + member.getDirName();
+        final List<String> imageFileNames,
+        final String dirName
+        ) {
+        final String imageBaseUrl = baseUrl + COMMON_IMG_PATH + profileImgDir + dirName;
         return imageFileNames.stream()
             .map(imageFileName -> imageBaseUrl + File.separator + imageFileName)
             .toList();

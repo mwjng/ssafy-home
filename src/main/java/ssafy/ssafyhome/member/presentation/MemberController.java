@@ -19,9 +19,10 @@ import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.presentation.request.*;
 
 import static org.springframework.http.HttpStatus.*;
+import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
 
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/members")
 @RestController
 public class MemberController {
 
@@ -29,19 +30,18 @@ public class MemberController {
     private final VerificationCodeService verificationCodeService;
     private final MailService mailService;
 
-    @GetMapping("/myinfo")
+    @GetMapping("/me")
     @UserAccess
     public ResponseEntity<MyInfoResponse> getMyInfo(
         @AuthenticationPrincipal final AccessContext accessContext,
         HttpServletRequest request
     ) {
-        final RequestUrl requestUrl = new RequestUrl(request);
         final MyInfoResponse myInfoResponse = memberService
-            .getMyInfo(accessContext.getMemberId(), requestUrl.getBaseUrl());
+            .getMyInfo(accessContext.getMemberId(), getBaseUrl(request));
         return ResponseEntity.ok().body(myInfoResponse);
     }
 
-    @PatchMapping("/myinfo")
+    @PatchMapping("/me")
     @UserAccess
     public ResponseEntity<Void> updateMyInfo(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -87,7 +87,7 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/image")
+    @PatchMapping("/profile-image")
     @UserAccess
     public ResponseEntity<Void> updateProfileImage(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -97,7 +97,7 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/id")
+    @PatchMapping("/login-id")
     @UserAccess
     public ResponseEntity<Void> updateLoginId(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -117,8 +117,8 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/forgot-password")
-    public ResponseEntity<Void> forgotPassword(
+    @PostMapping("/password-reset/request")
+    public ResponseEntity<Void> requestResetPassword(
         @Valid @RequestBody final PasswordForgotRequest passwordForgotRequest
     ) {
         final Member member = memberService.getMemberByLoginId(passwordForgotRequest.loginId());
@@ -127,7 +127,7 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/verify-reset")
+    @PostMapping("/password-reset/verify")
     public ResponseEntity<Void> verifyAndResetPassword(
         @Valid @RequestBody final VerificationRequest verificationRequest
     ) {

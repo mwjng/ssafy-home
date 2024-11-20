@@ -26,8 +26,8 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/oauth-login")
-    public ResponseEntity<AccessTokenResponse> oauthLogin(
+    @PostMapping("/social-login")
+    public ResponseEntity<AccessTokenResponse> socialLogin(
         @Validated(OAuthLoginCheck.class) @RequestBody final LoginRequest loginRequest
     ) {
         final AuthToken authToken = authService.socialLogin(loginRequest, now());

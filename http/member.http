@@ -1,16 +1,16 @@
 ###
-GET localhost:8080/member/nickname
+GET localhost:8080/members/nickname
 Authorization: Bearer
 
 ###
-GET localhost:8080/member/myinfo
+GET localhost:8080/members/myinfo
 Authorization: Bearer
 
 ###
 GET localhost:8080/auth/reissue
 
 ###
-POST localhost:8080/member
+POST localhost:8080/members
 Content-Type: application/json
 
 {
@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ###
-POST localhost:8080/member/admin
+POST localhost:8080/members/admin
 Content-Type: application/json
 Authorization: Bearer
 

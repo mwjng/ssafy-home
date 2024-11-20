@@ -47,10 +47,9 @@ public class MemberService {
 
     public MyInfoResponse getMyInfo(final Long memberId, final String baseUrl) {
         final Member member = findMember(memberId);
-        final List<String> imageFileNames = imageService.getImageFileNames(member, PROFILE_IMG_DIR);
+        final List<String> imageFileNames = imageService.getImageFileNames(member.getDirName(), PROFILE_IMG_DIR);
         final List<String> imageUrlList = imageService.getImageUrlList(
-            baseUrl, PROFILE_IMG_DIR, member, imageFileNames);
-
+            baseUrl, PROFILE_IMG_DIR, imageFileNames, member.getDirName());
         return MyInfoResponse.of(
             member,
             imageUrlList.stream().findFirst().orElse(null));
@@ -126,8 +125,8 @@ public class MemberService {
     public void updateProfileImage(final Long memberId, final MultipartFile image) {
         final Member member = findMember(memberId);
         final String imagePath = imageService.save(List.of(image), PROFILE_IMG_DIR).getFirst();
-        final List<String> imgFilePaths = imageService.getImageFilePaths(member, PROFILE_IMG_DIR);
-        final String imageFileDirPath = imageService.getImageFileDirPath(member, PROFILE_IMG_DIR);
+        final List<String> imgFilePaths = imageService.getImageFilePaths(member.getDirName(), PROFILE_IMG_DIR);
+        final String imageFileDirPath = imageService.getImageFileDirPath(member.getDirName(), PROFILE_IMG_DIR);
         eventPublisher.publishEvent(new ImageEvent(imageFileDirPath, imgFilePaths));
         member.changeProfileImageUrl(imagePath);
     }

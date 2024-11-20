@@ -2,7 +2,7 @@ package ssafy.ssafyhome.house.presentation.request;
 
 import ssafy.ssafyhome.house.domain.HouseType;
 
-public record HouseCreateRequest(
+public record HouseRegistRequest(
         String name,
         String jibum,
         Long buildYear,

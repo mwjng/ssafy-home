@@ -1,70 +1,121 @@
 package ssafy.ssafyhome.house.presentation;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.article.application.response.ArticlesResponse;
 import ssafy.ssafyhome.article.presentation.request.ArticleCreateRequest;
 import ssafy.ssafyhome.article.presentation.request.ArticleSearchCondition;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.presentation.AdminAccess;
+import ssafy.ssafyhome.auth.presentation.AgentAccess;
+import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
+import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
+import ssafy.ssafyhome.house.application.HouseService;
 import ssafy.ssafyhome.house.application.response.HouseResponse;
 import ssafy.ssafyhome.house.application.response.HousesResponse;
-import ssafy.ssafyhome.house.presentation.request.HouseCreateRequest;
-import ssafy.ssafyhome.house.presentation.request.HouseSearchCondition;
+import ssafy.ssafyhome.house.presentation.request.HouseRegistRequest;
+import ssafy.ssafyhome.house.presentation.request.HouseSearchRequest;
 import ssafy.ssafyhome.house.presentation.request.HouseUpdateRequest;
 
 import java.util.List;
 
-@RestController
+import static ssafy.ssafyhome.common.util.UrlUtil.*;
+
+@RequiredArgsConstructor
 @RequestMapping("/houses")
+@RestController
 public class HouseController implements HouseControllerDocs{
 
-    @Override
-    public ResponseEntity<HousesResponse> searchAll(final HouseSearchCondition houseSearchCondition) {
+    private final HouseService houseService;
+
+    @GetMapping
+    public ResponseEntity<HousesResponse> searchAll(
+        @ModelAttribute final HouseSearchRequest houseSearchRequest,
+        final HttpServletRequest httpServletRequest
+    ) {
+        return ResponseEntity.ok(houseService.searchAll(getBaseUrl(httpServletRequest)));
+    }
+
+    @GetMapping("/{houseId}")
+    public ResponseEntity<HouseResponse> search(
+        @PathVariable final Long houseId,
+        @ModelAttribute final HouseSearchRequest houseSearchRequest
+    ) {
         return null;
     }
 
-    @Override
-    public ResponseEntity<HouseResponse> search(final Long id, final HouseSearchCondition houseSearchCondition) {
+    @PostMapping
+    @AdminAccess
+    public ResponseEntity<Void> create(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @RequestPart final HouseRegistRequest houseRegistRequest,
+        @RequestPart final List<MultipartFile> images
+    ) {
         return null;
     }
 
-    @Override
-    public ResponseEntity<Void> create(final AccessContext accessContext, final HouseCreateRequest houseCreateRequest, final List<MultipartFile> images) {
+    @PatchMapping("/{houseId}")
+    @AdminAccess
+    public ResponseEntity<Void> update(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long houseId,
+        @RequestPart final HouseUpdateRequest houseUpdateRequest,
+        @RequestPart final List<MultipartFile> images
+    ) {
         return null;
     }
 
-    @Override
-    public ResponseEntity<Void> update(final AccessContext accessContext, final Long id, final HouseUpdateRequest houseUpdateRequest, final List<MultipartFile> images) {
+    @DeleteMapping("/{houseId}")
+    @AdminAccess
+    public ResponseEntity<Void> delete(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long houseId
+    ) {
         return null;
     }
 
-    @Override
-    public ResponseEntity<Void> delete(final AccessContext accessContext, final Long id) {
+    @GetMapping("/{houseId}/deals")
+    public ResponseEntity<DealsResponse> searchDeals(
+        @PathVariable final Long houseId,
+        @ModelAttribute final DealSearchCondition dealSearchCondition
+    ) {
         return null;
     }
 
-    @Override
-    public ResponseEntity<DealsResponse> searchDeals(final Long houseId, final DealSearchCondition dealSearchCondition) {
+    @PostMapping("/{houseId}/deals")
+    @AgentAccess
+    public ResponseEntity<Void> createDeal(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long houseId,
+        @RequestPart final DealCreateRequest dealCreateRequest,
+        @RequestPart final List<MultipartFile> images
+    ) {
         return null;
     }
 
-    @Override
-    public ResponseEntity<Void> createDeal(final AccessContext accessContext, final Long houseId, final DealCreateRequest dealCreateRequest, final List<MultipartFile> images) {
+    @GetMapping("/{houseId}/articles")
+    @UserAccess
+    public ResponseEntity<ArticlesResponse> searchArticles(
+        @PathVariable final Long houseId,
+        @ModelAttribute final ArticleSearchCondition articleSearchCondition
+    ) {
         return null;
     }
 
-    @Override
-    public ResponseEntity<ArticlesResponse> searchArticles(final Long houseId, final ArticleSearchCondition articleSearchCondition) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Void> createArticle(final AccessContext accessContext, final Long houseId, final ArticleCreateRequest articleCreateRequest, final List<MultipartFile> images) {
+    @PostMapping("/{houseId}/articles")
+    @UserAccess
+    public ResponseEntity<Void> createArticle(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long houseId,
+        @RequestPart final ArticleCreateRequest articleCreateRequest,
+        @RequestPart final List<MultipartFile> images
+    ) {
         return null;
     }
 }
