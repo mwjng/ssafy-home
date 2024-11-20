@@ -6,7 +6,7 @@ import ssafy.ssafyhome.region.presentation.request.RegionSearchCondition;
 
 public interface RegionService {
 
-    RegionSearchResponse search(RegionSearchCondition regionSearchCondition);
+    RegionSearchResponse search(final RegionSearchCondition regionSearchCondition);
 
-    RegionIdResponse searchId(String sido, String gugun, String dong);
+    RegionIdResponse searchId(final String sido, final String gugun, final String dong);
 }

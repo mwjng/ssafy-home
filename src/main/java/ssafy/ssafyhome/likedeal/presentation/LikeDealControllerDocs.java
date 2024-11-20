@@ -13,7 +13,7 @@ import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.likedeal.application.response.LikeDealsResponse;
 
 @Tag(name = "관심 매물 컨트롤러", description = "관심 매물에 대한 조회, 생성, 삭제를 처리 하는 클래스.")
-@RequestMapping("/like/deals")
+@RequestMapping("/deals/like")
 public interface LikeDealControllerDocs {
 
     @Operation(summary = "관심 매물 조회", description = "관심 매물에 해당하는 매물 정보를 반환한다.")

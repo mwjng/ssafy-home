@@ -116,4 +116,10 @@ public class Member extends BaseEntity {
     public void changePassword(String newHashedPassword) {
         this.password = newHashedPassword;
     }
+
+    public static Member withId(Long id) {
+        Member member = new Member();
+        member.id = id;
+        return member;
+    }
 }

@@ -40,7 +40,7 @@ public class RegionRepositoryImpl implements RegionRepositoryCustom {
     }
 
     @Override
-    public Long findIdBySidoAndGugunAndDong(String sido, String gugun, String dong) {
+    public Long findIdBySidoAndGugunAndDong(final String sido, final String gugun, final String dong) {
         return queryFactory
                 .select(region.id)
                 .from(region)

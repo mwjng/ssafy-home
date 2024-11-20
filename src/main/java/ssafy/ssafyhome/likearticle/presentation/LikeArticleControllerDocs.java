@@ -14,7 +14,7 @@ import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.likearticle.application.response.LikeArticlesResponse;
 
 @Tag(name = "관심 Article 컨트롤러", description = "관심 Article에 대한 조회, 생성, 삭제를 처리 하는 클래스.")
-@RequestMapping("/like/articles")
+@RequestMapping("/articles/like")
 public interface LikeArticleControllerDocs {
 
     @Operation(summary = "관심 Article 조회", description = "관심 Article에 해당하는 Article 정보를 반환한다.")

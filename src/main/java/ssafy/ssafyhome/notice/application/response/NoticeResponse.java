@@ -9,4 +9,15 @@ public record NoticeResponse(
         String content,
         LocalDateTime createdAt,
         LocalDateTime modifiedAt) {
+
+    public static NoticeResponse from(NoticeQueryResponse queryResponse) {
+        return new NoticeResponse(
+                queryResponse.getNoticeId(),
+                queryResponse.getWriter(),
+                queryResponse.getTitle(),
+                queryResponse.getContent(),
+                queryResponse.getCreatedAt(),
+                queryResponse.getModifiedAt()
+        );
+    }
 }

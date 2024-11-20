@@ -13,7 +13,7 @@ import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.likehouse.application.response.LikeHousesResponse;
 
 @Tag(name = "관심 House 컨트롤러", description = "관심 House에 대한 조회, 생성, 삭제를 처리 하는 클래스.")
-@RequestMapping("/like/houses")
+@RequestMapping("/houses/like")
 public interface LikeHouseControllerDocs {
 
     @Operation(summary = "관심 House 조회", description = "관심 House에 해당하는 House 정보를 반환한다.")

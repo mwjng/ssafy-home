@@ -71,8 +71,5 @@ public interface NoticeControllerDocs {
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(
-            final AccessContext accessContext,
-            @Parameter(name = "id") final Long id
-    );
+    ResponseEntity<Void> delete(@Parameter(name = "id") final Long id);
 }

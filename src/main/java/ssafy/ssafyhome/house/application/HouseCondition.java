@@ -8,7 +8,10 @@ public class HouseCondition {
 
     private int size;
     private Long cursorId;
-    private Long regionId;
+    private String sido; // 서울특별시
+    private String gugun;
+    private String dong;
+//    private Long regionId;
     private HouseType type;
     private Long startBuildYear;
     private Long endBuildYear;

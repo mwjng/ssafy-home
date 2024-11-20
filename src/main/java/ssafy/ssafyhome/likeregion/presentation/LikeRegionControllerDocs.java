@@ -13,7 +13,7 @@ import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.likeregion.application.response.LikeRegionsResponse;
 
 @Tag(name = "관심 지역 컨트롤러", description = "관심 지역에 대한 조회, 생성 삭제를 처리 하는 클래스.")
-@RequestMapping("/like/regions")
+@RequestMapping("/regions/like")
 public interface LikeRegionControllerDocs {
 
     @Operation(summary = "관심 지역 조회", description = "관심 지역에 해당하는 지역 정보를 반환한다.")
