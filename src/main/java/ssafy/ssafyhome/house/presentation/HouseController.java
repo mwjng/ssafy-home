@@ -1,6 +1,7 @@
 package ssafy.ssafyhome.house.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
 import ssafy.ssafyhome.house.application.HouseService;
 import ssafy.ssafyhome.house.application.response.HouseResponse;
 import ssafy.ssafyhome.house.application.response.HousesResponse;
-import ssafy.ssafyhome.house.presentation.request.HouseRegistRequest;
+import ssafy.ssafyhome.house.presentation.request.HouseCreateRequest;
 import ssafy.ssafyhome.house.presentation.request.HouseSearchRequest;
 import ssafy.ssafyhome.house.presentation.request.HouseUpdateRequest;
 
@@ -36,27 +37,28 @@ public class HouseController implements HouseControllerDocs{
 
     @GetMapping
     public ResponseEntity<HousesResponse> searchAll(
-        @ModelAttribute final HouseSearchRequest houseSearchRequest,
+        @Valid @ModelAttribute final HouseSearchRequest houseSearchRequest,
         final HttpServletRequest httpServletRequest
     ) {
-        return ResponseEntity.ok(houseService.searchAll(getBaseUrl(httpServletRequest)));
+        return ResponseEntity.ok(houseService.searchAll(houseSearchRequest, getBaseUrl(httpServletRequest)));
     }
 
     @GetMapping("/{houseId}")
     public ResponseEntity<HouseResponse> search(
         @PathVariable final Long houseId,
-        @ModelAttribute final HouseSearchRequest houseSearchRequest
+        final HttpServletRequest httpServletRequest
     ) {
-        return null;
+        return ResponseEntity.ok(houseService.search(houseId, getBaseUrl(httpServletRequest)));
     }
 
     @PostMapping
     @AdminAccess
     public ResponseEntity<Void> create(
         @AuthenticationPrincipal final AccessContext accessContext,
-        @RequestPart final HouseRegistRequest houseRegistRequest,
+        @Valid @RequestPart final HouseCreateRequest houseCreateRequest,
         @RequestPart final List<MultipartFile> images
     ) {
+        houseService.createHouse(houseCreateRequest, images);
         return null;
     }
 
@@ -65,7 +67,7 @@ public class HouseController implements HouseControllerDocs{
     public ResponseEntity<Void> update(
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long houseId,
-        @RequestPart final HouseUpdateRequest houseUpdateRequest,
+        @Valid @RequestPart final HouseUpdateRequest houseUpdateRequest,
         @RequestPart final List<MultipartFile> images
     ) {
         return null;

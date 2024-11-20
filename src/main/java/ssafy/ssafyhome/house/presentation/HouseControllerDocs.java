@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.article.application.response.ArticlesResponse;
 import ssafy.ssafyhome.article.presentation.request.ArticleCreateRequest;
@@ -20,7 +19,7 @@ import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
 import ssafy.ssafyhome.house.application.response.HouseResponse;
 import ssafy.ssafyhome.house.application.response.HousesResponse;
-import ssafy.ssafyhome.house.presentation.request.HouseRegistRequest;
+import ssafy.ssafyhome.house.presentation.request.HouseCreateRequest;
 import ssafy.ssafyhome.house.presentation.request.HouseSearchRequest;
 import ssafy.ssafyhome.house.presentation.request.HouseUpdateRequest;
 
@@ -47,8 +46,7 @@ public interface HouseControllerDocs {
             @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
     })
     ResponseEntity<HouseResponse> search(
-            @Parameter(name = "id") final Long id,
-            @Parameter(name = "검색 조건") final HouseSearchRequest houseSearchRequest
+            @Parameter(name = "id") final Long id, final HttpServletRequest httpServletRequest
     );
 
     @Operation(summary = "house 생성", description = "house를 생성한다.")
@@ -59,7 +57,7 @@ public interface HouseControllerDocs {
     })
     ResponseEntity<Void> create(
             final AccessContext accessContext,
-            @Parameter(name = "house") final HouseRegistRequest houseRegistRequest,
+            @Parameter(name = "house") final HouseCreateRequest houseRegistRequest,
             @Parameter(name = "image") final List<MultipartFile> images
     );
 

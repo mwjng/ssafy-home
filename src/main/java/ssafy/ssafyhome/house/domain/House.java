@@ -1,6 +1,7 @@
 package ssafy.ssafyhome.house.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.ssafyhome.common.auditing.BaseEntity;
@@ -54,4 +55,26 @@ public class House extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "region_id")
     private Region region;
+
+    @Builder
+    public House(
+        final String name, final Long buildYear,
+        final String jibun, final String road,
+        final String bonbun, final String bubun,
+        final String latitude, final String longitude,
+        final String dirName, final HouseType type,
+        final Region region
+    ) {
+        this.name = name;
+        this.buildYear = buildYear;
+        this.jibun = jibun;
+        this.road = road;
+        this.bonbun = bonbun;
+        this.bubun = bubun;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.dirName = dirName;
+        this.type = type;
+        this.region = region;
+    }
 }

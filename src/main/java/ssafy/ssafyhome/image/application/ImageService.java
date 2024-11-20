@@ -33,7 +33,7 @@ public class ImageService {
         this.imageDirPath = imageDirPath;
     }
 
-    public List<String> save(final List<MultipartFile> images, final String dirName) {
+    public String save(final List<MultipartFile> images, final String dirName) {
         return imageUploader.uploadImages(images, dirName, imageDirPath);
     }
 

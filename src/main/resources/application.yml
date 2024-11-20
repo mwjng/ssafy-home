@@ -5,22 +5,15 @@ spring:
     import: application-secret.yml
 
   datasource:
-    url: jdbc:mysql://localhost:3306/ssafyhome?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ssafy
-    password: ssafy
+    url: jdbc:h2:mem:~/BoardPracticeApplication
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     open-in-view: false
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-        highlight_sql: true
-        format_sql: true
-    defer-datasource-initialization: true
 
   data:
     redis:
@@ -53,7 +46,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -61,21 +54,19 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
 
+  h2:
+    console:
+      enabled: true
+
 ---
 spring:
   config:
     activate:
       on-profile: test
 
-  datasource:
-    url: jdbc:mysql://localhost:3306/ssafyhome?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ssafy
-    password: ssafy
-
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:

@@ -124,7 +124,7 @@ public class MemberService {
     @Transactional
     public void updateProfileImage(final Long memberId, final MultipartFile image) {
         final Member member = findMember(memberId);
-        final String imagePath = imageService.save(List.of(image), PROFILE_IMG_DIR).getFirst();
+        final String imagePath = imageService.save(List.of(image), PROFILE_IMG_DIR);
         final List<String> imgFilePaths = imageService.getImageFilePaths(member.getDirName(), PROFILE_IMG_DIR);
         final String imageFileDirPath = imageService.getImageFileDirPath(member.getDirName(), PROFILE_IMG_DIR);
         eventPublisher.publishEvent(new ImageEvent(imageFileDirPath, imgFilePaths));

@@ -19,21 +19,22 @@ import static ssafy.ssafyhome.common.exception.ErrorCode.INVALID_IMAGE_FORMAT;
 public class FileSystemImageUploader implements ImageUploader {
 
     @Override
-    public List<String> uploadImages(final List<MultipartFile> images, final String dirName, final String imageDirPath) {
+    public String uploadImages(final List<MultipartFile> images, final String dirName, final String imageDirPath) {
         return images.stream()
             .map(image -> uploadImage(image, dirName, imageDirPath))
-            .toList();
+            .findAny()
+            .orElseThrow(() -> new ImageException(FAIL_IMAGE_UPLOAD));
     }
 
     private String uploadImage(final MultipartFile image, final String dirName, String imageFileDir) {
         final String originalName = image.getOriginalFilename();
-        final String imageFileName = generateShortUUID();
-        final String imageFullPath = getImageFullPath(originalName, imageFileDir + dirName, imageFileName);
+        final String imageFileDirName = generateShortUUID();
+        final String imageFullPath = getImageFullPath(originalName, imageFileDir + dirName, imageFileDirName);
         try {
             Path path = Path.of(imageFullPath);
             Files.createDirectories(path.getParent());
             Files.copy(image.getInputStream(), path, REPLACE_EXISTING);
-            return imageFileName;
+            return imageFileDirName;
         } catch (IOException e) {
             throw new ImageException(FAIL_IMAGE_UPLOAD, e);
         }
