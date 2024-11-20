@@ -4,10 +4,10 @@ import ssafy.ssafyhome.directmessage.domain.MessageStatus;
 
 import java.time.LocalDateTime;
 
-public record DirectMessageResponse(
+public record ReceivedMessageResponse(
         Long directMessageId,
-        Long memberId,
-        String nickname,
+        Long senderId,
+        String senderName,
         String content,
         MessageStatus status,
         LocalDateTime createAt,

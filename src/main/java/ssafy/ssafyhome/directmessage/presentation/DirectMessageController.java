@@ -1,44 +1,65 @@
 package ssafy.ssafyhome.directmessage.presentation;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.directmessage.application.response.DirectMessageResponse;
-import ssafy.ssafyhome.directmessage.application.response.DirectMessagesResponse;
+import ssafy.ssafyhome.directmessage.application.response.ReceivedMessagesResponse;
+import ssafy.ssafyhome.directmessage.application.response.SentMessagesResponse;
+import ssafy.ssafyhome.directmessage.application.response.UnreadMessageResponse;
 
-@RestController
+@RequiredArgsConstructor
 @RequestMapping("/direct-messages")
+@RestController
 public class DirectMessageController implements DirectMessageControllerDocs{
 
     @Override
     @UserAccess
-    public ResponseEntity<DirectMessagesResponse> searchAll(final AccessContext accessContext, final int size, final Long cursorId) {
+    @GetMapping("/received")
+    public ResponseEntity<ReceivedMessagesResponse> searchReceivedMessages(final AccessContext accessContext, final int size, final Long cursorId) {
         return null;
     }
 
     @Override
     @UserAccess
+    @GetMapping("/sent")
+    public ResponseEntity<SentMessagesResponse> searchSentMessages(final AccessContext accessContext, final int size, final Long cursorId) {
+        return null;
+    }
+
+    @Override
+    @UserAccess
+    @GetMapping("/{directMessageId}")
     public ResponseEntity<DirectMessageResponse> search(final AccessContext accessContext, final Long directMessageId) {
         return null;
     }
 
     @Override
     @UserAccess
-    public ResponseEntity<Boolean> searchUnRead(final AccessContext accessContext) {
+    @GetMapping("/search-unread")
+    public ResponseEntity<UnreadMessageResponse> searchUnRead(final AccessContext accessContext) {
         return null;
     }
 
     @Override
     @UserAccess
-    public ResponseEntity<Void> send(final AccessContext accessContext, final Long receiverId, final String content) {
+    @PostMapping("/{receiverId}")
+    public ResponseEntity<Void> send(
+            @AuthenticationPrincipal final AccessContext accessContext,
+            @PathVariable final Long receiverId,
+            @RequestBody final String content) {
         return null;
     }
 
     @Override
     @UserAccess
-    public ResponseEntity<Void> delete(final AccessContext accessContext, final Long directMessageId) {
+    @DeleteMapping("/{directMessageId}")
+    public ResponseEntity<Void> delete(
+            @AuthenticationPrincipal final AccessContext accessContext,
+            @PathVariable final Long directMessageId) {
         return null;
     }
 }

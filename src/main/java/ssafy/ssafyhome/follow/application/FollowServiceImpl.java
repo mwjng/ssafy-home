@@ -17,6 +17,7 @@ import ssafy.ssafyhome.member.domain.repository.MemberRepository;
 import ssafy.ssafyhome.member.exception.MemberException;
 
 import java.util.List;
+import java.util.Objects;
 
 import static ssafy.ssafyhome.common.exception.ErrorCode.*;
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.defaultSort;
@@ -89,9 +90,14 @@ public class FollowServiceImpl implements FollowService{
     @Override
     @Transactional
     public void createFollow(final Long followerId, final Long followingId) {
-        if(!memberRepository.existsById(followerId) || !memberRepository.existsById(followingId)){
-            throw new MemberException(NOT_FOUND_MEMBER);
+        if(Objects.equals(followerId, followingId)){
+            // TODO throw new FollowException(SELF_FOLLOW_NOT_ALLOWED); INVALID_SELF_FOLLOW_REQUEST(3050, BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다.");
         }
+
+        if(!memberRepository.existsById(followerId) || !memberRepository.existsById(followingId)){
+            throw new MemberException(NOT_FOUND_USER_ID);
+        }
+
         Member follower = Member.withId(followerId);
         Member following = Member.withId(followingId);
         Follow follow = Follow.create(follower, following);
