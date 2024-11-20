@@ -19,6 +19,7 @@ public enum ErrorCode {
     INVALID_VERIFICATION_CODE(1006, BAD_REQUEST, "올바르지 않은 인증 코드입니다."),
     INVALID_REGION_FIELD(1010, BAD_REQUEST, "유효하지 않은 지역 필드 요청입니다."),
     INVALID_REGION(1011, BAD_REQUEST, "유효하지 않은 지역 요청입니다."),
+    INVALID_HOUSE_TYPE(1020, BAD_REQUEST, "올바르지 않은 주거 타입입니다."),
 
     INVALID_AUTHORITY(2001, FORBIDDEN, "해당 리소스에 접근할 권한이 없습니다."),
     INVALID_USER_ID(2002, UNAUTHORIZED, "아이디가 존재하지 않습니다."),
@@ -38,8 +39,6 @@ public enum ErrorCode {
     NOT_FOUND_USER_EMAIL(3003, NOT_FOUND, "요청한 이메일에 해당하는 사용자가 존재하지 않습니다."),
     NOT_FOUND_IMAGE_FILE(3004, NOT_FOUND, "요청한 이미지 파일을 찾을 수 없습니다."),
     NOT_FOUND_VERIFICATION_CODE(3005, NOT_FOUND, "요청에 해당하는 검증 코드가 존재하지 않습니다."),
-    NOT_FOUND_MEMBER(3006, NOT_FOUND, "요청한 ID에 해당하는 Member가 없습니다."),
-    NOT_FOUND_HOUSE_ID(3006, NOT_FOUND, "요청한 ID에 해당하는 집이 존재하지 않습니다."),
     NOT_FOUND_HOUSE_ID(3006, NOT_FOUND, "요청한 ID에 해당하는 집이 존재하지 않습니다."),
 
     NOT_FOUND_NOTICE(3020, NOT_FOUND, "요청한 ID에 해당하는 공지사항이 없습니다."),
