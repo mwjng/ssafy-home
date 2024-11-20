@@ -14,6 +14,7 @@ import ssafy.ssafyhome.directmessage.application.response.DirectMessageResponse;
 import ssafy.ssafyhome.directmessage.application.response.ReceivedMessagesResponse;
 import ssafy.ssafyhome.directmessage.application.response.SentMessagesResponse;
 import ssafy.ssafyhome.directmessage.application.response.UnreadMessageResponse;
+import ssafy.ssafyhome.directmessage.presentation.request.SendMessageRequest;
 
 @Tag(name = "DirectMessage 컨트롤러", description = "DirectMessage에 대한 등록, 수정, 삭제, 조회를 처리 하는 클래스.")
 @RequestMapping("/direct-messages")
@@ -81,7 +82,7 @@ public interface DirectMessageControllerDocs {
     ResponseEntity<Void> send(
             final AccessContext accessContext,
             @Parameter(name = "receiverId") Long receiverId,
-            @Parameter(name = "내용") String content
+            @Parameter(name = "message") SendMessageRequest sendMessageRequest
     );
 
     @Operation(summary = "DirectMessage 삭제", description = "DirectMessage를 삭제한다.")

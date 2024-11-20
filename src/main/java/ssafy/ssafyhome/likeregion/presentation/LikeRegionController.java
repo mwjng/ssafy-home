@@ -1,5 +1,6 @@
 package ssafy.ssafyhome.likeregion.presentation;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.likeregion.application.LikeRegionService;
 import ssafy.ssafyhome.likeregion.application.response.LikeRegionsResponse;
+import ssafy.ssafyhome.likeregion.presentation.request.CreateLikeRegionRequest;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -19,7 +21,6 @@ public class LikeRegionController implements LikeRegionControllerDocs {
 
     private final LikeRegionService likeRegionService;
 
-    @Override
     @UserAccess
     @GetMapping
     public ResponseEntity<LikeRegionsResponse> searchAll(
@@ -30,19 +31,15 @@ public class LikeRegionController implements LikeRegionControllerDocs {
         return ResponseEntity.ok().body(response);
     }
 
-    @Override
     @UserAccess
     @PostMapping
     public ResponseEntity<Void> create(
             @AuthenticationPrincipal final AccessContext accessContext,
-            @RequestParam final String sido,
-            @RequestParam final String gugun,
-            @RequestParam final String dong) {
-        likeRegionService.create(accessContext.getMemberId(), sido, gugun, dong);
+            @Valid @RequestBody CreateLikeRegionRequest createLikeRegionRequest) {
+        likeRegionService.create(accessContext.getMemberId(), createLikeRegionRequest);
         return ResponseEntity.status(CREATED).build();
     }
 
-    @Override
     @UserAccess
     @DeleteMapping("/{likeRegionId}")
     public ResponseEntity<Void> delete(@AuthenticationPrincipal final AccessContext accessContext, @PathVariable final Long likeRegionId) {

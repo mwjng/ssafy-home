@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.likeregion.application.response.LikeRegionsResponse;
+import ssafy.ssafyhome.likeregion.presentation.request.CreateLikeRegionRequest;
 
 @Tag(name = "관심 지역 컨트롤러", description = "관심 지역에 대한 조회, 생성 삭제를 처리 하는 클래스.")
 @RequestMapping("/regions/like")
@@ -39,9 +40,7 @@ public interface LikeRegionControllerDocs {
     @PostMapping
     ResponseEntity<Void> create(
             final AccessContext accessContext,
-            @Parameter(name = "sido") final String sido,
-            @Parameter(name = "gugun") final String gugun,
-            @Parameter(name = "dong") final String dong
+            @Parameter(name = "region")CreateLikeRegionRequest createLikeRegionRequest
     );
 
     @Operation(summary = "관심 지역 삭제", description = "관심 지역을 삭제한다.")

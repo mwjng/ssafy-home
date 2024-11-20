@@ -3,8 +3,8 @@ package ssafy.ssafyhome.notice.presentation.request;
 import jakarta.validation.constraints.NotBlank;
 
 public record NoticeCreateRequest(
-        @NotBlank(message = "제목은 필수 값입니다.")
+        @NotBlank(message = "제목을 입력해주세요.")
         String title,
-        @NotBlank(message = "내용은 필수 값입니다.")
+        @NotBlank(message = "내용을 입력해주세요.")
         String content) {
 }

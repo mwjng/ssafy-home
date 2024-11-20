@@ -10,6 +10,7 @@ import ssafy.ssafyhome.directmessage.application.response.DirectMessageResponse;
 import ssafy.ssafyhome.directmessage.application.response.ReceivedMessagesResponse;
 import ssafy.ssafyhome.directmessage.application.response.SentMessagesResponse;
 import ssafy.ssafyhome.directmessage.application.response.UnreadMessageResponse;
+import ssafy.ssafyhome.directmessage.presentation.request.SendMessageRequest;
 
 @RequiredArgsConstructor
 @RequestMapping("/direct-messages")
@@ -50,7 +51,7 @@ public class DirectMessageController implements DirectMessageControllerDocs{
     public ResponseEntity<Void> send(
             @AuthenticationPrincipal final AccessContext accessContext,
             @PathVariable final Long receiverId,
-            @RequestBody final String content) {
+            @RequestBody SendMessageRequest sendMessageRequest) {
         return null;
     }
 
