@@ -92,4 +92,10 @@ public class House extends BaseEntity {
         this.type = HouseType.getHouseType(request.houseType());
         this.region = region;
     }
+
+    public static House withId(Long id) {
+        House house = new House();
+        house.id = id;
+        return house;
+    }
 }

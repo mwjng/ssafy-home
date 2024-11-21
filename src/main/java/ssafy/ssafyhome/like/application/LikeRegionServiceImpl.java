@@ -38,13 +38,7 @@ public class LikeRegionServiceImpl implements LikeRegionService {
 
     @Transactional
     public void create(final Long memberId, final LikeRegionCreateRequest likeRegionCreateRequest) {
-        Member member = Member.withId(memberId);
-        Region region = Region.create(
-                likeRegionCreateRequest.sido(),
-                likeRegionCreateRequest.gugun(),
-                likeRegionCreateRequest.dong());
-        LikeRegion likeRegion = LikeRegion.create(region, member);
-        likeRegionRepository.save(likeRegion);
+        likeRegionRepository.save(makeLikeRegion(memberId, likeRegionCreateRequest));
     }
 
     @Transactional
@@ -54,5 +48,12 @@ public class LikeRegionServiceImpl implements LikeRegionService {
             throw new LikeRegionException(UNAUTHORIZED_LIKE_REGION_ACCESS);
         }
         likeRegionRepository.deleteById(likeRegionId);
+    }
+
+    private LikeRegion makeLikeRegion(final Long memberId, final LikeRegionCreateRequest likeRegionCreateRequest) {
+        return LikeRegion.create(Region.create(
+                likeRegionCreateRequest.sido(),
+                likeRegionCreateRequest.gugun(),
+                likeRegionCreateRequest.dong()), Member.withId(memberId));
     }
 }

@@ -70,8 +70,7 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     public void send(final Long memberId, final Long receiverId, final SendMessageRequest sendMessageRequest) {
-        Member sender = Member.withId(memberId);
-        Member receiver = Member.withId(receiverId);
+        directMessageRepository.save(makeDirectMessage(memberId, receiverId, sendMessageRequest));
     }
 
     public void delete(final Long memberId, final Long directMessageId) {
@@ -82,6 +81,10 @@ public class DirectMessageServiceImpl implements DirectMessageService {
         }
 
         directMessageRepository.deleteById(directMessageId);
+    }
+
+    private DirectMessage makeDirectMessage(final Long memberId, final Long receiverId, final SendMessageRequest sendMessageRequest) {
+        return DirectMessage.create(sendMessageRequest.content(), Member.withId(memberId), Member.withId(receiverId));
     }
 
     private PageRequest createPageRequest(final int size) {

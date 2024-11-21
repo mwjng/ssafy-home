@@ -81,10 +81,7 @@ public class FollowServiceImpl implements FollowService {
             throw new MemberException(NOT_FOUND_USER_ID);
         }
 
-        Member follower = Member.withId(followerId);
-        Member following = Member.withId(followingId);
-        Follow follow = Follow.create(follower, following);
-        followRepository.save(follow);
+        followRepository.save(makeFollow(followerId, followingId));
     }
 
     private FollowerResponse getFollowerResponse(final String baseUrl, final FollowQueryResponse follower) {
@@ -107,6 +104,11 @@ public class FollowServiceImpl implements FollowService {
 
     private List<String> getImageUrl(final String baseUrl, final List<String> imageFileNames, final String dirName) {
         return imageService.getImageUrlList(baseUrl, PROFILE.getDirectory(), imageFileNames, dirName);
+    }
+
+
+    private Follow makeFollow(final Long followerId, final Long followingId) {
+        return Follow.create(Member.withId(followerId), Member.withId(followingId));
     }
 
     private PageRequest createPageRequest(final int size) {

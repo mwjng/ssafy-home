@@ -28,4 +28,11 @@ public class LikeHouse extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "house_id")
     private House house;
+
+    public static LikeHouse create(Member member, House house){
+        LikeHouse likeHouse = new LikeHouse();
+        likeHouse.member = member;
+        likeHouse.house = house;
+        return likeHouse;
+    }
 }

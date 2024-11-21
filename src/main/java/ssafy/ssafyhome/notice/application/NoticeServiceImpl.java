@@ -46,12 +46,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Transactional
     public void create(final Long adminId, final NoticeCreateRequest noticeCreateRequest) {
-        Notice notice = Notice.create(
-                noticeCreateRequest.title(),
-                noticeCreateRequest.content(),
-                Member.withId(adminId)
-        );
-        noticeRepository.save(notice);
+        noticeRepository.save(makeNotice(adminId, noticeCreateRequest));
     }
 
     @Transactional
@@ -75,5 +70,13 @@ public class NoticeServiceImpl implements NoticeService {
         }
 
         noticeRepository.deleteById(noticeId);
+    }
+
+    private Notice makeNotice(final Long adminId, final NoticeCreateRequest noticeCreateRequest) {
+        return Notice.create(
+                noticeCreateRequest.title(),
+                noticeCreateRequest.content(),
+                Member.withId(adminId)
+        );
     }
 }
