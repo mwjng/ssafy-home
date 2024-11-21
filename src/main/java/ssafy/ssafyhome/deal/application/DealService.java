@@ -1,17 +1,22 @@
 package ssafy.ssafyhome.deal.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.common.exception.BadRequestException;
+import ssafy.ssafyhome.deal.application.response.DealResponse;
+import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.domain.Deal;
 import ssafy.ssafyhome.deal.domain.repository.DealRepository;
+import ssafy.ssafyhome.deal.infrastructure.DealQueryRepository;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.repository.HouseRepository;
 import ssafy.ssafyhome.image.application.ImageService;
+import ssafy.ssafyhome.image.domain.ImageEvent;
 import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.domain.repository.MemberRepository;
 import ssafy.ssafyhome.member.presentation.response.MyDealResponse;
@@ -27,12 +32,14 @@ import static ssafy.ssafyhome.image.application.ImageDirectory.*;
 @Service
 public class DealService {
 
-    private final DealRepository dealRepository;
     private final ImageService imageService;
+    private final DealRepository dealRepository;
+    private final DealQueryRepository dealQueryRepository;
     private final MemberRepository memberRepository;
     private final HouseRepository houseRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public MyDealsResponse getMyDeals(Long memberId, Pageable pageable, String baseUrl) {
+    public MyDealsResponse getDealsByMemberId(Long memberId, Pageable pageable, String baseUrl) {
         final List<Deal> deals = dealRepository.findDealsByMemberId(memberId, pageable);
         final List<MyDealResponse> myDealResponses = deals.stream()
             .map(deal -> MyDealResponse.of(
@@ -47,6 +54,21 @@ public class DealService {
     private List<String> getImageUrlList(final String baseUrl, final String dirName, final String imgDir) {
         final List<String> imageFileNames = imageService.getImageFileNames(dirName, imgDir);
         return imageService.getImageUrlList(baseUrl, imgDir, imageFileNames, dirName);
+    }
+
+    public DealsResponse getDealsByHouseId(final Long houseId, final String baseUrl) {
+        if(!houseRepository.existsById(houseId)) {
+            throw new BadRequestException(NOT_FOUND_HOUSE_ID);
+        }
+        final List<Deal> deals = dealRepository.findDealsByHouseId(houseId);
+        final List<DealResponse> dealResponses = deals.stream()
+            .map(deal -> DealResponse.of(
+                deal,
+                getImageUrlList(baseUrl, deal.getDirName(), DEAL.getDirectory()),
+                getImageUrlList(baseUrl, deal.getHouse().getDirName(), HOUSE.getDirectory())
+            )).toList();
+
+        return new DealsResponse(dealResponses);
     }
 
     @Transactional
@@ -64,8 +86,17 @@ public class DealService {
         dealRepository.save(dealCreateRequest.toDeal(house, member, imagePath));
     }
 
+    @Transactional
     public void deleteDeal(final Long dealId) {
-        dealRepository.findById(dealId)
+        final Deal deal = dealRepository.findById(dealId)
             .orElseThrow(() -> new BadRequestException(NOT_FOUND_DEAL_ID));
+        deleteImages(deal.getDirName(), DEAL.getDirectory());
+        dealRepository.deleteById(dealId);
+    }
+
+    private void deleteImages(final String dirName, String imgDir) {
+        final List<String> imageFilePaths = imageService.getImageFilePaths(dirName, imgDir);
+        final String imageFileDirPath = imageService.getImageFileDirPath(dirName, imgDir);
+        eventPublisher.publishEvent(new ImageEvent(imageFileDirPath, imageFilePaths));
     }
 }

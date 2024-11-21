@@ -14,6 +14,7 @@ import ssafy.ssafyhome.article.application.response.ArticlesResponse;
 import ssafy.ssafyhome.article.presentation.request.ArticleCreateRequest;
 import ssafy.ssafyhome.article.presentation.request.ArticleSearchCondition;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
 import ssafy.ssafyhome.house.application.response.HouseResponse;
@@ -81,18 +82,6 @@ public interface HouseControllerDocs {
     ResponseEntity<Void> deleteHouse(
             final AccessContext accessContext,
             @Parameter(name = "id") final Long id
-    );
-
-    @Operation(summary = "house에 해당하는 모든 deal 조회", description = "house에 해당하는 모든 deal의 정보를 반환한다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = DealsResponse.class))),
-            @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
-    })
-    ResponseEntity<DealsResponse> getDeals(
-            @Parameter(name = "houseId") final Long houseId,
-            @Parameter(name = "검색 조건") final DealSearchCondition dealSearchCondition
     );
 
     @Operation(summary = "house에 해당하는 deal을 생성", description = "house에 해당하는 deal을 생성한다.")

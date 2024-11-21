@@ -1,15 +1,12 @@
 package ssafy.ssafyhome.house.infrastructure;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ssafy.ssafyhome.house.application.request.HouseSearchCondition;
 import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.HouseType;
-import ssafy.ssafyhome.house.presentation.request.HouseSearchRequest;
 
 import java.util.List;
 

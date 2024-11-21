@@ -67,7 +67,7 @@ public class HouseController implements HouseControllerDocs{
         return ResponseEntity.status(CREATED).build();
     }
 
-    @PatchMapping("/{houseId}")
+    @PutMapping("/{houseId}")
     @AdminAccess
     public ResponseEntity<Void> updateHouse(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -89,10 +89,11 @@ public class HouseController implements HouseControllerDocs{
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{houseId}/deals")
-    public ResponseEntity<DealsResponse> getDeals(
+    @GetMapping("/{houseId}/articles")
+    @UserAccess
+    public ResponseEntity<ArticlesResponse> getArticles(
         @PathVariable final Long houseId,
-        @ModelAttribute final DealSearchCondition dealSearchCondition
+        @ModelAttribute final ArticleSearchCondition articleSearchCondition
     ) {
 
         return null;
@@ -106,16 +107,6 @@ public class HouseController implements HouseControllerDocs{
         @RequestPart final DealCreateRequest dealCreateRequest,
         @RequestPart final List<MultipartFile> images
     ) {
-        return null;
-    }
-
-    @GetMapping("/{houseId}/articles")
-    @UserAccess
-    public ResponseEntity<ArticlesResponse> getArticles(
-        @PathVariable final Long houseId,
-        @ModelAttribute final ArticleSearchCondition articleSearchCondition
-    ) {
-
         return null;
     }
 

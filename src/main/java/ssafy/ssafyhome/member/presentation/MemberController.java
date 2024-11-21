@@ -40,7 +40,7 @@ public class MemberController {
     @UserAccess
     public ResponseEntity<MyInfoResponse> getMyInfo(
         @AuthenticationPrincipal final AccessContext accessContext,
-        HttpServletRequest request
+        final HttpServletRequest request
     ) {
         final MyInfoResponse myInfoResponse = memberService
             .getMyInfo(accessContext.getMemberId(), getBaseUrl(request));
@@ -52,12 +52,13 @@ public class MemberController {
     public ResponseEntity<MyDealsResponse> getMyDeals(
         @AuthenticationPrincipal final AccessContext accessContext,
         @PageableDefault(size = 10) final Pageable pageable,
-        HttpServletRequest request
+        final HttpServletRequest request
     ) {
-        return ResponseEntity.ok()
-            .body(dealService.getMyDeals(accessContext.getMemberId(), pageable, getBaseUrl(request)));
+        return ResponseEntity.ok().body(dealService.getDealsByMemberId(
+            accessContext.getMemberId(),
+            pageable,
+            getBaseUrl(request)));
     }
-
 
     @PatchMapping("/me")
     @UserAccess

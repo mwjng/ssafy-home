@@ -1,5 +1,6 @@
 package ssafy.ssafyhome.deal.presentation;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,12 +9,14 @@ import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AgentAccess;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.deal.application.DealService;
+import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.deal.presentation.request.DealUpdateRequest;
 
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
 
 @RequiredArgsConstructor
 @RequestMapping("/deals")
@@ -33,6 +36,17 @@ public class DealController implements DealControllerDocs{
         return ResponseEntity.status(CREATED).build();
     }
 
+    @GetMapping("/{houseId}")
+    public ResponseEntity<DealsResponse> getDeals(
+        @PathVariable final Long houseId,
+        final HttpServletRequest request
+    ) {
+        return ResponseEntity.ok(dealService.getDealsByHouseId(
+            houseId,
+            getBaseUrl(request)
+        ));
+    }
+
     @PutMapping("/{dealId}")
     @AgentAccess
     public ResponseEntity<Void> updateDeal(
@@ -41,7 +55,8 @@ public class DealController implements DealControllerDocs{
         @RequestPart final DealUpdateRequest dealUpdateRequest,
         @RequestPart final List<MultipartFile> images
     ) {
-        return null;
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{dealId}")
@@ -50,6 +65,7 @@ public class DealController implements DealControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long dealId
     ) {
-        return null;
+        dealService.deleteDeal(dealId);
+        return ResponseEntity.noContent().build();
     }
 }
