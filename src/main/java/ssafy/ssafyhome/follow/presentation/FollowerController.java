@@ -19,7 +19,6 @@ public class FollowerController implements FollowerControllerDocs{
 
     private final FollowService followService;
 
-    @Override
     @UserAccess
     @GetMapping
     public ResponseEntity<FollowersResponse> searchFollowers(
@@ -32,7 +31,6 @@ public class FollowerController implements FollowerControllerDocs{
         return ResponseEntity.ok().body(response);
     }
 
-    @Override
     @UserAccess
     @DeleteMapping("/{followId}")
     public ResponseEntity<Void> delete(

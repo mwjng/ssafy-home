@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.directmessage.application.response.DirectMessageResponse;
 import ssafy.ssafyhome.directmessage.application.response.ReceivedMessagesResponse;
 import ssafy.ssafyhome.directmessage.application.response.SentMessagesResponse;
@@ -58,8 +59,7 @@ public interface DirectMessageControllerDocs {
     @GetMapping("/{directMessageId}")
     ResponseEntity<DirectMessageResponse> search(
             final AccessContext accessContext,
-            @Parameter(name = "directMessageId") Long directMessageId
-    );
+            @Parameter(name = "directMessageId") Long directMessageId);
 
     @Operation(summary = "안읽은 DirectMessage 조회", description = "안읽은 DirectMessage가 있는지 확인하여 결과를 반환한다.")
     @ApiResponses(value = {

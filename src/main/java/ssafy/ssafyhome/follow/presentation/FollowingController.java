@@ -1,6 +1,7 @@
 package ssafy.ssafyhome.follow.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.follow.application.FollowService;
 import ssafy.ssafyhome.follow.application.response.FollowingsResponse;
+import ssafy.ssafyhome.follow.presentation.request.FollowCreateRequest;
 
 import static org.springframework.http.HttpStatus.*;
 import static ssafy.ssafyhome.common.util.UrlUtil.*;
@@ -20,7 +22,6 @@ public class FollowingController implements FollowingControllerDocs{
 
     private final FollowService followService;
 
-    @Override
     @UserAccess
     @GetMapping
     public ResponseEntity<FollowingsResponse> searchFollowings(
@@ -32,17 +33,15 @@ public class FollowingController implements FollowingControllerDocs{
         return ResponseEntity.ok().body(response);
     }
 
-    @Override
     @UserAccess
-    @PostMapping("/{memberId}")
+    @PostMapping
     public ResponseEntity<Void> create(
             @AuthenticationPrincipal final AccessContext accessContext,
-            @PathVariable final Long memberId) {
-        followService.createFollow(accessContext.getMemberId(), memberId);
+            @Valid @RequestBody final FollowCreateRequest followCreateRequest) {
+        followService.createFollow(accessContext.getMemberId(), followCreateRequest.memberId());
         return ResponseEntity.status(CREATED).build();
     }
 
-    @Override
     @UserAccess
     @DeleteMapping("/{followId}")
     public ResponseEntity<Void> delete(

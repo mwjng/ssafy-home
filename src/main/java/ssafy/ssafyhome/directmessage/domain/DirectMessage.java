@@ -9,6 +9,7 @@ import ssafy.ssafyhome.member.domain.Member;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
+import static ssafy.ssafyhome.directmessage.domain.MessageStatus.*;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -33,4 +34,13 @@ public class DirectMessage extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "receiver")
     private Member receiver;
+
+    public static DirectMessage create(String content, Member sender, Member receiver){
+        DirectMessage directMessage = new DirectMessage();
+        directMessage.content = content;
+        directMessage.status = UNREAD;
+        directMessage.sender = sender;
+        directMessage.receiver = receiver;
+        return directMessage;
+    }
 }

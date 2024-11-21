@@ -8,5 +8,5 @@ public interface LikeRegionService {
 
     void create(final Long memberId, final CreateLikeRegionRequest createLikeRegionRequest);
 
-    void delete(final Long likeRegionId);
+    void delete(final Long memberId, final Long likeRegionId);
 }

@@ -23,7 +23,6 @@ public class NoticeController implements NoticeControllerDocs {
 
     private final NoticeService noticeService;
 
-    @Override
     @GetMapping
     public ResponseEntity<NoticesResponse> searchAll(
             @RequestParam(required = false, defaultValue = "10") int size,
@@ -32,14 +31,12 @@ public class NoticeController implements NoticeControllerDocs {
         return ResponseEntity.ok().body(response);
     }
 
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<NoticeResponse> search(@PathVariable final Long id) {
         NoticeResponse response = noticeService.search(id);
         return ResponseEntity.ok().body(response);
     }
 
-    @Override
     @AdminAccess
     @PostMapping
     public ResponseEntity<Void> create(
@@ -49,7 +46,6 @@ public class NoticeController implements NoticeControllerDocs {
         return ResponseEntity.status(CREATED).build();
     }
 
-    @Override
     @AdminAccess
     @PatchMapping("/{id}")
     public ResponseEntity<Void> update(
@@ -60,7 +56,6 @@ public class NoticeController implements NoticeControllerDocs {
         return ResponseEntity.noContent().build();
     }
 
-    @Override
     @AdminAccess
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable final Long id) {

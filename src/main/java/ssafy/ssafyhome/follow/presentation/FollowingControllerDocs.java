@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.follow.application.response.FollowingsResponse;
+import ssafy.ssafyhome.follow.presentation.request.FollowCreateRequest;
 
 @Tag(name = "Following 컨트롤러", description = "following에 대한 조회, 생성을 처리 하는 클래스.")
 @RequestMapping("/followings")
@@ -38,10 +39,10 @@ public interface FollowingControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @PostMapping("/{memberId}")
+    @PostMapping
     ResponseEntity<Void> create(
             final AccessContext accessContext,
-            @Parameter(name = "memberId") final Long memberId
+            @Parameter(name = "memberId") final FollowCreateRequest followCreateRequest
     );
 
     @Operation(summary = "following 취소", description = "following을 삭제한다.")

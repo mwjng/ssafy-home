@@ -43,7 +43,7 @@ public class LikeRegionController implements LikeRegionControllerDocs {
     @UserAccess
     @DeleteMapping("/{likeRegionId}")
     public ResponseEntity<Void> delete(@AuthenticationPrincipal final AccessContext accessContext, @PathVariable final Long likeRegionId) {
-        likeRegionService.delete(likeRegionId);
+        likeRegionService.delete(accessContext.getMemberId(), likeRegionId);
         return ResponseEntity.noContent().build();
     }
 }

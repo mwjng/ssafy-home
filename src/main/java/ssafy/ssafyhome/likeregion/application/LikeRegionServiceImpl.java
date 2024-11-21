@@ -21,7 +21,7 @@ import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
-public class LikeRegionServiceImpl implements LikeRegionService{
+public class LikeRegionServiceImpl implements LikeRegionService {
 
     private final LikeRegionRepository likeRegionRepository;
 
@@ -49,8 +49,9 @@ public class LikeRegionServiceImpl implements LikeRegionService{
 
     @Override
     @Transactional
-    public void delete(final Long likeRegionId) {
-        if(!likeRegionRepository.existsById(likeRegionId)){
+    public void delete(final Long memberId, final Long likeRegionId) {
+        LikeRegion likeRegion = likeRegionRepository.findById(likeRegionId).orElseThrow(() -> new LikeRegionException(NOT_FOUND_LIKE_REGION));
+        if (!likeRegion.getMember().getId().equals(memberId)) {
             throw new LikeRegionException(NOT_FOUND_LIKE_REGION);
         }
         likeRegionRepository.deleteById(likeRegionId);
