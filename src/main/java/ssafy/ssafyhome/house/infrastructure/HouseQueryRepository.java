@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import ssafy.ssafyhome.house.application.request.HouseSearchCondition;
 import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.HouseType;
 import ssafy.ssafyhome.house.presentation.request.HouseSearchRequest;
@@ -21,15 +22,15 @@ public class HouseQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<House> findHousesByRegionAndType(HouseSearchRequest request) {
+    public List<House> findHousesByRegionAndType(HouseSearchCondition condition) {
         return queryFactory
             .selectFrom(house)
             .leftJoin(house.region, region).fetchJoin()
             .where(
-                sidoEq(request.sido()),
-                gugunEq(request.gugun()),
-                dongEq(request.dong()),
-                typeEq(request.getType())
+                sidoEq(condition.sido()),
+                gugunEq(condition.gugun()),
+                dongEq(condition.dong()),
+                typeEq(condition.type())
             ).fetch();
     }
 

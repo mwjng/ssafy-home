@@ -20,12 +20,12 @@ import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
 import ssafy.ssafyhome.house.application.HouseService;
 import ssafy.ssafyhome.house.application.response.HouseResponse;
 import ssafy.ssafyhome.house.application.response.HousesResponse;
-import ssafy.ssafyhome.house.presentation.request.HouseCreateRequest;
+import ssafy.ssafyhome.house.presentation.request.HouseRequest;
 import ssafy.ssafyhome.house.presentation.request.HouseSearchRequest;
-import ssafy.ssafyhome.house.presentation.request.HouseUpdateRequest;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.*;
 import static ssafy.ssafyhome.common.util.UrlUtil.*;
 
 @RequiredArgsConstructor
@@ -36,54 +36,61 @@ public class HouseController implements HouseControllerDocs{
     private final HouseService houseService;
 
     @GetMapping
-    public ResponseEntity<HousesResponse> searchAll(
+    public ResponseEntity<HousesResponse> getHouses(
         @Valid @ModelAttribute final HouseSearchRequest houseSearchRequest,
         final HttpServletRequest httpServletRequest
     ) {
-        return ResponseEntity.ok(houseService.searchAll(houseSearchRequest, getBaseUrl(httpServletRequest)));
+        return ResponseEntity.ok(houseService.searchAll(
+            houseSearchRequest,
+            getBaseUrl(httpServletRequest)
+        ));
     }
 
     @GetMapping("/{houseId}")
-    public ResponseEntity<HouseResponse> search(
+    public ResponseEntity<HouseResponse> getHouse(
         @PathVariable final Long houseId,
         final HttpServletRequest httpServletRequest
     ) {
-        return ResponseEntity.ok(houseService.search(houseId, getBaseUrl(httpServletRequest)));
+        return ResponseEntity.ok(houseService.search(
+            houseId,
+            getBaseUrl(httpServletRequest)
+        ));
     }
 
     @PostMapping
     @AdminAccess
-    public ResponseEntity<Void> create(
+    public ResponseEntity<Void> createHouse(
         @AuthenticationPrincipal final AccessContext accessContext,
-        @Valid @RequestPart final HouseCreateRequest houseCreateRequest,
+        @Valid @RequestPart final HouseRequest houseRequest,
         @RequestPart final List<MultipartFile> images
     ) {
-        houseService.createHouse(houseCreateRequest, images);
-        return null;
+        houseService.createHouse(houseRequest, images);
+        return ResponseEntity.status(CREATED).build();
     }
 
     @PatchMapping("/{houseId}")
     @AdminAccess
-    public ResponseEntity<Void> update(
+    public ResponseEntity<Void> updateHouse(
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long houseId,
-        @Valid @RequestPart final HouseUpdateRequest houseUpdateRequest,
+        @Valid @RequestPart final HouseRequest houseRequest,
         @RequestPart final List<MultipartFile> images
     ) {
-        return null;
+        houseService.updateHouse(houseId, houseRequest, images);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{houseId}")
     @AdminAccess
-    public ResponseEntity<Void> delete(
+    public ResponseEntity<Void> deleteHouse(
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long houseId
     ) {
-        return null;
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{houseId}/deals")
-    public ResponseEntity<DealsResponse> searchDeals(
+    public ResponseEntity<DealsResponse> getDeals(
         @PathVariable final Long houseId,
         @ModelAttribute final DealSearchCondition dealSearchCondition
     ) {
@@ -103,7 +110,7 @@ public class HouseController implements HouseControllerDocs{
 
     @GetMapping("/{houseId}/articles")
     @UserAccess
-    public ResponseEntity<ArticlesResponse> searchArticles(
+    public ResponseEntity<ArticlesResponse> getArticles(
         @PathVariable final Long houseId,
         @ModelAttribute final ArticleSearchCondition articleSearchCondition
     ) {

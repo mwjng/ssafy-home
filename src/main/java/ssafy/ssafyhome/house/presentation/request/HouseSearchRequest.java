@@ -1,6 +1,7 @@
 package ssafy.ssafyhome.house.presentation.request;
 
 import jakarta.validation.constraints.NotBlank;
+import ssafy.ssafyhome.house.application.request.HouseSearchCondition;
 import ssafy.ssafyhome.house.domain.HouseType;
 
 public record HouseSearchRequest(
@@ -13,9 +14,13 @@ public record HouseSearchRequest(
     @NotBlank(message = "동을 입력해주세요.")
     String dong,
 
-    String type
+    String houseType
 ) {
-    public HouseType getType() {
-        return HouseType.getHouseType(type);
+    public HouseSearchCondition toHouseSearchCondition() {
+        return new HouseSearchCondition(sido, gugun, dong, getHouseType());
+    }
+
+    private HouseType getHouseType() {
+        return HouseType.getHouseType(houseType);
     }
 }

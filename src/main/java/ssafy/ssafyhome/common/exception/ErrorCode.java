@@ -42,6 +42,7 @@ public enum ErrorCode {
     NOT_FOUND_IMAGE_FILE(3004, NOT_FOUND, "요청한 이미지 파일을 찾을 수 없습니다."),
     NOT_FOUND_VERIFICATION_CODE(3005, NOT_FOUND, "요청에 해당하는 검증 코드가 존재하지 않습니다."),
     NOT_FOUND_HOUSE_ID(3006, NOT_FOUND, "요청한 ID에 해당하는 집이 존재하지 않습니다."),
+    NOT_FOUND_REGION(3007, NOT_FOUND, "해당 지역이 존재하지 않습니다."),
 
     NOT_FOUND_NOTICE(3020, NOT_FOUND, "요청한 ID에 해당하는 공지사항이 없습니다."),
     NOT_FOUND_LIKE_REGION(3030, NOT_FOUND, "요청한 ID에 해당하는 관심 지역이 없습니다."),

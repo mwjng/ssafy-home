@@ -19,9 +19,8 @@ import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
 import ssafy.ssafyhome.house.application.response.HouseResponse;
 import ssafy.ssafyhome.house.application.response.HousesResponse;
-import ssafy.ssafyhome.house.presentation.request.HouseCreateRequest;
+import ssafy.ssafyhome.house.presentation.request.HouseRequest;
 import ssafy.ssafyhome.house.presentation.request.HouseSearchRequest;
-import ssafy.ssafyhome.house.presentation.request.HouseUpdateRequest;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public interface HouseControllerDocs {
                             schema = @Schema(implementation = HousesResponse.class))),
             @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
     })
-    ResponseEntity<HousesResponse> searchAll(
+    ResponseEntity<HousesResponse> getHouses(
         @Parameter(name = "검색 조건") final HouseSearchRequest houseSearchRequest, final HttpServletRequest request);
 
     @Operation(summary = "house 조회", description = "house의 정보를 반환한다.")
@@ -45,7 +44,7 @@ public interface HouseControllerDocs {
                             schema = @Schema(implementation = HouseResponse.class))),
             @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
     })
-    ResponseEntity<HouseResponse> search(
+    ResponseEntity<HouseResponse> getHouse(
             @Parameter(name = "id") final Long id, final HttpServletRequest httpServletRequest
     );
 
@@ -55,9 +54,9 @@ public interface HouseControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
     })
-    ResponseEntity<Void> create(
+    ResponseEntity<Void> createHouse(
             final AccessContext accessContext,
-            @Parameter(name = "house") final HouseCreateRequest houseRegistRequest,
+            @Parameter(name = "house") final HouseRequest houseRequest,
             @Parameter(name = "image") final List<MultipartFile> images
     );
 
@@ -67,10 +66,10 @@ public interface HouseControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
     })
-    ResponseEntity<Void> update(
+    ResponseEntity<Void> updateHouse(
             final AccessContext accessContext,
             @Parameter(name = "id") final Long id,
-            @Parameter(name = "house") final HouseUpdateRequest houseUpdateRequest,
+            @Parameter(name = "house") final HouseRequest houseRequest,
             @Parameter(name = "image") final List<MultipartFile> images
     );
 
@@ -80,7 +79,7 @@ public interface HouseControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
     })
-    ResponseEntity<Void> delete(
+    ResponseEntity<Void> deleteHouse(
             final AccessContext accessContext,
             @Parameter(name = "id") final Long id
     );
@@ -92,7 +91,7 @@ public interface HouseControllerDocs {
                             schema = @Schema(implementation = DealsResponse.class))),
             @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
     })
-    ResponseEntity<DealsResponse> searchDeals(
+    ResponseEntity<DealsResponse> getDeals(
             @Parameter(name = "houseId") final Long houseId,
             @Parameter(name = "검색 조건") final DealSearchCondition dealSearchCondition
     );
@@ -117,7 +116,7 @@ public interface HouseControllerDocs {
                             schema = @Schema(implementation = ArticlesResponse.class))),
             @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
     })
-    ResponseEntity<ArticlesResponse> searchArticles(
+    ResponseEntity<ArticlesResponse> getArticles(
             @Parameter(name = "houseId") final Long houseId,
             @Parameter(name = "검색 조건") final ArticleSearchCondition articleSearchCondition
     );
