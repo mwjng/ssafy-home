@@ -47,8 +47,8 @@ public class LikeRegionServiceImpl implements LikeRegionService {
 
     @Transactional
     public void delete(final Long memberId, final Long likeRegionId) {
-        LikeRegion likeRegion = likeRegionRepository.findById(likeRegionId).orElseThrow(() -> new LikeRegionException(NOT_FOUND_LIKE_REGION));
-        if (!likeRegion.getMember().getId().equals(memberId)) {
+        Member member = likeRegionRepository.findMemberById(likeRegionId).orElseThrow(() -> new LikeRegionException(NOT_FOUND_LIKE_REGION));
+        if (!member.getId().equals(memberId)) {
             throw new LikeRegionException(UNAUTHORIZED_LIKE_REGION_ACCESS);
         }
         likeRegionRepository.deleteById(likeRegionId);

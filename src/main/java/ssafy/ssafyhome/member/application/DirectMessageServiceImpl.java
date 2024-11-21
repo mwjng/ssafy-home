@@ -4,13 +4,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ssafy.ssafyhome.member.domain.DirectMessage;
+import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.domain.repository.DirectMessageRepository;
+import ssafy.ssafyhome.member.exception.DirectMessageException;
 import ssafy.ssafyhome.member.presentation.request.SendMessageRequest;
 import ssafy.ssafyhome.member.application.response.*;
 
 import java.util.List;
 
+import static ssafy.ssafyhome.common.exception.ErrorCode.NOT_FOUND_DIRECT_MESSAGE;
+import static ssafy.ssafyhome.common.exception.ErrorCode.UNAUTHORIZED_DIRECT_MESSAGE_ACCESS;
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.defaultSort;
+import static ssafy.ssafyhome.member.domain.MessageStatus.*;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -37,25 +43,43 @@ public class DirectMessageServiceImpl implements DirectMessageService {
         return new SentMessagesResponse(sentMessages);
     }
 
-    public DirectMessageResponse searchReceivedMessage(final Long memberId, final Long directMessageId) {
-        return null;
+    public ReceivedMessageResponse searchReceivedMessage(final Long memberId, final Long directMessageId) {
+        DirectMessage message = directMessageRepository.findById(directMessageId).orElseThrow(() -> new DirectMessageException(NOT_FOUND_DIRECT_MESSAGE));
+
+        if (!message.getReceiver().getId().equals(memberId)) {
+            throw new DirectMessageException(UNAUTHORIZED_DIRECT_MESSAGE_ACCESS);
+        }
+        return ReceivedMessageResponse.from(message);
     }
 
-    public DirectMessageResponse searchSentMessage(final Long memberId, final Long directMessageId) {
-        return null;
-    }
+    public SentMessageResponse searchSentMessage(final Long memberId, final Long directMessageId) {
+        DirectMessage message = directMessageRepository.findById(directMessageId).orElseThrow(() -> new DirectMessageException(NOT_FOUND_DIRECT_MESSAGE));
 
+        if (!message.getSender().getId().equals(memberId)) {
+            throw new DirectMessageException(UNAUTHORIZED_DIRECT_MESSAGE_ACCESS);
+        }
+
+        return SentMessageResponse.from(message);
+    }
 
     public UnreadMessageResponse searchUnRead(final Long memberId) {
-        return null;
+        long unreadCount = directMessageRepository.countByReceiverIdAndStatus(memberId, UNREAD);
+        return new UnreadMessageResponse(unreadCount > 0, (int) unreadCount);
     }
 
     public void send(final Long memberId, final Long receiverId, final SendMessageRequest sendMessageRequest) {
-
+        Member sender = Member.withId(memberId);
+        Member receiver = Member.withId(receiverId);
     }
 
     public void delete(final Long memberId, final Long directMessageId) {
+        Member sender = directMessageRepository.findSenderById(directMessageId).orElseThrow(() -> new DirectMessageException(NOT_FOUND_DIRECT_MESSAGE));
 
+        if(!sender.getId().equals(memberId)){
+            throw new DirectMessageException(UNAUTHORIZED_DIRECT_MESSAGE_ACCESS);
+        }
+
+        directMessageRepository.deleteById(directMessageId);
     }
 
     private PageRequest createPageRequest(final int size) {

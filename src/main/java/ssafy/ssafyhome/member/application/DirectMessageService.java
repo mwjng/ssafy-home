@@ -1,9 +1,6 @@
 package ssafy.ssafyhome.member.application;
 
-import ssafy.ssafyhome.member.application.response.DirectMessageResponse;
-import ssafy.ssafyhome.member.application.response.ReceivedMessagesResponse;
-import ssafy.ssafyhome.member.application.response.SentMessagesResponse;
-import ssafy.ssafyhome.member.application.response.UnreadMessageResponse;
+import ssafy.ssafyhome.member.application.response.*;
 import ssafy.ssafyhome.member.presentation.request.SendMessageRequest;
 
 public interface DirectMessageService {
@@ -17,7 +14,7 @@ public interface DirectMessageService {
 
     void delete(Long memberId, Long directMessageId);
 
-    DirectMessageResponse searchReceivedMessage(Long memberId, Long directMessageId);
+    ReceivedMessageResponse searchReceivedMessage(Long memberId, Long directMessageId);
 
-    DirectMessageResponse searchSentMessage(Long memberId, Long directMessageId);
+    SentMessageResponse searchSentMessage(Long memberId, Long directMessageId);
 }

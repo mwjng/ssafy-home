@@ -57,7 +57,6 @@ public class NoticeServiceImpl implements NoticeService {
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new NoticeException(NOT_FOUND_NOTICE));
 
         if(!notice.getMember().getId().equals(adminId)){
-            // UNAUTHORIZED_NOTICE_ACCESS(2021, FORBIDDEN, "요청한 ID에 해당하는 공지사항을 설정할 권한이 없습니다."),
             throw new NoticeException(UNAUTHORIZED_NOTICE_ACCESS);
         }
 

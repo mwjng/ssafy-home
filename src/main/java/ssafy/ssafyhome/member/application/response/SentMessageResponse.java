@@ -1,5 +1,6 @@
 package ssafy.ssafyhome.member.application.response;
 
+import ssafy.ssafyhome.member.domain.DirectMessage;
 import ssafy.ssafyhome.member.domain.MessageStatus;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,18 @@ public record SentMessageResponse(
                 sentMessageQueryResponse.status(),
                 sentMessageQueryResponse.createdAt(),
                 sentMessageQueryResponse.modifiedAt()
+        );
+    }
+
+    public static SentMessageResponse from(DirectMessage directMessage){
+        return new SentMessageResponse(
+                directMessage.getId(),
+                directMessage.getReceiver().getId(),
+                directMessage.getReceiver().getNickname(),
+                directMessage.getContent(),
+                directMessage.getStatus(),
+                directMessage.getCreatedAt(),
+                directMessage.getModifiedAt()
         );
     }
 }

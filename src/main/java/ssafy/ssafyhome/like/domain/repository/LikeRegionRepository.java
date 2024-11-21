@@ -10,7 +10,6 @@ import java.util.Optional;
 public interface LikeRegionRepository extends JpaRepository<LikeRegion, Long>, LikeRegionRepositoryCustom {
     Optional<LikeRegion> findByIdAndMember(Long regionId, Member member);
 
-    @Override
     @EntityGraph(attributePaths = {"member"})
-    Optional<LikeRegion> findById(Long regionId);
+    Optional<Member> findMemberById(Long regionId);
 }

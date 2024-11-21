@@ -7,10 +7,7 @@ import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.member.application.DirectMessageService;
-import ssafy.ssafyhome.member.application.response.DirectMessageResponse;
-import ssafy.ssafyhome.member.application.response.ReceivedMessagesResponse;
-import ssafy.ssafyhome.member.application.response.SentMessagesResponse;
-import ssafy.ssafyhome.member.application.response.UnreadMessageResponse;
+import ssafy.ssafyhome.member.application.response.*;
 import ssafy.ssafyhome.member.presentation.request.SendMessageRequest;
 
 import static org.springframework.http.HttpStatus.*;
@@ -44,19 +41,19 @@ public class DirectMessageController implements DirectMessageControllerDocs{
 
     @UserAccess
     @GetMapping("/received/{directMessageId}")
-    public ResponseEntity<DirectMessageResponse> searchReceivedMessage(
+    public ResponseEntity<ReceivedMessageResponse> searchReceivedMessage(
             @AuthenticationPrincipal final AccessContext accessContext,
             @PathVariable final Long directMessageId) {
-        DirectMessageResponse response = directMessageService.searchReceivedMessage(accessContext.getMemberId(), directMessageId);
+        ReceivedMessageResponse response = directMessageService.searchReceivedMessage(accessContext.getMemberId(), directMessageId);
         return ResponseEntity.ok().body(response);
     }
 
     @UserAccess
     @GetMapping("/sent/{directMessageId}")
-    public ResponseEntity<DirectMessageResponse> searchSentMessage(
+    public ResponseEntity<SentMessageResponse> searchSentMessage(
             @AuthenticationPrincipal final AccessContext accessContext,
             @PathVariable final Long directMessageId) {
-        DirectMessageResponse response = directMessageService.searchSentMessage(accessContext.getMemberId(), directMessageId);
+        SentMessageResponse response = directMessageService.searchSentMessage(accessContext.getMemberId(), directMessageId);
         return ResponseEntity.ok().body(response);
     }
 
