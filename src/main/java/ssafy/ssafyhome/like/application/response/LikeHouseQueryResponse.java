@@ -2,9 +2,10 @@ package ssafy.ssafyhome.like.application.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import ssafy.ssafyhome.house.domain.HouseType;
-import ssafy.ssafyhome.region.application.response.RegionResponse;
+import ssafy.ssafyhome.region.domain.Region;
 
 public record LikeHouseQueryResponse(
+        Long likeHouseId,
         Long houseId,
         String name,
         Long buildYear,
@@ -15,7 +16,7 @@ public record LikeHouseQueryResponse(
         String latitude,
         String longitude,
         HouseType houseType,
-        RegionResponse region,
+        Region region,
         String dirName) {
 
     @QueryProjection

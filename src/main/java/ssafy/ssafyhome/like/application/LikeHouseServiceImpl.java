@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ssafy.ssafyhome.house.application.response.HouseResponse;
 import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.repository.HouseRepository;
 import ssafy.ssafyhome.image.application.ImageService;
 import ssafy.ssafyhome.like.application.response.LikeHouseQueryResponse;
+import ssafy.ssafyhome.like.application.response.LikeHouseResponse;
 import ssafy.ssafyhome.like.application.response.LikeHousesResponse;
 import ssafy.ssafyhome.like.domain.LikeHouse;
 import ssafy.ssafyhome.like.domain.repository.LikeHouseRepository;
@@ -34,7 +34,7 @@ public class LikeHouseServiceImpl implements LikeHouseService {
 
     public LikeHousesResponse searchAll(final Long memberId, final int size, final Long cursorId, final String baseUrl) {
         PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
-        List<HouseResponse> likeHouses = likeHouseQueryRepository.searchAll(memberId, pageRequest, cursorId)
+        List<LikeHouseResponse> likeHouses = likeHouseQueryRepository.searchAll(memberId, pageRequest, cursorId)
                 .stream()
                 .map(likeHouse -> getHouseResponse(baseUrl, likeHouse))
                 .toList();
@@ -58,11 +58,11 @@ public class LikeHouseServiceImpl implements LikeHouseService {
         likeHouseRepository.delete(likeHouse);
     }
 
-    private HouseResponse getHouseResponse(final String baseUrl, final LikeHouseQueryResponse likeHouse) {
+    private LikeHouseResponse getHouseResponse(final String baseUrl, final LikeHouseQueryResponse likeHouse) {
         String dirName = likeHouse.dirName();
         List<String> imageFileNames = getFileNames(dirName);
         List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, dirName);
-        return HouseResponse.from(likeHouse, imageUrl);
+        return LikeHouseResponse.from(likeHouse, imageUrl);
     }
 
     private List<String> getFileNames(final String dirName) {
