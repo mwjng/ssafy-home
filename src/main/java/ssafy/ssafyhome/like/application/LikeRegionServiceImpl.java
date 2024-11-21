@@ -10,7 +10,7 @@ import ssafy.ssafyhome.like.domain.LikeRegion;
 import ssafy.ssafyhome.like.domain.repository.LikeRegionRepository;
 import ssafy.ssafyhome.like.exception.LikeRegionException;
 import ssafy.ssafyhome.like.infrastructure.LikeRegionQueryRepository;
-import ssafy.ssafyhome.like.presentation.request.CreateLikeRegionRequest;
+import ssafy.ssafyhome.like.presentation.request.LikeRegionCreateRequest;
 import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.region.domain.Region;
 
@@ -37,12 +37,12 @@ public class LikeRegionServiceImpl implements LikeRegionService {
     }
 
     @Transactional
-    public void create(final Long memberId, final CreateLikeRegionRequest createLikeRegionRequest) {
+    public void create(final Long memberId, final LikeRegionCreateRequest likeRegionCreateRequest) {
         Member member = Member.withId(memberId);
         Region region = Region.create(
-                createLikeRegionRequest.sido(),
-                createLikeRegionRequest.gugun(),
-                createLikeRegionRequest.dong());
+                likeRegionCreateRequest.sido(),
+                likeRegionCreateRequest.gugun(),
+                likeRegionCreateRequest.dong());
         LikeRegion likeRegion = LikeRegion.create(region, member);
         likeRegionRepository.save(likeRegion);
     }

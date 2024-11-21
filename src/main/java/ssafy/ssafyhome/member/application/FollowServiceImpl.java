@@ -19,6 +19,7 @@ import java.util.Objects;
 
 import static ssafy.ssafyhome.common.exception.ErrorCode.*;
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.defaultSort;
+import static ssafy.ssafyhome.image.application.ImageDirectory.*;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -29,8 +30,6 @@ public class FollowServiceImpl implements FollowService {
     private final FollowQueryRepository followQueryRepository;
     private final MemberRepository memberRepository;
     private final ImageService imageService;
-
-    private static final String PROFILE_IMG_DIR = "member/";
 
     public FollowersResponse searchFollowers(final Long memberId, final int size, final Long cursorId, final String baseUrl) {
         PageRequest pageRequest = createPageRequest(size);
@@ -103,11 +102,11 @@ public class FollowServiceImpl implements FollowService {
     }
 
     private List<String> getFileNames(final String dirName) {
-        return imageService.getImageFileNames(dirName, PROFILE_IMG_DIR);
+        return imageService.getImageFileNames(dirName, PROFILE.getDirectory());
     }
 
     private List<String> getImageUrl(final String baseUrl, final List<String> imageFileNames, final String dirName) {
-        return imageService.getImageUrlList(baseUrl, PROFILE_IMG_DIR, imageFileNames, dirName);
+        return imageService.getImageUrlList(baseUrl, PROFILE.getDirectory(), imageFileNames, dirName);
     }
 
     private PageRequest createPageRequest(final int size) {

@@ -9,7 +9,7 @@ import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.like.application.LikeRegionService;
 import ssafy.ssafyhome.like.application.response.LikeRegionsResponse;
-import ssafy.ssafyhome.like.presentation.request.CreateLikeRegionRequest;
+import ssafy.ssafyhome.like.presentation.request.LikeRegionCreateRequest;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -34,8 +34,8 @@ public class LikeRegionController implements LikeRegionControllerDocs {
     @PostMapping
     public ResponseEntity<Void> create(
             @AuthenticationPrincipal final AccessContext accessContext,
-            @Valid @RequestBody CreateLikeRegionRequest createLikeRegionRequest) {
-        likeRegionService.create(accessContext.getMemberId(), createLikeRegionRequest);
+            @Valid @RequestBody LikeRegionCreateRequest likeRegionCreateRequest) {
+        likeRegionService.create(accessContext.getMemberId(), likeRegionCreateRequest);
         return ResponseEntity.status(CREATED).build();
     }
 

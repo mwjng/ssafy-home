@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ssafy.ssafyhome.auth.exception.AuthException;
+import ssafy.ssafyhome.member.exception.DirectMessageException;
 import ssafy.ssafyhome.member.exception.FollowException;
 import ssafy.ssafyhome.image.exception.ImageException;
 import ssafy.ssafyhome.like.exception.LikeRegionException;
+import ssafy.ssafyhome.like.exception.LikeHouseException;
 import ssafy.ssafyhome.member.exception.UserNotFoundException;
 import ssafy.ssafyhome.notice.exception.NoticeException;
 import ssafy.ssafyhome.region.exception.RegionException;
@@ -82,6 +84,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(new ExceptionResponse(e.getErrorCode()));
     }
 
+    @ExceptionHandler(FollowException.class)
+    public ResponseEntity<ExceptionResponse> handleFollowException(final FollowException e) {
+        log.warn(e.getMessage(), e);
+        return ResponseEntity.badRequest()
+                .body(new ExceptionResponse(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(DirectMessageException.class)
+    public ResponseEntity<ExceptionResponse> handleDirectMessageException(final DirectMessageException e) {
+        log.warn(e.getMessage(), e);
+        return ResponseEntity.badRequest()
+                .body(new ExceptionResponse(e.getErrorCode()));
+    }
+
     @ExceptionHandler(LikeRegionException.class)
     public ResponseEntity<ExceptionResponse> handleLikeRegionException(final LikeRegionException e) {
         log.warn(e.getMessage(), e);
@@ -89,8 +105,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(new ExceptionResponse(e.getErrorCode()));
     }
 
-    @ExceptionHandler(FollowException.class)
-    public ResponseEntity<ExceptionResponse> handleFollowException(final FollowException e) {
+    @ExceptionHandler(LikeHouseException.class)
+    public ResponseEntity<ExceptionResponse> handleLikeHouseException(final LikeHouseException e) {
         log.warn(e.getMessage(), e);
         return ResponseEntity.badRequest()
                 .body(new ExceptionResponse(e.getErrorCode()));

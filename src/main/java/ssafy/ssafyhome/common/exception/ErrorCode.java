@@ -37,6 +37,7 @@ public enum ErrorCode {
     UNAUTHORIZED_LIKE_REGION_ACCESS(2031, FORBIDDEN, "요청한 ID에 해당하는 관심 지역을 설정할 권한이 없습니다."),
     UNAUTHORIZED_FOLLOW_ACCESS(2040, FORBIDDEN, "팔로우 관계에 접근할 권한이 없습니다."),
     UNAUTHORIZED_DIRECT_MESSAGE_ACCESS(2050, FORBIDDEN, "요청한 ID에 해당하는 Direct Message를 설정할 권한이 없습니다."),
+    UNAUTHORIZED_LIKE_HOUSE_ACCESS(2070, FORBIDDEN, "요청한 ID에 해당하는 관심 House를 설정할 권한이 없습니다."),
 
     NOT_FOUND_USER_ID(3001, NOT_FOUND, "요청한 ID에 해당하는 사용자가 존재하지 않습니다."),
     NOT_FOUND_USER_LOGIN_ID(3002, NOT_FOUND, "요청한 Login ID에 해당하는 사용자가 존재하지 않습니다."),
@@ -52,6 +53,7 @@ public enum ErrorCode {
     NOT_FOUND_FOLLOWING(3041, NOT_FOUND, "요청한 ID에 해당하는 팔로잉이 없습니다."),
     NOT_FOUND_DIRECT_MESSAGE(3050, NOT_FOUND, "요청한 ID에 해당하는 Direct Message가 없습니다."),
     NOT_FOUND_DEAL_ID(3060, NOT_FOUND, "요청한 ID에 해당하는 매물이 없습니다."),
+    NOT_FOUND_LIKE_HOUSE_ID(3070, NOT_FOUND, "요청한 ID에 해당하는 관심 House가 없습니다."),
 
     SERVER_ERROR(4000, INTERNAL_SERVER_ERROR, "서버 에러가 발생하였습니다."),
     DIRECTORY_ACCESS_ERROR(4001, INTERNAL_SERVER_ERROR, "디렉토리에서 파일을 읽는 중 문제가 발생했습니다.");

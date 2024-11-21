@@ -7,10 +7,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.like.application.response.LikeHousesResponse;
+import ssafy.ssafyhome.member.presentation.request.LikeHouseCreateRequest;
 
 @Tag(name = "관심 House 컨트롤러", description = "관심 House에 대한 조회, 생성, 삭제를 처리 하는 클래스.")
 @RequestMapping("/houses/like")
@@ -27,7 +29,8 @@ public interface LikeHouseControllerDocs {
     ResponseEntity<LikeHousesResponse> searchAll(
             final AccessContext accessContext,
             @Parameter(name = "페이징 개수") int size,
-            @Parameter(name = "마지막 관심 지역 ID") Long cursorId
+            @Parameter(name = "마지막 관심 지역 ID") Long cursorId,
+            HttpServletRequest request
     );
 
     @Operation(summary = "관심 House 생성", description = "관심 House를 생성한다.")
@@ -36,10 +39,10 @@ public interface LikeHouseControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @PostMapping("/{id}")
+    @PostMapping
     ResponseEntity<Void> create(
             final AccessContext accessContext,
-            @Parameter(name = "id") final Long id
+            @Parameter(name = "houseId") final LikeHouseCreateRequest likeHouseCreateRequest
     );
 
     @Operation(summary = "관심 House 삭제", description = "관심 House를 삭제한다.")
@@ -48,9 +51,9 @@ public interface LikeHouseControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{likeHouseId}")
     ResponseEntity<Void> delete(
             final AccessContext accessContext,
-            @Parameter(name = "id") final Long id
+            @Parameter(name = "likeHouseId") final Long likeHouseId
     );
 }
