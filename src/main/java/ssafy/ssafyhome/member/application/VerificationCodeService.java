@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ssafy.ssafyhome.common.exception.BadRequestException;
 import ssafy.ssafyhome.member.domain.repository.MemberRepository;
-import ssafy.ssafyhome.verification.domain.VerificationCode;
-import ssafy.ssafyhome.verification.domain.repository.VerificationCodeRepository;
+import ssafy.ssafyhome.member.domain.VerificationCode;
+import ssafy.ssafyhome.member.domain.repository.VerificationCodeRepository;
 
 import static ssafy.ssafyhome.common.exception.ErrorCode.INVALID_VERIFICATION_CODE;
 import static ssafy.ssafyhome.common.exception.ErrorCode.NOT_FOUND_VERIFICATION_CODE;
