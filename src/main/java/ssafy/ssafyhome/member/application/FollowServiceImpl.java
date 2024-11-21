@@ -4,16 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ssafy.ssafyhome.member.application.response.FollowerResponse;
-import ssafy.ssafyhome.member.application.response.FollowersResponse;
-import ssafy.ssafyhome.member.application.response.FollowingResponse;
-import ssafy.ssafyhome.member.application.response.FollowingsResponse;
-import ssafy.ssafyhome.member.domain.Follow;
-import ssafy.ssafyhome.member.domain.repository.FollowRepository;
-import ssafy.ssafyhome.member.exception.FollowException;
 import ssafy.ssafyhome.image.application.ImageService;
+import ssafy.ssafyhome.member.application.response.*;
+import ssafy.ssafyhome.member.domain.Follow;
 import ssafy.ssafyhome.member.domain.Member;
+import ssafy.ssafyhome.member.domain.repository.FollowRepository;
 import ssafy.ssafyhome.member.domain.repository.MemberRepository;
+import ssafy.ssafyhome.member.exception.FollowException;
 import ssafy.ssafyhome.member.exception.MemberException;
 
 import java.util.List;
@@ -25,7 +22,7 @@ import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.defaultSort;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
-public class FollowServiceImpl implements FollowService{
+public class FollowServiceImpl implements FollowService {
 
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
@@ -37,12 +34,7 @@ public class FollowServiceImpl implements FollowService{
         PageRequest pageRequest = createPageRequest(size);
         List<FollowerResponse> followers = followRepository.searchFollowers(memberId, pageRequest, cursorId)
                 .stream()
-                .map(q -> {
-                    String dirName = q.dirName();
-                    List<String> imageFilePaths = imageService.getImageFilePaths(dirName, PROFILE_IMG_DIR);
-                    List<String> imageUrl = imageService.getImageUrlList(baseUrl, PROFILE_IMG_DIR, imageFilePaths, dirName);
-                    return FollowerResponse.from(q, imageUrl);
-                })
+                .map(follower -> getFollowerResponse(baseUrl, follower))
                 .toList();
         return new FollowersResponse(followers);
     }
@@ -51,12 +43,7 @@ public class FollowServiceImpl implements FollowService{
         PageRequest pageRequest = createPageRequest(size);
         List<FollowingResponse> followings = followRepository.searchFollowings(memberId, pageRequest, cursorId)
                 .stream()
-                .map(q -> {
-                    String dirName = q.dirName();
-                    List<String> imageFilePaths = imageService.getImageFilePaths(dirName, PROFILE_IMG_DIR);
-                    List<String> imageUrl = imageService.getImageUrlList(baseUrl, PROFILE_IMG_DIR, imageFilePaths, dirName);
-                    return FollowingResponse.from(q, imageUrl);
-                })
+                .map(following -> getFollowingResponse(baseUrl, following))
                 .toList();
         return new FollowingsResponse(followings);
     }
@@ -97,6 +84,28 @@ public class FollowServiceImpl implements FollowService{
         Member following = Member.withId(followingId);
         Follow follow = Follow.create(follower, following);
         followRepository.save(follow);
+    }
+
+    private FollowerResponse getFollowerResponse(final String baseUrl, final FollowQueryResponse follower) {
+        String dirName = follower.dirName();
+        List<String> imageFileNames = getFileNames(dirName);
+        List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, dirName);
+        return FollowerResponse.from(follower, imageUrl);
+    }
+
+    private FollowingResponse getFollowingResponse(final String baseUrl, final FollowQueryResponse following) {
+        String dirName = following.dirName();
+        List<String> imageFileNames = getFileNames(dirName);
+        List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, dirName);
+        return FollowingResponse.from(following, imageUrl);
+    }
+
+    private List<String> getFileNames(final String dirName) {
+        return imageService.getImageFileNames(dirName, PROFILE_IMG_DIR);
+    }
+
+    private List<String> getImageUrl(final String baseUrl, final List<String> imageFileNames, final String dirName) {
+        return imageService.getImageUrlList(baseUrl, PROFILE_IMG_DIR, imageFileNames, dirName);
     }
 
     private PageRequest createPageRequest(final int size) {
