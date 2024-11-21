@@ -22,13 +22,12 @@ import java.util.List;
 
 import static ssafy.ssafyhome.common.exception.ErrorCode.NOT_FOUND_HOUSE_ID;
 import static ssafy.ssafyhome.common.exception.ErrorCode.NOT_FOUND_REGION;
+import static ssafy.ssafyhome.image.application.ImageDirectory.HOUSE;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class HouseService {
-
-    private static final String HOUSE_IMG_DIR = "house/";
 
     private final HouseRepository houseRepository;
     private final HouseQueryRepository houseQueryRepository;
@@ -57,14 +56,14 @@ public class HouseService {
     }
 
     private List<String> getHouseImageUrlList(final String baseUrl, final House house) {
-        final List<String> imageFileNames = imageService.getImageFileNames(house.getDirName(), HOUSE_IMG_DIR);
-        return imageService.getImageUrlList(baseUrl, HOUSE_IMG_DIR, imageFileNames, house.getDirName());
+        final List<String> imageFileNames = imageService.getImageFileNames(house.getDirName(), HOUSE.getDirectory());
+        return imageService.getImageUrlList(baseUrl, HOUSE.getDirectory(), imageFileNames, house.getDirName());
     }
 
     @Transactional
     public void createHouse(final HouseRequest request,
                             final List<MultipartFile> images) {
-        final String imagePath = imageService.save(images, HOUSE_IMG_DIR);
+        final String imagePath = imageService.save(images, HOUSE.getDirectory());
         houseRepository.save(request.toMember(imagePath, getRegion(request)));
     }
 
@@ -74,7 +73,7 @@ public class HouseService {
                             final List<MultipartFile> images) {
         final House house = houseRepository.findById(houseId)
             .orElseThrow(() -> new BadRequestException(NOT_FOUND_HOUSE_ID));
-        final String imagePath = imageService.save(images, HOUSE_IMG_DIR);
+        final String imagePath = imageService.save(images, HOUSE.getDirectory());
         deleteHouseImages(house);
         house.updateHouseInfo(request, getRegion(request), imagePath);
     }
@@ -94,8 +93,8 @@ public class HouseService {
     }
 
     private void deleteHouseImages(final House house) {
-        final List<String> imageFilePaths = imageService.getImageFilePaths(house.getDirName(), HOUSE_IMG_DIR);
-        final String imageFileDirPath = imageService.getImageFileDirPath(house.getDirName(), HOUSE_IMG_DIR);
+        final List<String> imageFilePaths = imageService.getImageFilePaths(house.getDirName(), HOUSE.getDirectory());
+        final String imageFileDirPath = imageService.getImageFileDirPath(house.getDirName(), HOUSE.getDirectory());
         eventPublisher.publishEvent(new ImageEvent(imageFileDirPath, imageFilePaths));
     }
 }

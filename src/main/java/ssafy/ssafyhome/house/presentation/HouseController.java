@@ -14,7 +14,6 @@ import ssafy.ssafyhome.auth.presentation.AdminAccess;
 import ssafy.ssafyhome.auth.presentation.AgentAccess;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
-import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
 import ssafy.ssafyhome.house.application.HouseService;
@@ -95,6 +94,7 @@ public class HouseController implements HouseControllerDocs{
         @PathVariable final Long houseId,
         @ModelAttribute final DealSearchCondition dealSearchCondition
     ) {
+
         return null;
     }
 

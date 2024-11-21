@@ -1,4 +1,4 @@
-package ssafy.ssafyhome.deal.application;
+package ssafy.ssafyhome.deal.application.request;
 
 public enum DealSortCondition {
     NEWEST,            // 최신순

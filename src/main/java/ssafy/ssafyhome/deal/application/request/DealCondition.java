@@ -1,4 +1,4 @@
-package ssafy.ssafyhome.deal.application;
+package ssafy.ssafyhome.deal.application.request;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 
 @Getter
 public class DealCondition {
+
     private BigDecimal maxExclusiveArea;
     private BigDecimal minExclusiveArea;
     private Integer maxDeposit;
@@ -33,8 +34,8 @@ public class DealCondition {
             DealType type,
             DealSortCondition dealSortCondition,
             Long memberId,
-            Long houseId) {
-
+            Long houseId
+    ) {
         this.maxExclusiveArea = maxExclusiveArea;
         this.minExclusiveArea = minExclusiveArea;
         this.maxDeposit = maxDeposit;

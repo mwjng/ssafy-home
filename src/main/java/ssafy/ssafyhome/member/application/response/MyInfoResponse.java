@@ -3,9 +3,9 @@ package ssafy.ssafyhome.member.application.response;
 import ssafy.ssafyhome.member.domain.Member;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record MyInfoResponse(
+    Long memberId,
     String nickname,
     String name,
     String email,
@@ -18,6 +18,7 @@ public record MyInfoResponse(
 ) {
     public static MyInfoResponse from(final Member member) {
         return new MyInfoResponse(
+            member.getId(),
             member.getNickname(),
             member.getName(),
             member.getEmail(),
@@ -32,6 +33,7 @@ public record MyInfoResponse(
 
     public static MyInfoResponse of(final Member member, final String imagePath) {
         return new MyInfoResponse(
+            member.getId(),
             member.getNickname(),
             member.getName(),
             member.getEmail(),

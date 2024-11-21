@@ -1,4 +1,4 @@
-package ssafy.ssafyhome.house.application.response;
+package ssafy.ssafyhome.member.presentation.response;
 
 import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.HouseType;
@@ -6,7 +6,7 @@ import ssafy.ssafyhome.region.application.response.RegionResponse;
 
 import java.util.List;
 
-public record HouseResponse(
+public record MyDealHouseResponse(
     Long houseId,
     String name,
     Long buildYear,
@@ -20,8 +20,8 @@ public record HouseResponse(
     RegionResponse region,
     List<String> imageUrl
 ) {
-    public static HouseResponse of(House house, List<String> imageUrl) {
-        return new HouseResponse(
+    public static MyDealHouseResponse of(final House house, List<String> imageUrl) {
+        return new MyDealHouseResponse(
             house.getId(),
             house.getName(),
             house.getBuildYear(),

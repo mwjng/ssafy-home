@@ -2,7 +2,7 @@ package ssafy.ssafyhome.deal.presentation.request;
 
 import lombok.Builder;
 import lombok.Getter;
-import ssafy.ssafyhome.deal.application.DealSortCondition;
+import ssafy.ssafyhome.deal.application.request.DealSortCondition;
 import ssafy.ssafyhome.deal.domain.DealStatus;
 import ssafy.ssafyhome.deal.domain.DealType;
 

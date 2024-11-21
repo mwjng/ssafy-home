@@ -24,13 +24,12 @@ import java.util.List;
 import java.util.UUID;
 
 import static ssafy.ssafyhome.common.exception.ErrorCode.*;
+import static ssafy.ssafyhome.image.application.ImageDirectory.PROFILE;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class MemberService {
-
-    private static final String PROFILE_IMG_DIR = "member/";
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -47,9 +46,9 @@ public class MemberService {
 
     public MyInfoResponse getMyInfo(final Long memberId, final String baseUrl) {
         final Member member = findMember(memberId);
-        final List<String> imageFileNames = imageService.getImageFileNames(member.getDirName(), PROFILE_IMG_DIR);
+        final List<String> imageFileNames = imageService.getImageFileNames(member.getDirName(), PROFILE.getDirectory());
         final List<String> imageUrlList = imageService.getImageUrlList(
-            baseUrl, PROFILE_IMG_DIR, imageFileNames, member.getDirName());
+            baseUrl, PROFILE.getDirectory(), imageFileNames, member.getDirName());
         return MyInfoResponse.of(
             member,
             imageUrlList.stream().findFirst().orElse(null));
@@ -124,9 +123,9 @@ public class MemberService {
     @Transactional
     public void updateProfileImage(final Long memberId, final MultipartFile image) {
         final Member member = findMember(memberId);
-        final String imagePath = imageService.save(List.of(image), PROFILE_IMG_DIR);
-        final List<String> imgFilePaths = imageService.getImageFilePaths(member.getDirName(), PROFILE_IMG_DIR);
-        final String imageFileDirPath = imageService.getImageFileDirPath(member.getDirName(), PROFILE_IMG_DIR);
+        final String imagePath = imageService.save(List.of(image), PROFILE.getDirectory());
+        final List<String> imgFilePaths = imageService.getImageFilePaths(member.getDirName(), PROFILE.getDirectory());
+        final String imageFileDirPath = imageService.getImageFileDirPath(member.getDirName(), PROFILE.getDirectory());
         eventPublisher.publishEvent(new ImageEvent(imageFileDirPath, imgFilePaths));
         member.changeProfileImageUrl(imagePath);
     }

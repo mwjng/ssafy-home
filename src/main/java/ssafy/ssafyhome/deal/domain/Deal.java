@@ -54,4 +54,28 @@ public class Deal extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public Deal(
+        final BigDecimal exclusiveArea,
+        final int floor,
+        final int views,
+        final Integer deposit,
+        final Integer price,
+        final String dirName,
+        final DealStatus status,
+        final DealType type,
+        final House house,
+        final Member member
+    ) {
+        this.exclusiveArea = exclusiveArea;
+        this.floor = floor;
+        this.views = views;
+        this.deposit = deposit;
+        this.price = price;
+        this.dirName = dirName;
+        this.status = status;
+        this.type = type;
+        this.house = house;
+        this.member = member;
+    }
 }

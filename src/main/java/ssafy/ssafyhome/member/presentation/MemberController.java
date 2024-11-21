@@ -3,13 +3,17 @@ package ssafy.ssafyhome.member.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.presentation.AgentAccess;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.MasterAccess;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
+import ssafy.ssafyhome.deal.application.DealService;
 import ssafy.ssafyhome.member.application.MailService;
 import ssafy.ssafyhome.member.application.MemberService;
 import ssafy.ssafyhome.member.application.VerificationCodeService;
@@ -17,6 +21,7 @@ import ssafy.ssafyhome.member.application.response.MemberNicknameResponse;
 import ssafy.ssafyhome.member.application.response.MyInfoResponse;
 import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.presentation.request.*;
+import ssafy.ssafyhome.member.presentation.response.MyDealsResponse;
 
 import static org.springframework.http.HttpStatus.*;
 import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
@@ -27,6 +32,7 @@ import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
 public class MemberController {
 
     private final MemberService memberService;
+    private final DealService dealService;
     private final VerificationCodeService verificationCodeService;
     private final MailService mailService;
 
@@ -40,6 +46,18 @@ public class MemberController {
             .getMyInfo(accessContext.getMemberId(), getBaseUrl(request));
         return ResponseEntity.ok().body(myInfoResponse);
     }
+
+    @GetMapping("/me/deals")
+    @AgentAccess
+    public ResponseEntity<MyDealsResponse> getMyDeals(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PageableDefault(size = 10) final Pageable pageable,
+        HttpServletRequest request
+    ) {
+        return ResponseEntity.ok()
+            .body(dealService.getMyDeals(accessContext.getMemberId(), pageable, getBaseUrl(request)));
+    }
+
 
     @PatchMapping("/me")
     @UserAccess
