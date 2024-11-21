@@ -25,7 +25,8 @@ public class DirectMessage extends BaseEntity {
     private String content;
 
     @Column(nullable = false)
-    private MessageStatus status;
+    @Enumerated(EnumType.STRING)
+    private MessageStatus status = UNREAD;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "sender")
@@ -38,7 +39,6 @@ public class DirectMessage extends BaseEntity {
     public static DirectMessage create(String content, Member sender, Member receiver){
         DirectMessage directMessage = new DirectMessage();
         directMessage.content = content;
-        directMessage.status = UNREAD;
         directMessage.sender = sender;
         directMessage.receiver = receiver;
         return directMessage;

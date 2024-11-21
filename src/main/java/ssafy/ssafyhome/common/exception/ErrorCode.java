@@ -33,8 +33,9 @@ public enum ErrorCode {
     EXPIRED_REFRESH_TOKEN(2009, UNAUTHORIZED, "만료된 RefreshToken 입니다."),
     INVALID_MEMBER_ROLE(2010, UNAUTHORIZED, "유효하지 않은 권한 정보 입니다."),
     FAIL_OAUTH_USERINFO_RETRIEVAL(2011, UNAUTHORIZED, "회원 정보를 가져오는데 실패했습니다."),
-    UNAUTHORIZED_FOLLOW_ACCESS(2040, FORBIDDEN, "팔로우 관계에 접근할 권한이 없습니다."),
+    UNAUTHORIZED_NOTICE_ACCESS(2021, FORBIDDEN, "요청한 ID에 해당하는 공지사항을 설정할 권한이 없습니다."),
     UNAUTHORIZED_LIKE_REGION_ACCESS(2031, FORBIDDEN, "요청한 ID에 해당하는 관심 지역을 설정할 권한이 없습니다."),
+    UNAUTHORIZED_FOLLOW_ACCESS(2040, FORBIDDEN, "팔로우 관계에 접근할 권한이 없습니다."),
 
     NOT_FOUND_USER_ID(3001, NOT_FOUND, "요청한 ID에 해당하는 사용자가 존재하지 않습니다."),
     NOT_FOUND_USER_LOGIN_ID(3002, NOT_FOUND, "요청한 Login ID에 해당하는 사용자가 존재하지 않습니다."),

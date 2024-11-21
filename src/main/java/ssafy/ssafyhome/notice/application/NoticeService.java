@@ -1,6 +1,5 @@
 package ssafy.ssafyhome.notice.application;
 
-import jakarta.validation.Valid;
 import ssafy.ssafyhome.notice.application.response.NoticeResponse;
 import ssafy.ssafyhome.notice.application.response.NoticesResponse;
 import ssafy.ssafyhome.notice.presentation.request.NoticeCreateRequest;
@@ -13,7 +12,7 @@ public interface NoticeService {
 
     void create(final Long adminId, final NoticeCreateRequest noticeCreateRequest);
 
-    void update(final Long noticeId, final NoticeUpdateRequest noticeUpdateRequest);
+    void update(final Long adminId, final Long noticeId, final NoticeUpdateRequest noticeUpdateRequest);
 
-    void delete(final Long noticeId);
+    void delete(final Long adminId, final Long noticeId);
 }

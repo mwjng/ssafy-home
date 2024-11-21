@@ -13,10 +13,10 @@ public record FollowingResponse(
 
     public static FollowingResponse from(FollowQueryResponse queryResponse, List<String> imageUrl){
         return new FollowingResponse(
-                queryResponse.getFollowId(),
-                queryResponse.getMemberId(),
-                queryResponse.getNickname(),
-                queryResponse.getRole(),
+                queryResponse.followId(),
+                queryResponse.memberId(),
+                queryResponse.nickname(),
+                queryResponse.role(),
                 imageUrl
         );
     }

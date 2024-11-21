@@ -43,11 +43,20 @@ public class DirectMessageController implements DirectMessageControllerDocs{
     }
 
     @UserAccess
-    @GetMapping("/{directMessageId}")
-    public ResponseEntity<DirectMessageResponse> search(
+    @GetMapping("/received/{directMessageId}")
+    public ResponseEntity<DirectMessageResponse> searchReceivedMessage(
             @AuthenticationPrincipal final AccessContext accessContext,
             @PathVariable final Long directMessageId) {
-        DirectMessageResponse response = directMessageService.search(accessContext.getMemberId(), directMessageId);
+        DirectMessageResponse response = directMessageService.searchReceivedMessage(accessContext.getMemberId(), directMessageId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @UserAccess
+    @GetMapping("/sent/{directMessageId}")
+    public ResponseEntity<DirectMessageResponse> searchSentMessage(
+            @AuthenticationPrincipal final AccessContext accessContext,
+            @PathVariable final Long directMessageId) {
+        DirectMessageResponse response = directMessageService.searchSentMessage(accessContext.getMemberId(), directMessageId);
         return ResponseEntity.ok().body(response);
     }
 

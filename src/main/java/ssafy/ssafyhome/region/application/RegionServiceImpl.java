@@ -23,14 +23,15 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public RegionSearchResponse search(final RegionSearchCondition regionSearchCondition) {
-        return new RegionSearchResponse(regionRepository.findBySearchCondition(regionSearchCondition));
+//        return new RegionSearchResponse(regionRepository.findBySearchCondition(regionSearchCondition));
+        return null;
     }
 
     @Override
     public RegionIdResponse searchId(final String sido, final String gugun, final String dong) {
-        Long id = Optional.ofNullable(regionRepository.findIdBySidoAndGugunAndDong(sido, gugun, dong))
-                .orElseThrow(() -> new RegionException(INVALID_REGION));
+//        Long id = Optional.ofNullable(regionRepository.findIdBySidoAndGugunAndDong(sido, gugun, dong))
+//                .orElseThrow(() -> new RegionException(INVALID_REGION));
 
-        return new RegionIdResponse(id);
+        return null;
     }
 }

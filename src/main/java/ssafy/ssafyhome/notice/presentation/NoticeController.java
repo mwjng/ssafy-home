@@ -2,7 +2,6 @@ package ssafy.ssafyhome.notice.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
@@ -52,14 +51,16 @@ public class NoticeController implements NoticeControllerDocs {
             @AuthenticationPrincipal final AccessContext accessContext,
             @PathVariable final Long id,
             @Valid @RequestBody final NoticeUpdateRequest noticeUpdateRequest) {
-        noticeService.update(id, noticeUpdateRequest);
+        noticeService.update(accessContext.getMemberId(), id, noticeUpdateRequest);
         return ResponseEntity.noContent().build();
     }
 
     @AdminAccess
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable final Long id) {
-        noticeService.delete(id);
+    public ResponseEntity<Void> delete(
+            @AuthenticationPrincipal final AccessContext accessContext,
+            @PathVariable final Long id) {
+        noticeService.delete(accessContext.getMemberId(), id);
         return ResponseEntity.noContent().build();
     }
 }

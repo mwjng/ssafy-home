@@ -25,7 +25,6 @@ public class LikeRegionServiceImpl implements LikeRegionService {
 
     private final LikeRegionRepository likeRegionRepository;
 
-    @Override
     public LikeRegionsResponse searchAll(final Long memberId, final int size, final Long cursorId) {
         PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
         List<LikeRegionResponse> likeRegions = likeRegionRepository.searchAll(memberId, pageRequest, cursorId).stream()
@@ -35,7 +34,6 @@ public class LikeRegionServiceImpl implements LikeRegionService {
         return new LikeRegionsResponse(likeRegions);
     }
 
-    @Override
     @Transactional
     public void create(final Long memberId, final CreateLikeRegionRequest createLikeRegionRequest) {
         Member member = Member.withId(memberId);
@@ -47,12 +45,11 @@ public class LikeRegionServiceImpl implements LikeRegionService {
         likeRegionRepository.save(likeRegion);
     }
 
-    @Override
     @Transactional
     public void delete(final Long memberId, final Long likeRegionId) {
         LikeRegion likeRegion = likeRegionRepository.findById(likeRegionId).orElseThrow(() -> new LikeRegionException(NOT_FOUND_LIKE_REGION));
         if (!likeRegion.getMember().getId().equals(memberId)) {
-            throw new LikeRegionException(NOT_FOUND_LIKE_REGION);
+            throw new LikeRegionException(UNAUTHORIZED_LIKE_REGION_ACCESS);
         }
         likeRegionRepository.deleteById(likeRegionId);
     }

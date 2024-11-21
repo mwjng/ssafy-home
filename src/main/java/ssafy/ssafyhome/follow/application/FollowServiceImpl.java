@@ -33,13 +33,12 @@ public class FollowServiceImpl implements FollowService{
 
     private static final String PROFILE_IMG_DIR = "member/";
 
-    @Override
     public FollowersResponse searchFollowers(final Long memberId, final int size, final Long cursorId, final String baseUrl) {
         PageRequest pageRequest = createPageRequest(size);
         List<FollowerResponse> followers = followRepository.searchFollowers(memberId, pageRequest, cursorId)
                 .stream()
                 .map(q -> {
-                    String dirName = q.getDirName();
+                    String dirName = q.dirName();
                     List<String> imageFilePaths = imageService.getImageFilePaths(dirName, PROFILE_IMG_DIR);
                     List<String> imageUrl = imageService.getImageUrlList(baseUrl, PROFILE_IMG_DIR, imageFilePaths, dirName);
                     return FollowerResponse.from(q, imageUrl);
@@ -48,13 +47,12 @@ public class FollowServiceImpl implements FollowService{
         return new FollowersResponse(followers);
     }
 
-    @Override
     public FollowingsResponse searchFollowings(final Long memberId, final int size, final Long cursorId, final String baseUrl) {
         PageRequest pageRequest = createPageRequest(size);
         List<FollowingResponse> followings = followRepository.searchFollowings(memberId, pageRequest, cursorId)
                 .stream()
                 .map(q -> {
-                    String dirName = q.getDirName();
+                    String dirName = q.dirName();
                     List<String> imageFilePaths = imageService.getImageFilePaths(dirName, PROFILE_IMG_DIR);
                     List<String> imageUrl = imageService.getImageUrlList(baseUrl, PROFILE_IMG_DIR, imageFilePaths, dirName);
                     return FollowingResponse.from(q, imageUrl);
@@ -63,7 +61,6 @@ public class FollowServiceImpl implements FollowService{
         return new FollowingsResponse(followings);
     }
 
-    @Override
     @Transactional
     public void deleteFollower(final Long memberId, final Long followId) {
         Member follower = followRepository.findFollowerById(followId).orElseThrow(() -> new FollowException(NOT_FOUND_FOLLOW));
@@ -75,7 +72,6 @@ public class FollowServiceImpl implements FollowService{
         followRepository.deleteById(followId);
     }
 
-    @Override
     @Transactional
     public void deleteFollowing(final Long memberId, final Long followId) {
         Member following = followRepository.findFollowingById(followId).orElseThrow(() -> new FollowException(NOT_FOUND_FOLLOW));
@@ -87,7 +83,6 @@ public class FollowServiceImpl implements FollowService{
         followRepository.deleteById(followId);
     }
 
-    @Override
     @Transactional
     public void createFollow(final Long followerId, final Long followingId) {
         if(Objects.equals(followerId, followingId)){

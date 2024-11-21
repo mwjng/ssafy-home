@@ -8,10 +8,10 @@ public record LikeRegionResponse(
 
     public static LikeRegionResponse from(LikeRegionQueryResponse queryResponse){
         return new LikeRegionResponse(
-                queryResponse.getLikeRegionId(),
-                queryResponse.getSido(),
-                queryResponse.getGugun(),
-                queryResponse.getDong()
+                queryResponse.likeRegionId(),
+                queryResponse.sido(),
+                queryResponse.gugun(),
+                queryResponse.dong()
         );
     }
 }

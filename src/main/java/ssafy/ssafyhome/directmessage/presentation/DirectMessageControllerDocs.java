@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
+import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.directmessage.application.response.DirectMessageResponse;
 import ssafy.ssafyhome.directmessage.application.response.ReceivedMessagesResponse;
 import ssafy.ssafyhome.directmessage.application.response.SentMessagesResponse;
@@ -49,17 +50,31 @@ public interface DirectMessageControllerDocs {
             @Parameter(name = "마지막 관심 지역 ID") Long cursorId
     );
 
-    @Operation(summary = "DirectMessage 상세 조회", description = "DirectMessage 상세 정보를 반환한다.")
+    @Operation(summary = "보낸 DirectMessage 상세 조회", description = "보낸 DirectMessage 상세 정보를 반환한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = DirectMessageResponse.class))),
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다.")
     })
-    @GetMapping("/{directMessageId}")
-    ResponseEntity<DirectMessageResponse> search(
+    @UserAccess
+    @GetMapping("/sent/{directMessageId}")
+    ResponseEntity<DirectMessageResponse> searchSentMessage(
             final AccessContext accessContext,
-            @Parameter(name = "directMessageId") Long directMessageId);
+            @Parameter(name = "directMessageId") final Long directMessageId);
+
+    @Operation(summary = "받은 DirectMessage 상세 조회", description = "받은 DirectMessage 상세 정보를 반환한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DirectMessageResponse.class))),
+            @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다.")
+    })
+    @UserAccess
+    @GetMapping("/received/{directMessageId}")
+    ResponseEntity<DirectMessageResponse> searchReceivedMessage(
+            final AccessContext accessContext,
+            @Parameter(name = "directMessageId") final Long directMessageId);
 
     @Operation(summary = "안읽은 DirectMessage 조회", description = "안읽은 DirectMessage가 있는지 확인하여 결과를 반환한다.")
     @ApiResponses(value = {

@@ -10,6 +10,18 @@ public record ReceivedMessageResponse(
         String senderName,
         String content,
         MessageStatus status,
-        LocalDateTime createAt,
+        LocalDateTime createdAt,
         LocalDateTime modifiedAt) {
+
+    public static ReceivedMessageResponse from(ReceivedMessageQueryResponse receivedMessageQueryResponse){
+        return new ReceivedMessageResponse(
+                receivedMessageQueryResponse.directMessageId(),
+                receivedMessageQueryResponse.senderId(),
+                receivedMessageQueryResponse.senderName(),
+                receivedMessageQueryResponse.content(),
+                receivedMessageQueryResponse.status(),
+                receivedMessageQueryResponse.createdAt(),
+                receivedMessageQueryResponse.modifiedAt()
+        );
+    }
 }

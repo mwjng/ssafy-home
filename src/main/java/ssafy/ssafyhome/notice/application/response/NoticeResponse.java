@@ -12,12 +12,12 @@ public record NoticeResponse(
 
     public static NoticeResponse from(NoticeQueryResponse queryResponse) {
         return new NoticeResponse(
-                queryResponse.getNoticeId(),
-                queryResponse.getWriter(),
-                queryResponse.getTitle(),
-                queryResponse.getContent(),
-                queryResponse.getCreatedAt(),
-                queryResponse.getModifiedAt()
+                queryResponse.noticeId(),
+                queryResponse.writer(),
+                queryResponse.title(),
+                queryResponse.content(),
+                queryResponse.createdAt(),
+                queryResponse.modifiedAt()
         );
     }
 }

@@ -10,6 +10,18 @@ public record DirectMessageResponse(
         String nickname,
         String content,
         MessageStatus status,
-        LocalDateTime createAt,
+        LocalDateTime createdAt,
         LocalDateTime modifiedAt) {
+
+    public static DirectMessageResponse from(DirectMessageQueryResponse directMessageQueryResponse){
+        return new DirectMessageResponse(
+                directMessageQueryResponse.directMessageId(),
+                directMessageQueryResponse.memberId(),
+                directMessageQueryResponse.nickname(),
+                directMessageQueryResponse.content(),
+                directMessageQueryResponse.status(),
+                directMessageQueryResponse.createdAt(),
+                directMessageQueryResponse.modifiedAt()
+        );
+    }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static ssafy.ssafyhome.common.exception.ErrorCode.NOT_FOUND_NOTICE;
+import static ssafy.ssafyhome.common.exception.ErrorCode.UNAUTHORIZED_NOTICE_ACCESS;
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
 
 @RequiredArgsConstructor
@@ -26,7 +27,6 @@ public class NoticeServiceImpl implements NoticeService {
 
     private final NoticeRepository noticeRepository;
 
-    @Override
     public NoticesResponse searchAll(final int size, final Long cursorId) {
         PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
         List<NoticeResponse> notices = noticeRepository.searchAll(cursorId, pageRequest).stream()
@@ -36,14 +36,12 @@ public class NoticeServiceImpl implements NoticeService {
         return new NoticesResponse(notices);
     }
 
-    @Override
     public NoticeResponse search(final Long noticeId) {
         return Optional.ofNullable(noticeRepository.search(noticeId))
                 .map(NoticeResponse::from)
                 .orElseThrow(() -> new NoticeException(NOT_FOUND_NOTICE));
     }
 
-    @Override
     @Transactional
     public void create(final Long adminId, final NoticeCreateRequest noticeCreateRequest) {
         Notice notice = Notice.create(
@@ -54,21 +52,27 @@ public class NoticeServiceImpl implements NoticeService {
         noticeRepository.save(notice);
     }
 
-    @Override
     @Transactional
-    public void update(final Long noticeId, final NoticeUpdateRequest noticeUpdateRequest) {
-        Notice notice = noticeRepository.findById(noticeId)
-                .orElseThrow(() -> new NoticeException(NOT_FOUND_NOTICE));
+    public void update(final Long adminId, final Long noticeId, final NoticeUpdateRequest noticeUpdateRequest) {
+        Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new NoticeException(NOT_FOUND_NOTICE));
+
+        if(!notice.getMember().getId().equals(adminId)){
+            // UNAUTHORIZED_NOTICE_ACCESS(2021, FORBIDDEN, "요청한 ID에 해당하는 공지사항을 설정할 권한이 없습니다."),
+            throw new NoticeException(UNAUTHORIZED_NOTICE_ACCESS);
+        }
+
         notice.changeTitle(noticeUpdateRequest.title());
         notice.changeContent(noticeUpdateRequest.content());
     }
 
-    @Override
     @Transactional
-    public void delete(final Long noticeId) {
-       if(!noticeRepository.existsById(noticeId)){
-           throw new NoticeException(NOT_FOUND_NOTICE);
-       }
+    public void delete(final Long adminId, final Long noticeId) {
+        Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new NoticeException(NOT_FOUND_NOTICE));
+
+        if(!notice.getMember().getId().equals(adminId)){
+            throw new NoticeException(UNAUTHORIZED_NOTICE_ACCESS);
+        }
+
         noticeRepository.deleteById(noticeId);
     }
 }
