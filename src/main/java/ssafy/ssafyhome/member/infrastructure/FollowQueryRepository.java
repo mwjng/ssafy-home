@@ -1,25 +1,27 @@
-package ssafy.ssafyhome.member.domain.repository;
+package ssafy.ssafyhome.member.infrastructure;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.stereotype.Repository;
 import ssafy.ssafyhome.member.application.response.FollowQueryResponse;
-import ssafy.ssafyhome.follow.application.response.QFollowQueryResponse;
+import ssafy.ssafyhome.member.application.response.QFollowQueryResponse;
 
 import java.util.List;
 
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
-import static ssafy.ssafyhome.follow.domain.QFollow.*;
-import static ssafy.ssafyhome.member.domain.QMember.*;
+import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.makeOrderSpecifiers;
+import static ssafy.ssafyhome.member.domain.QFollow.follow;
+import static ssafy.ssafyhome.member.domain.QMember.member;
 
 @RequiredArgsConstructor
-public class FollowRepositoryImpl implements FollowRepositoryCustom{
+@Repository
+public class FollowQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    @Override
     public Slice<FollowQueryResponse> searchFollowers(final Long memberId, final Pageable pageable, final Long cursorId) {
         List<FollowQueryResponse> followers = queryFactory
                 .select(new QFollowQueryResponse(
@@ -34,10 +36,9 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(followers);
+        return new SliceImpl<>(followers);
     }
 
-    @Override
     public Slice<FollowQueryResponse> searchFollowings(final Long memberId, final Pageable pageable, final Long cursorId) {
         List<FollowQueryResponse> followings = queryFactory
                 .select(new QFollowQueryResponse(
@@ -52,6 +53,6 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(followings);
+        return new SliceImpl<>(followings);
     }
 }

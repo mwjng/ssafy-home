@@ -9,6 +9,7 @@ import ssafy.ssafyhome.like.application.response.LikeRegionsResponse;
 import ssafy.ssafyhome.like.domain.LikeRegion;
 import ssafy.ssafyhome.like.domain.repository.LikeRegionRepository;
 import ssafy.ssafyhome.like.exception.LikeRegionException;
+import ssafy.ssafyhome.like.infrastructure.LikeRegionQueryRepository;
 import ssafy.ssafyhome.like.presentation.request.CreateLikeRegionRequest;
 import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.region.domain.Region;
@@ -24,10 +25,11 @@ import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
 public class LikeRegionServiceImpl implements LikeRegionService {
 
     private final LikeRegionRepository likeRegionRepository;
+    private final LikeRegionQueryRepository likeRegionQueryRepository;
 
     public LikeRegionsResponse searchAll(final Long memberId, final int size, final Long cursorId) {
         PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
-        List<LikeRegionResponse> likeRegions = likeRegionRepository.searchAll(memberId, pageRequest, cursorId).stream()
+        List<LikeRegionResponse> likeRegions = likeRegionQueryRepository.searchAll(memberId, pageRequest, cursorId).stream()
                 .map(LikeRegionResponse::from)
                 .toList();
 

@@ -1,25 +1,26 @@
-package ssafy.ssafyhome.notice.domain.repository;
+package ssafy.ssafyhome.notice.infrastructure;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.stereotype.Repository;
 import ssafy.ssafyhome.notice.application.response.NoticeQueryResponse;
 import ssafy.ssafyhome.notice.application.response.QNoticeQueryResponse;
 
 import java.util.List;
 
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
-import static ssafy.ssafyhome.member.domain.QMember.*;
-import static ssafy.ssafyhome.notice.domain.QNotice.*;
+import static ssafy.ssafyhome.member.domain.QMember.member;
+import static ssafy.ssafyhome.notice.domain.QNotice.notice;
 
 @RequiredArgsConstructor
-public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
+@Repository
+public class NoticeQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    @Override
     public Slice<NoticeQueryResponse> searchAll(final Long cursorId, Pageable pageable) {
         List<NoticeQueryResponse> notices = queryFactory
                 .select(new QNoticeQueryResponse(notice.id, member.nickname, notice.title, notice.content, notice.createdAt, notice.modifiedAt))
@@ -29,10 +30,9 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(notices);
+        return new SliceImpl<>(notices);
     }
 
-    @Override
     public NoticeQueryResponse search(final Long noticeId) {
         return queryFactory
                 .select(new QNoticeQueryResponse(notice.id, member.nickname, notice.title, notice.content, notice.createdAt, notice.modifiedAt))

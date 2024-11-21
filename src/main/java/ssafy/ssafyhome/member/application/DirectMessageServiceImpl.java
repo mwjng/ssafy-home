@@ -8,6 +8,7 @@ import ssafy.ssafyhome.member.domain.DirectMessage;
 import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.domain.repository.DirectMessageRepository;
 import ssafy.ssafyhome.member.exception.DirectMessageException;
+import ssafy.ssafyhome.member.infrastructure.DirectMessageQueryRepository;
 import ssafy.ssafyhome.member.presentation.request.SendMessageRequest;
 import ssafy.ssafyhome.member.application.response.*;
 
@@ -24,10 +25,11 @@ import static ssafy.ssafyhome.member.domain.MessageStatus.*;
 public class DirectMessageServiceImpl implements DirectMessageService {
 
     private final DirectMessageRepository directMessageRepository;
+    private final DirectMessageQueryRepository directMessageQueryRepository;
 
     public ReceivedMessagesResponse searchReceivedMessages(final Long memberId, final int size, final Long cursorId) {
         PageRequest pageRequest = createPageRequest(size);
-        List<ReceivedMessageResponse> receivedMessages = directMessageRepository.searchReceivedMessages(memberId, pageRequest, cursorId)
+        List<ReceivedMessageResponse> receivedMessages = directMessageQueryRepository.searchReceivedMessages(memberId, pageRequest, cursorId)
                 .stream()
                 .map(ReceivedMessageResponse::from)
                 .toList();
@@ -36,7 +38,7 @@ public class DirectMessageServiceImpl implements DirectMessageService {
 
     public SentMessagesResponse searchSentMessages(final Long memberId, final int size, final Long cursorId) {
         PageRequest pageRequest = createPageRequest(size);
-        List<SentMessageResponse> sentMessages = directMessageRepository.searchSentMessages(memberId, pageRequest, cursorId)
+        List<SentMessageResponse> sentMessages = directMessageQueryRepository.searchSentMessages(memberId, pageRequest, cursorId)
                 .stream()
                 .map(SentMessageResponse::from)
                 .toList();

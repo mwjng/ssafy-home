@@ -10,6 +10,7 @@ import ssafy.ssafyhome.notice.application.response.NoticesResponse;
 import ssafy.ssafyhome.notice.domain.Notice;
 import ssafy.ssafyhome.notice.domain.repository.NoticeRepository;
 import ssafy.ssafyhome.notice.exception.NoticeException;
+import ssafy.ssafyhome.notice.infrastructure.NoticeQueryRepository;
 import ssafy.ssafyhome.notice.presentation.request.NoticeCreateRequest;
 import ssafy.ssafyhome.notice.presentation.request.NoticeUpdateRequest;
 
@@ -26,10 +27,11 @@ import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
 public class NoticeServiceImpl implements NoticeService {
 
     private final NoticeRepository noticeRepository;
+    private final NoticeQueryRepository noticeQueryRepository;
 
     public NoticesResponse searchAll(final int size, final Long cursorId) {
         PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
-        List<NoticeResponse> notices = noticeRepository.searchAll(cursorId, pageRequest).stream()
+        List<NoticeResponse> notices = noticeQueryRepository.searchAll(cursorId, pageRequest).stream()
                 .map(NoticeResponse::from)
                 .toList();
 
@@ -37,7 +39,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     public NoticeResponse search(final Long noticeId) {
-        return Optional.ofNullable(noticeRepository.search(noticeId))
+        return Optional.ofNullable(noticeQueryRepository.search(noticeId))
                 .map(NoticeResponse::from)
                 .orElseThrow(() -> new NoticeException(NOT_FOUND_NOTICE));
     }

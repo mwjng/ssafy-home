@@ -7,7 +7,7 @@ import ssafy.ssafyhome.member.domain.Member;
 
 import java.util.Optional;
 
-public interface LikeRegionRepository extends JpaRepository<LikeRegion, Long>, LikeRegionRepositoryCustom {
+public interface LikeRegionRepository extends JpaRepository<LikeRegion, Long> {
     Optional<LikeRegion> findByIdAndMember(Long regionId, Member member);
 
     @EntityGraph(attributePaths = {"member"})

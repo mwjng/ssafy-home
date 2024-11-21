@@ -12,6 +12,7 @@ import ssafy.ssafyhome.member.domain.repository.FollowRepository;
 import ssafy.ssafyhome.member.domain.repository.MemberRepository;
 import ssafy.ssafyhome.member.exception.FollowException;
 import ssafy.ssafyhome.member.exception.MemberException;
+import ssafy.ssafyhome.member.infrastructure.FollowQueryRepository;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +26,7 @@ import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.defaultSort;
 public class FollowServiceImpl implements FollowService {
 
     private final FollowRepository followRepository;
+    private final FollowQueryRepository followQueryRepository;
     private final MemberRepository memberRepository;
     private final ImageService imageService;
 
@@ -32,7 +34,7 @@ public class FollowServiceImpl implements FollowService {
 
     public FollowersResponse searchFollowers(final Long memberId, final int size, final Long cursorId, final String baseUrl) {
         PageRequest pageRequest = createPageRequest(size);
-        List<FollowerResponse> followers = followRepository.searchFollowers(memberId, pageRequest, cursorId)
+        List<FollowerResponse> followers = followQueryRepository.searchFollowers(memberId, pageRequest, cursorId)
                 .stream()
                 .map(follower -> getFollowerResponse(baseUrl, follower))
                 .toList();
@@ -41,7 +43,7 @@ public class FollowServiceImpl implements FollowService {
 
     public FollowingsResponse searchFollowings(final Long memberId, final int size, final Long cursorId, final String baseUrl) {
         PageRequest pageRequest = createPageRequest(size);
-        List<FollowingResponse> followings = followRepository.searchFollowings(memberId, pageRequest, cursorId)
+        List<FollowingResponse> followings = followQueryRepository.searchFollowings(memberId, pageRequest, cursorId)
                 .stream()
                 .map(following -> getFollowingResponse(baseUrl, following))
                 .toList();

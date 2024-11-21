@@ -7,7 +7,7 @@ import ssafy.ssafyhome.member.domain.Member;
 
 import java.util.Optional;
 
-public interface FollowRepository extends JpaRepository<Follow, Long>, FollowRepositoryCustom{
+public interface FollowRepository extends JpaRepository<Follow, Long> {
     @EntityGraph(attributePaths = {"follower"})
     Optional<Member> findFollowerById(Long id);
 

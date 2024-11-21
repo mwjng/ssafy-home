@@ -8,7 +8,7 @@ import ssafy.ssafyhome.member.domain.MessageStatus;
 
 import java.util.Optional;
 
-public interface DirectMessageRepository extends JpaRepository<DirectMessage, Long>, DirectMessageRepositoryCustom {
+public interface DirectMessageRepository extends JpaRepository<DirectMessage, Long> {
     Optional<DirectMessage> findByIdAndSenderId(Long directMessageId, Long senderId);
     Optional<DirectMessage> findByIdAndReceiverId(Long directMessageId, Long receiverId);
 

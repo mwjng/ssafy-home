@@ -8,7 +8,7 @@ import ssafy.ssafyhome.notice.domain.Notice;
 import java.util.List;
 import java.util.Optional;
 
-public interface NoticeRepository extends JpaRepository<Notice, Long>, NoticeRepositoryCustom {
+public interface NoticeRepository extends JpaRepository<Notice, Long> {
     @Override
     @EntityGraph(attributePaths = "{member}")
     Optional<Notice> findById(Long noticeId);
