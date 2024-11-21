@@ -86,6 +86,7 @@ public class HouseController implements HouseControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long houseId
     ) {
+        houseService.deleteHouse(houseId);
         return ResponseEntity.noContent().build();
     }
 
@@ -114,6 +115,7 @@ public class HouseController implements HouseControllerDocs{
         @PathVariable final Long houseId,
         @ModelAttribute final ArticleSearchCondition articleSearchCondition
     ) {
+
         return null;
     }
 

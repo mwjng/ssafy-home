@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.ssafyhome.common.auditing.BaseEntity;
+import ssafy.ssafyhome.house.presentation.request.HouseRequest;
 import ssafy.ssafyhome.region.domain.Region;
 
 import static jakarta.persistence.EnumType.*;
@@ -75,6 +76,20 @@ public class House extends BaseEntity {
         this.longitude = longitude;
         this.dirName = dirName;
         this.type = type;
+        this.region = region;
+    }
+
+    public void updateHouseInfo(final HouseRequest request, final Region region, final String imagePath) {
+        this.name = request.name();
+        this.buildYear = request.buildYear();
+        this.jibun = request.jibun();
+        this.road = request.road();
+        this.bonbun = request.bonbun();
+        this.bubun = request.bubun();
+        this.latitude = request.latitude();
+        this.longitude = request.longitude();
+        this.dirName = imagePath;
+        this.type = HouseType.getHouseType(request.houseType());
         this.region = region;
     }
 }

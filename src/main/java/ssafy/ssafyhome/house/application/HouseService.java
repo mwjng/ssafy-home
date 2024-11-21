@@ -65,27 +65,37 @@ public class HouseService {
     public void createHouse(final HouseRequest request,
                             final List<MultipartFile> images) {
         final String imagePath = imageService.save(images, HOUSE_IMG_DIR);
-        final Region region = regionRepository.findBySidoAndGugunAndDong(
-                request.sido(), request.gugun(), request.dong())
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_REGION));
-        houseRepository.save(request.toMember(imagePath, region));
+        houseRepository.save(request.toMember(imagePath, getRegion(request)));
     }
 
     @Transactional
     public void updateHouse(final Long houseId,
                             final HouseRequest request,
                             final List<MultipartFile> images) {
-        houseRepository.findById(houseId).orElseThrow(() -> new BadRequestException(NOT_FOUND_HOUSE_ID));
+        final House house = houseRepository.findById(houseId)
+            .orElseThrow(() -> new BadRequestException(NOT_FOUND_HOUSE_ID));
+        final String imagePath = imageService.save(images, HOUSE_IMG_DIR);
+        deleteHouseImages(house);
+        house.updateHouseInfo(request, getRegion(request), imagePath);
+    }
+
+    private Region getRegion(final HouseRequest request) {
+        return regionRepository
+            .findBySidoAndGugunAndDong(request.sido(), request.gugun(), request.dong())
+            .orElseThrow(() -> new BadRequestException(NOT_FOUND_REGION));
     }
 
     @Transactional
     public void deleteHouse(final Long houseId) {
         final House house = houseRepository.findById(houseId)
             .orElseThrow(() -> new BadRequestException(NOT_FOUND_HOUSE_ID));
+        deleteHouseImages(house);
+        houseRepository.deleteById(houseId);
+    }
+
+    private void deleteHouseImages(final House house) {
         final List<String> imageFilePaths = imageService.getImageFilePaths(house.getDirName(), HOUSE_IMG_DIR);
         final String imageFileDirPath = imageService.getImageFileDirPath(house.getDirName(), HOUSE_IMG_DIR);
-
         eventPublisher.publishEvent(new ImageEvent(imageFileDirPath, imageFilePaths));
-        houseRepository.deleteById(houseId);
     }
 }
