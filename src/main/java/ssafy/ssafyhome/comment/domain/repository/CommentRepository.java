@@ -23,7 +23,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         FROM Comment comment
         WHERE comment.member.id = :memberId
     """)
-    List<CommentResponse> findCommentsByMemberId(Long memberId, Pageable pageable);
+    List<CommentResponse> findCommentsByMemberId(final Long memberId, final Pageable pageable);
 
     @Query("""
         SELECT new ssafy.ssafyhome.comment.application.response.ArticleCommentResponse (
@@ -39,5 +39,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         JOIN comment.member member
         WHERE comment.article.id = :articleId
     """)
-    List<ArticleCommentResponse> findCommentsByArticleId(Long articleId, Pageable pageable);
+    List<ArticleCommentResponse> findCommentsByArticleId(final Long articleId, final Pageable pageable);
 }
