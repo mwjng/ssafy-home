@@ -1,4 +1,6 @@
 package ssafy.ssafyhome.comment.presentation.request;
 
-public record CommentUpdateRequest(String content) {
+public record CommentUpdateRequest(
+    String content
+) {
 }

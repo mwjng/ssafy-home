@@ -33,4 +33,16 @@ public class Article extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "house_id")
     private House house;
+
+    public Article(final String content, final String dirName, final Member member, final House house) {
+        this.content = content;
+        this.dirName = dirName;
+        this.member = member;
+        this.house = house;
+    }
+
+    public void updateArticle(String content, String dirName) {
+        this.content = content;
+        this.dirName = dirName;
+    }
 }

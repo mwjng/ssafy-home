@@ -3,19 +3,19 @@ package ssafy.ssafyhome.house.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ssafy.ssafyhome.article.application.ArticleService;
 import ssafy.ssafyhome.article.application.response.ArticlesResponse;
 import ssafy.ssafyhome.article.presentation.request.ArticleCreateRequest;
-import ssafy.ssafyhome.article.presentation.request.ArticleSearchCondition;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AdminAccess;
 import ssafy.ssafyhome.auth.presentation.AgentAccess;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
-import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
 import ssafy.ssafyhome.house.application.HouseService;
 import ssafy.ssafyhome.house.application.response.HouseResponse;
 import ssafy.ssafyhome.house.application.response.HousesResponse;
@@ -33,6 +33,7 @@ import static ssafy.ssafyhome.common.util.UrlUtil.*;
 public class HouseController implements HouseControllerDocs{
 
     private final HouseService houseService;
+    private final ArticleService articleService;
 
     @GetMapping
     public ResponseEntity<HousesResponse> getHouses(
@@ -93,20 +94,9 @@ public class HouseController implements HouseControllerDocs{
     @UserAccess
     public ResponseEntity<ArticlesResponse> getArticles(
         @PathVariable final Long houseId,
-        @ModelAttribute final ArticleSearchCondition articleSearchCondition
+        final Pageable pageable
     ) {
 
-        return null;
-    }
-
-    @PostMapping("/{houseId}/deals")
-    @AgentAccess
-    public ResponseEntity<Void> createDeal(
-        @AuthenticationPrincipal final AccessContext accessContext,
-        @PathVariable final Long houseId,
-        @RequestPart final DealCreateRequest dealCreateRequest,
-        @RequestPart final List<MultipartFile> images
-    ) {
         return null;
     }
 
@@ -115,7 +105,21 @@ public class HouseController implements HouseControllerDocs{
     public ResponseEntity<Void> createArticle(
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long houseId,
-        @RequestPart final ArticleCreateRequest articleCreateRequest,
+        @Valid @RequestPart ArticleCreateRequest articleCreateRequest,
+        @RequestPart final List<MultipartFile> images
+    ) {
+        articleService.createArticle(
+            accessContext.getMemberId(), houseId, articleCreateRequest.content(), images
+        );
+        return ResponseEntity.status(CREATED).build();
+    }
+
+    @PostMapping("/{houseId}/deals")
+    @AgentAccess
+    public ResponseEntity<Void> createDeal(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long houseId,
+        @RequestPart final DealCreateRequest dealCreateRequest,
         @RequestPart final List<MultipartFile> images
     ) {
         return null;

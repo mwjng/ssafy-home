@@ -57,6 +57,7 @@ public enum ErrorCode {
     NOT_FOUND_DEAL_ID(3060, NOT_FOUND, "요청한 ID에 해당하는 매물이 없습니다."),
     NOT_FOUND_LIKE_HOUSE_ID(3070, NOT_FOUND, "요청한 ID에 해당하는 관심 House가 없습니다."),
     NOT_FOUND_ARTICLE_ID(3080, NOT_FOUND, "요청한 ID에 해당하는 게시글이 없습니다."),
+    NOT_FOUND_COMMENT_ID(3090, NOT_FOUND, "요청한 ID에 해당하는 댓글이 없습니다."),
 
     SERVER_ERROR(4000, INTERNAL_SERVER_ERROR, "서버 에러가 발생하였습니다."),
     DIRECTORY_ACCESS_ERROR(4001, INTERNAL_SERVER_ERROR, "디렉토리에서 파일을 읽는 중 문제가 발생했습니다.");

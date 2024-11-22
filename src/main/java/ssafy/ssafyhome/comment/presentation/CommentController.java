@@ -1,37 +1,57 @@
 package ssafy.ssafyhome.comment.presentation;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
+import ssafy.ssafyhome.auth.presentation.UserAccess;
+import ssafy.ssafyhome.comment.application.CommentService;
 import ssafy.ssafyhome.comment.application.response.CommentResponse;
 import ssafy.ssafyhome.comment.application.response.CommentsResponse;
-import ssafy.ssafyhome.comment.presentation.request.CommentCreateRequest;
-import ssafy.ssafyhome.comment.presentation.request.CommentSearchCondition;
 import ssafy.ssafyhome.comment.presentation.request.CommentUpdateRequest;
 
-@RestController
+@RequiredArgsConstructor
 @RequestMapping("/comments")
+@RestController
 public class CommentController implements CommentControllerDocs{
 
-    @Override
-    public ResponseEntity<CommentsResponse> searchMyComment(final AccessContext accessContext, final CommentSearchCondition commentSearchCondition) {
+    private final CommentService commentService;
+
+    @GetMapping
+    @UserAccess
+    public ResponseEntity<CommentsResponse> getMyComments(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        final Pageable pageable
+    ) {
+        return ResponseEntity.ok(
+            commentService.getMemberComments(accessContext.getMemberId(), pageable)
+        );
+    }
+
+    @GetMapping("/{commentId}")
+    public ResponseEntity<CommentResponse> getComment(@PathVariable final Long commentId) {
         return null;
     }
 
-    @Override
-    public ResponseEntity<CommentResponse> search(final Long id) {
+    @PatchMapping("/{commentId}")
+    @UserAccess
+    public ResponseEntity<Void> updateComment(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long commentId,
+        @RequestBody final CommentUpdateRequest commentUpdateRequest
+    ) {
         return null;
     }
 
-    @Override
-    public ResponseEntity<Void> update(final AccessContext accessContext, final Long id, final CommentUpdateRequest commentUpdateRequest, final MultipartFile image) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Void> delete(final AccessContext accessContext, final Long id) {
-        return null;
+    @DeleteMapping("/{commentId}")
+    @UserAccess
+    public ResponseEntity<Void> deleteComment(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long commentId
+    ) {
+        commentService.deleteComment(commentId);
+        return ResponseEntity.noContent().build();
     }
 }

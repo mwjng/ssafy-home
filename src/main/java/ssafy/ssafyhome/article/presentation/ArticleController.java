@@ -13,6 +13,7 @@ import ssafy.ssafyhome.article.presentation.request.ArticleUpdateRequest;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
+import ssafy.ssafyhome.comment.application.CommentService;
 import ssafy.ssafyhome.comment.application.response.CommentsResponse;
 import ssafy.ssafyhome.comment.presentation.request.CommentCreateRequest;
 
@@ -26,6 +27,7 @@ import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
 public class ArticleController implements ArticleControllerDocs{
 
     private final ArticleService articleService;
+    private final CommentService commentService;
 
     @GetMapping
     @UserAccess
@@ -39,7 +41,7 @@ public class ArticleController implements ArticleControllerDocs{
             getBaseUrl(request)));
     }
 
-    @PatchMapping("/{articleId}")
+    @PutMapping("/{articleId}")
     @UserAccess
     public ResponseEntity<Void> updateArticle(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -47,7 +49,7 @@ public class ArticleController implements ArticleControllerDocs{
         @Valid @RequestPart final ArticleUpdateRequest articleUpdateRequest,
         @RequestPart final List<MultipartFile> images
     ) {
-        articleService.updateArticle(articleId, articleUpdateRequest, images);
+        articleService.updateArticle(articleId, articleUpdateRequest.content(), images);
         return ResponseEntity.noContent().build();
     }
 
@@ -57,7 +59,8 @@ public class ArticleController implements ArticleControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long articleId
     ) {
-        return null;
+        articleService.deleteArticle(articleId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{articleId}/comments")
