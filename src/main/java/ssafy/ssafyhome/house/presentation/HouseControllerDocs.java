@@ -13,11 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.article.application.response.ArticlesResponse;
 import ssafy.ssafyhome.article.presentation.request.ArticleCreateRequest;
-import ssafy.ssafyhome.article.presentation.request.ArticleSearchCondition;
 import ssafy.ssafyhome.auth.domain.AccessContext;
-import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
-import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
 import ssafy.ssafyhome.house.application.response.HouseResponse;
 import ssafy.ssafyhome.house.application.response.HousesResponse;
 import ssafy.ssafyhome.house.presentation.request.HouseRequest;
@@ -95,31 +92,6 @@ public interface HouseControllerDocs {
             final AccessContext accessContext,
             @Parameter(name = "houseId") final Long houseId,
             @Parameter(name = "deal") final DealCreateRequest dealCreateRequest,
-            @Parameter(name = "image") final List<MultipartFile> images
-    );
-
-    @Operation(summary = "house에 해당하는 모든 article 조회", description = "house에 해당하는 모든 article의 정보를 반환한다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ArticlesResponse.class))),
-            @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
-    })
-    ResponseEntity<ArticlesResponse> getArticles(
-            @Parameter(name = "houseId") final Long houseId,
-            final Pageable pageable
-    );
-
-    @Operation(summary = "house에 해당하는 article을 생성", description = "house에 해당하는 article을 생성한다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "요청이 처리되어서 새로운 리소스가 생성되었다."),
-            @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
-            @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
-    })
-    ResponseEntity<Void> createArticle(
-            final AccessContext accessContext,
-            @Parameter(name = "houseId") final Long houseId,
-            @Parameter(name = "article") final ArticleCreateRequest articleCreateRequest,
             @Parameter(name = "image") final List<MultipartFile> images
     );
 }

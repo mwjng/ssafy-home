@@ -1,4 +1,4 @@
-package ssafy.ssafyhome.member.presentation.response;
+package ssafy.ssafyhome.like.application.response;
 
 import ssafy.ssafyhome.deal.domain.Deal;
 import ssafy.ssafyhome.deal.domain.DealStatus;
@@ -8,8 +8,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record MyDealResponse(
+public record LikeDealResponse(
+        Long likeDealId,
         Long dealId,
+        Long memberId,
         BigDecimal exclusiveArea,
         int floor,
         Integer deposit,
@@ -17,16 +19,14 @@ public record MyDealResponse(
         DealStatus status,
         DealType type,
         LocalDateTime dealDate,
-        MyDealHouseResponse house,
-        Long memberId,
-        String agentNickName,
-        List<String> imageUrl,
-        LocalDateTime createAt,
-        LocalDateTime modifiedAt
-) {
-    public static MyDealResponse from(Deal deal, List<String> dealImageUrl) {
-        return new MyDealResponse(
+        List<String> imageUrl) {
+
+    public static LikeDealResponse from(LikeDealQueryResponse likeDeal, List<String> dealImageUrl) {
+        Deal deal = likeDeal.deal();
+        return new LikeDealResponse(
+                likeDeal.likeDealId(),
                 deal.getId(),
+                deal.getMember().getId(),
                 deal.getExclusiveArea(),
                 deal.getFloor(),
                 deal.getDeposit(),
@@ -34,12 +34,7 @@ public record MyDealResponse(
                 deal.getStatus(),
                 deal.getType(),
                 deal.getDealDate(),
-                MyDealHouseResponse.of(deal.getHouse()),
-                deal.getMember().getId(),
-                deal.getMember().getNickname(),
-                dealImageUrl,
-                deal.getCreatedAt(),
-                deal.getModifiedAt()
+                dealImageUrl
         );
     }
 }

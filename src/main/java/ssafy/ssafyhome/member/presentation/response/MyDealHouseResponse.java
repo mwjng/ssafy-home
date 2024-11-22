@@ -4,8 +4,6 @@ import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.HouseType;
 import ssafy.ssafyhome.region.application.response.RegionResponse;
 
-import java.util.List;
-
 public record MyDealHouseResponse(
     Long houseId,
     String name,
@@ -17,10 +15,9 @@ public record MyDealHouseResponse(
     String latitude,
     String longitude,
     HouseType houseType,
-    RegionResponse region,
-    List<String> imageUrl
+    RegionResponse region
 ) {
-    public static MyDealHouseResponse of(final House house, List<String> imageUrl) {
+    public static MyDealHouseResponse of(final House house) {
         return new MyDealHouseResponse(
             house.getId(),
             house.getName(),
@@ -32,8 +29,7 @@ public record MyDealHouseResponse(
             house.getLatitude(),
             house.getLongitude(),
             house.getType(),
-            RegionResponse.of(house.getRegion()),
-            imageUrl
+            RegionResponse.of(house.getRegion())
         );
     }
 }

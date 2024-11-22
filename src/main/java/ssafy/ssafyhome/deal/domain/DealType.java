@@ -6,6 +6,7 @@ import ssafy.ssafyhome.house.domain.HouseType;
 import java.util.Arrays;
 
 import static org.springframework.util.StringUtils.hasText;
+import static ssafy.ssafyhome.common.exception.ErrorCode.INVALID_DEAL_TYPE;
 
 public enum DealType {
 

@@ -8,6 +8,7 @@ import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.member.domain.Member;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.FetchType.LAZY;
@@ -30,9 +31,6 @@ public class Deal extends BaseEntity {
     @Column(nullable = false)
     private int floor;
 
-    @Column(nullable = false)
-    private int views;
-
     private Integer deposit;
 
     @Column(nullable = false)
@@ -46,6 +44,8 @@ public class Deal extends BaseEntity {
     @Enumerated(STRING)
     private DealType type;
 
+    private LocalDateTime dealDate;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "house_id")
     private House house;
@@ -57,7 +57,6 @@ public class Deal extends BaseEntity {
     public Deal(
         final BigDecimal exclusiveArea,
         final int floor,
-        final int views,
         final Integer deposit,
         final Integer price,
         final String dirName,
@@ -68,7 +67,6 @@ public class Deal extends BaseEntity {
     ) {
         this.exclusiveArea = exclusiveArea;
         this.floor = floor;
-        this.views = views;
         this.deposit = deposit;
         this.price = price;
         this.dirName = dirName;

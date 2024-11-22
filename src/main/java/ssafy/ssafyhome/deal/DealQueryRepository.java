@@ -5,17 +5,25 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import ssafy.ssafyhome.common.querydsl.QueryDslUtil;
 import ssafy.ssafyhome.deal.application.request.DealCondition;
 import ssafy.ssafyhome.deal.domain.Deal;
 import ssafy.ssafyhome.deal.domain.DealStatus;
 import ssafy.ssafyhome.deal.domain.DealType;
 import ssafy.ssafyhome.house.domain.HouseType;
+import ssafy.ssafyhome.like.application.response.LikeDealQueryResponse;
+import ssafy.ssafyhome.like.domain.QLikeDeal;
+import ssafy.ssafyhome.member.domain.QMember;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
+import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
 import static ssafy.ssafyhome.deal.domain.QDeal.deal;
 import static ssafy.ssafyhome.house.domain.QHouse.house;
+import static ssafy.ssafyhome.like.domain.QLikeDeal.*;
+import static ssafy.ssafyhome.member.domain.QMember.*;
 import static ssafy.ssafyhome.region.domain.QRegion.region;
 
 @RequiredArgsConstructor
@@ -27,8 +35,8 @@ public class DealQueryRepository {
     public List<Deal> findDeals(DealCondition condition, Pageable pageable) {
         return queryFactory
             .selectFrom(deal)
-            .leftJoin(deal.house, house).fetchJoin()
-            .leftJoin(house.region, region).fetchJoin()
+            .join(deal.house, house).fetchJoin()
+            .join(house.region, region).fetchJoin()
             .where(
                 maxExclusiveArea(condition.getMaxExclusiveArea()),
                 minExclusiveArea(condition.getMinExclusiveArea()),
@@ -44,6 +52,29 @@ public class DealQueryRepository {
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
+    }
+
+    public List<Deal> findByMemberId(final Long memberId) {
+        return queryFactory
+                .selectFrom(deal)
+                .join(deal.member, member).fetchJoin()
+                .join(deal.house, house).fetchJoin()
+                .join(house.region, region).fetchJoin()
+                .where(toEqExpression(deal.member.id, memberId))
+                .fetch();
+    }
+
+    public List<LikeDealQueryResponse> findLikeDealsByMemberId(final Long memberId) {
+        return null;
+//        return queryFactory
+//                .select(new QLikeDealQueryResponse(deal, likeDeal.id))
+//                .from(likeDeal)
+//                .join(likeDeal.deal, deal).fetchJoin()
+//                .join(deal.member, member).fetchJoin()
+//                .join(deal.house, house).fetchJoin()
+//                .join(house.region, region).fetchJoin()
+//                .where(toEqExpression(likeDeal.member.id, memberId))
+//                .fetch();
     }
 
     private BooleanExpression maxExclusiveArea(BigDecimal maxArea) {
@@ -76,10 +107,6 @@ public class DealQueryRepository {
 
     private BooleanExpression dealTypeEq(DealType type) {
         return type != null ? deal.type.eq(type) : null;
-    }
-
-    private BooleanExpression houseTypeEq(HouseType type) {
-        return type != null ? house.type.eq(type) : null;
     }
 
     private BooleanExpression memberIdEq(Long memberId) {

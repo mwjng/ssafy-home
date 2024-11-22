@@ -56,22 +56,9 @@ public class MemberController {
     @AgentAccess
     public ResponseEntity<MyDealsResponse> getMyDeals(
         @AuthenticationPrincipal final AccessContext accessContext,
-        @RequestParam(defaultValue = "SALE") final String dealType,
-        @RequestParam(defaultValue = "APT") final String houseType,
-        @RequestParam(defaultValue = "10") final int pageSize,
-        @RequestParam(required = false) final LocalDateTime cursor,
-        @RequestParam(defaultValue = "PENDING") final String dealStatus,
         final HttpServletRequest request
     ) {
-        final MyDealsResponse myDealResponse = dealService.getDealsByMemberId(
-            accessContext.getMemberId(),
-            getDealStatus(dealStatus),
-            getDealType(dealType),
-            getHouseType(houseType),
-            pageSize,
-            Objects.requireNonNullElse(cursor, now()),
-            getBaseUrl(request));
-
+        final MyDealsResponse myDealResponse = dealService.getDealsByMemberId(accessContext.getMemberId(), getBaseUrl(request));
         return ResponseEntity.ok().body(myDealResponse);
     }
 

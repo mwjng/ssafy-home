@@ -14,4 +14,12 @@ public record RegionResponse(
             region.getDong()
         );
     }
+
+    public static RegionResponse from (RegionQueryResponse region){
+        return new RegionResponse(
+                region.sido(),
+                region.gugun(),
+                region.dong()
+        );
+    }
 }

@@ -19,7 +19,6 @@ public class DealCondition {
     private Integer minPrice;
     private DealStatus dealStatus;
     private DealType dealType;
-    private HouseType houseType;
     private DealSortCondition dealSortCondition;
     private Long memberId;
     private Long houseId;
@@ -46,7 +45,6 @@ public class DealCondition {
         this.maxPrice = maxPrice;
         this.minPrice = minPrice;
         this.dealStatus = dealStatus;
-        this.houseType = houseType;
         this.dealType = dealType;
         this.dealSortCondition = dealSortCondition;
         this.memberId = memberId;

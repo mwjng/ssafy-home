@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 public record DealCreateRequest(
     BigDecimal exclusiveArea,
     int floor,
-    int views,
     Integer deposit,
     Integer price,
     DealStatus status,
@@ -22,7 +21,6 @@ public record DealCreateRequest(
         return new Deal(
             exclusiveArea,
             floor,
-            views,
             deposit,
             price,
             dirName,

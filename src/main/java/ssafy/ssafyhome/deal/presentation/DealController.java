@@ -27,6 +27,21 @@ public class DealController implements DealControllerDocs{
 
     private final DealService dealService;
 
+    @GetMapping("/{houseId}")
+    public ResponseEntity<DealsResponse> getDeals(
+            @PathVariable final Long houseId,
+            @RequestParam(defaultValue = "PENDING") final String dealStatus,
+            @RequestParam(defaultValue = "SALE") final String dealType,
+            @RequestParam(defaultValue = "APT") final String houseType,
+            @PageableDefault final Pageable pageable,
+            final HttpServletRequest request
+    ) {
+        return ResponseEntity.ok(dealService.getDealsByHouseId(
+                houseId,
+                getBaseUrl(request)
+        ));
+    }
+
     @PostMapping
     @AgentAccess
     public ResponseEntity<Void> createDeal(
@@ -38,21 +53,7 @@ public class DealController implements DealControllerDocs{
         return ResponseEntity.status(CREATED).build();
     }
 
-    @GetMapping("/{houseId}")
-    public ResponseEntity<DealsResponse> getDeals(
-        @PathVariable final Long houseId,
-        @RequestParam(defaultValue = "PENDING") final String dealStatus,
-        @RequestParam(defaultValue = "SALE") final String dealType,
-        @RequestParam(defaultValue = "APT") final String houseType,
-        @PageableDefault final Pageable pageable,
-        final HttpServletRequest request
-    ) {
-        return ResponseEntity.ok(dealService.getDealsByHouseId(
-            houseId,
-            getBaseUrl(request)
-        ));
-    }
-
+    // TODO update
     @PutMapping("/{dealId}")
     @AgentAccess
     public ResponseEntity<Void> updateDeal(
