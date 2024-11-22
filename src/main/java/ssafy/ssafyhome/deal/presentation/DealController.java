@@ -34,12 +34,8 @@ public class DealController implements DealControllerDocs{
             @RequestParam(defaultValue = "SALE") final String dealType,
             @RequestParam(defaultValue = "APT") final String houseType,
             @PageableDefault final Pageable pageable,
-            final HttpServletRequest request
-    ) {
-        return ResponseEntity.ok(dealService.getDealsByHouseId(
-                houseId,
-                getBaseUrl(request)
-        ));
+            final HttpServletRequest request) {
+        return null;
     }
 
     @PostMapping
@@ -47,8 +43,7 @@ public class DealController implements DealControllerDocs{
     public ResponseEntity<Void> createDeal(
         @AuthenticationPrincipal final AccessContext accessContext,
         @RequestPart final DealCreateRequest dealCreateRequest,
-        @RequestPart final List<MultipartFile> images
-    ) {
+        @RequestPart final List<MultipartFile> images) {
         dealService.createDeal(accessContext.getMemberId(), dealCreateRequest, images);
         return ResponseEntity.status(CREATED).build();
     }
@@ -70,8 +65,8 @@ public class DealController implements DealControllerDocs{
     @AgentAccess
     public ResponseEntity<Void> deleteDeal(
         @AuthenticationPrincipal final AccessContext accessContext,
-        @PathVariable final Long dealId
-    ) {
+        @PathVariable final Long dealId) {
+
         dealService.deleteDeal(dealId);
         return ResponseEntity.noContent().build();
     }

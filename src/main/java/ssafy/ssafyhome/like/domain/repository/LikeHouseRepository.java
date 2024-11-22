@@ -11,4 +11,6 @@ public interface LikeHouseRepository extends JpaRepository<LikeHouse, Long> {
     @Override
     @EntityGraph(attributePaths = "{member}")
     Optional<LikeHouse> findById(Long id);
+
+    Boolean existsByMemberIdAndHouseId(Long memberId, Long houseId);
 }

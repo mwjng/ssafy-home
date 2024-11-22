@@ -2,10 +2,12 @@ package ssafy.ssafyhome.deal.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.common.exception.BadRequestException;
+import ssafy.ssafyhome.common.querydsl.QueryDslUtil;
 import ssafy.ssafyhome.deal.DealQueryRepository;
 import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.domain.Deal;
@@ -15,6 +17,8 @@ import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.repository.HouseRepository;
 import ssafy.ssafyhome.image.application.ImageService;
 import ssafy.ssafyhome.image.domain.ImageEvent;
+import ssafy.ssafyhome.like.application.response.LikeDealQueryResponse;
+import ssafy.ssafyhome.like.application.response.LikeDealResponse;
 import ssafy.ssafyhome.like.application.response.LikeDealsResponse;
 import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.domain.repository.MemberRepository;
@@ -24,6 +28,7 @@ import ssafy.ssafyhome.member.presentation.response.MyDealsResponse;
 import java.util.List;
 
 import static ssafy.ssafyhome.common.exception.ErrorCode.*;
+import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
 import static ssafy.ssafyhome.image.application.ImageDirectory.*;
 
 @Transactional(readOnly = true)
@@ -38,11 +43,11 @@ public class DealService {
     private final DealQueryRepository dealQueryRepository;
     private final ApplicationEventPublisher eventPublisher;
 
-    public MyDealsResponse getDealsByMemberId(final Long memberId, final String baseUrl) {
-        final List<MyDealResponse> myDealResponses = dealQueryRepository.findByMemberId(memberId).stream()
+    public MyDealsResponse getDealsByMemberId(final Long memberId, final String baseUrl, final int size, final Long cursorId) {
+        final PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
+        final List<MyDealResponse> myDealResponses = dealQueryRepository.findByMemberId(memberId, pageRequest, cursorId).stream()
                 .map(deal -> getMyDealsResponse(baseUrl, deal))
                 .toList();
-
         return new MyDealsResponse(myDealResponses);
     }
 
@@ -53,9 +58,12 @@ public class DealService {
         return null;
     }
 
-    public LikeDealsResponse getLikeDealsByMemberId(final Long memberId, final String baseUrl){
-        dealQueryRepository.findLikeDealsByMemberId(memberId);
-        return  null;
+    public LikeDealsResponse getLikeDealsByMemberId(final Long memberId, final String baseUrl, final int size, final Long cursorId){
+        final PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
+        final List<LikeDealResponse> likeDealResponses = dealQueryRepository.findLikeDealsByMemberId(memberId, pageRequest, cursorId).stream()
+                .map(likeDeal -> getLikeDealResponse(baseUrl, likeDeal))
+                .toList();
+        return new LikeDealsResponse(likeDealResponses);
     }
 
     @Transactional
@@ -81,10 +89,17 @@ public class DealService {
         dealRepository.deleteById(dealId);
     }
 
+    private LikeDealResponse getLikeDealResponse(final String baseUrl, final LikeDealQueryResponse likeDeal) {
+        final String dirName = likeDeal.deal().getDirName();
+        final List<String> imageFileNames = getFileNames(dirName);
+        final List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, dirName);
+        return LikeDealResponse.from(likeDeal, imageUrl);
+    }
+
     private MyDealResponse getMyDealsResponse(final String baseUrl, final Deal deal) {
-        String dirName = deal.getDirName();
-        List<String> imageFileNames = getFileNames(dirName);
-        List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, dirName);
+        final String dirName = deal.getDirName();
+        final List<String> imageFileNames = getFileNames(dirName);
+        final List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, dirName);
         return MyDealResponse.from(deal, imageUrl);
     }
 

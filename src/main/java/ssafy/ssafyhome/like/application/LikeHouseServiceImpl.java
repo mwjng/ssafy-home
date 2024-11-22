@@ -47,11 +47,16 @@ public class LikeHouseServiceImpl implements LikeHouseService {
             throw new LikeHouseException(NOT_FOUND_HOUSE_ID);
         }
 
+        if(likeHouseRepository.existsByMemberIdAndHouseId(memberId, houseId)){
+            throw new LikeHouseException(DUPLICATED_LIKE_HOUSE);
+        }
+
         likeHouseRepository.save(makeLikeHouse(memberId, houseId));
     }
 
     public void delete(final Long memberId, final Long likeHouseId) {
-        LikeHouse likeHouse = likeHouseRepository.findById(likeHouseId).orElseThrow(() -> new LikeHouseException(NOT_FOUND_LIKE_HOUSE_ID));
+        LikeHouse likeHouse = likeHouseRepository.findById(likeHouseId)
+                .orElseThrow(() -> new LikeHouseException(NOT_FOUND_LIKE_HOUSE_ID));
         if (!likeHouse.getMember().getId().equals(memberId)) {
             throw new LikeHouseException(UNAUTHORIZED_LIKE_HOUSE_ACCESS);
         }

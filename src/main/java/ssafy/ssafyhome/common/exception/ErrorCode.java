@@ -23,6 +23,7 @@ public enum ErrorCode {
     INVALID_DEAL_TYPE(1030, BAD_REQUEST, "올바르지 않은 거래 타입입니다."),
     INVALID_DEAL_STATUS(1031, BAD_REQUEST, "올바르지 않은 거래 상태입니다."),
     INVALID_SELF_FOLLOW_REQUEST(1041, BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다."),
+    DUPLICATED_LIKE_HOUSE(1070, BAD_REQUEST, "이미 존재하는 관심 House입니다."),
 
     INVALID_AUTHORITY(2001, FORBIDDEN, "해당 리소스에 접근할 권한이 없습니다."),
     INVALID_USER_ID(2002, UNAUTHORIZED, "아이디가 존재하지 않습니다."),

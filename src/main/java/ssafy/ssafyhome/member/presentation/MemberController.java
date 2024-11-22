@@ -56,9 +56,15 @@ public class MemberController {
     @AgentAccess
     public ResponseEntity<MyDealsResponse> getMyDeals(
         @AuthenticationPrincipal final AccessContext accessContext,
+        @RequestParam(required = false, defaultValue = "10") int size,
+        @RequestParam(required = false) Long cursorId,
         final HttpServletRequest request
     ) {
-        final MyDealsResponse myDealResponse = dealService.getDealsByMemberId(accessContext.getMemberId(), getBaseUrl(request));
+        final MyDealsResponse myDealResponse = dealService.getDealsByMemberId(
+                accessContext.getMemberId(),
+                getBaseUrl(request),
+                size,
+                cursorId);
         return ResponseEntity.ok().body(myDealResponse);
     }
 
