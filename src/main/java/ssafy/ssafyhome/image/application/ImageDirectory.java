@@ -4,7 +4,8 @@ public enum ImageDirectory {
 
     PROFILE("member/"),
     HOUSE("house/"),
-    DEAL("deal/");
+    DEAL("deal/"),
+    ARTICLE("article/");
 
     private final String directory;
 

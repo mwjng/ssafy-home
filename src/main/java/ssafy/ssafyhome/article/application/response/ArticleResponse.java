@@ -1,11 +1,28 @@
 package ssafy.ssafyhome.article.application.response;
 
+import ssafy.ssafyhome.article.domain.Article;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record ArticleResponse(
         Long articleId,
         Long memberId,
-        String writer,
+        String nickname,
         String content,
-        List<String> imageUrl) {
+        List<String> imageUrl,
+        LocalDateTime createdAt,
+        LocalDateTime modified_at
+) {
+    public static ArticleResponse of(Article article, List<String> imageUrl) {
+        return new ArticleResponse(
+            article.getId(),
+            article.getMember().getId(),
+            article.getMember().getNickname(),
+            article.getContent(),
+            imageUrl,
+            article.getCreatedAt(),
+            article.getModifiedAt()
+        );
+    }
 }

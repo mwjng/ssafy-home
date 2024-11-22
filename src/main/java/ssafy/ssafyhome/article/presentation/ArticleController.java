@@ -1,45 +1,79 @@
 package ssafy.ssafyhome.article.presentation;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ssafy.ssafyhome.article.application.ArticleService;
 import ssafy.ssafyhome.article.application.response.ArticlesResponse;
-import ssafy.ssafyhome.article.presentation.request.ArticleSearchCondition;
 import ssafy.ssafyhome.article.presentation.request.ArticleUpdateRequest;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
+import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.comment.application.response.CommentsResponse;
 import ssafy.ssafyhome.comment.presentation.request.CommentCreateRequest;
-import ssafy.ssafyhome.comment.presentation.request.CommentSearchCondition;
 
 import java.util.List;
 
-@RestController
+import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
+
+@RequiredArgsConstructor
 @RequestMapping("/articles")
+@RestController
 public class ArticleController implements ArticleControllerDocs{
 
-    @Override
-    public ResponseEntity<ArticlesResponse> searchMyArticles(final AccessContext accessContext, final ArticleSearchCondition articleSearchCondition) {
+    private final ArticleService articleService;
+
+    @GetMapping
+    @UserAccess
+    public ResponseEntity<ArticlesResponse> getMyArticles(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        final Pageable pageable,
+        final HttpServletRequest request
+    ) {
+        return ResponseEntity.ok(articleService.getMemberArticles(
+            accessContext.getMemberId(),
+            getBaseUrl(request)));
+    }
+
+    @PatchMapping("/{articleId}")
+    @UserAccess
+    public ResponseEntity<Void> updateArticle(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long articleId,
+        @Valid @RequestPart final ArticleUpdateRequest articleUpdateRequest,
+        @RequestPart final List<MultipartFile> images
+    ) {
+        articleService.updateArticle(articleId, articleUpdateRequest, images);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{articleId}")
+    @UserAccess
+    public ResponseEntity<Void> deleteArticle(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long articleId
+    ) {
         return null;
     }
 
-    @Override
-    public ResponseEntity<Void> update(final AccessContext accessContext, final Long articleId, final ArticleUpdateRequest articleUpdateRequest, final List<MultipartFile> images) {
+    @GetMapping("/{articleId}/comments")
+    public ResponseEntity<CommentsResponse> getComments(
+        @PathVariable final Long articleId,
+        final Pageable pageable
+    ) {
         return null;
     }
 
-    @Override
-    public ResponseEntity<Void> delete(final AccessContext accessContext, final Long id) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<CommentsResponse> searchComments(final Long articleId, final CommentSearchCondition commentSearchCondition) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Void> createComment(final AccessContext accessContext, final Long articleId, final CommentCreateRequest commentCreateRequest, final MultipartFile image) {
+    @PostMapping("/{articleId}/comments")
+    public ResponseEntity<Void> createComment(
+        @AuthenticationPrincipal AccessContext accessContext,
+        @PathVariable Long articleId,
+        @RequestBody final CommentCreateRequest commentCreateRequest
+    ) {
         return null;
     }
 }
