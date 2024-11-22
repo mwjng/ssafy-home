@@ -38,6 +38,7 @@ public class ArticleController implements ArticleControllerDocs {
     ) {
         return ResponseEntity.ok(articleService.getMemberArticles(
             accessContext.getMemberId(),
+            pageable,
             getBaseUrl(request)));
     }
 
@@ -45,10 +46,13 @@ public class ArticleController implements ArticleControllerDocs {
     @UserAccess
     public ResponseEntity<ArticlesResponse> getArticles(
         @PathVariable final Long houseId,
-        final Pageable pageable
+        final Pageable pageable,
+        final HttpServletRequest request
     ) {
-
-        return null;
+        return ResponseEntity.ok(articleService.getHouseArticles(
+            houseId,
+            pageable,
+            getBaseUrl(request)));
     }
 
     @PostMapping("/houses/{houseId}/articles")

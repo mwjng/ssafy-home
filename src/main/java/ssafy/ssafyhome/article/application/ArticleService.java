@@ -2,6 +2,7 @@ package ssafy.ssafyhome.article.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,8 +34,26 @@ public class ArticleService {
     private final ImageService imageService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public ArticlesResponse getMemberArticles(Long memberId, String baseUrl) {
-        final List<Article> articles = articleRepository.findByMemberId(memberId);
+    public ArticlesResponse getMemberArticles(
+        final Long memberId,
+        final Pageable pageable,
+        final String baseUrl
+    ) {
+        final List<Article> articles = articleRepository.findByMemberId(memberId, pageable);
+        final List<ArticleResponse> articleResponses = articles.stream()
+            .map(article -> ArticleResponse.of(
+                article,
+                getImageUrlList(baseUrl, article.getDirName(), ARTICLE.getDirectory())))
+            .toList();
+        return new ArticlesResponse(articleResponses);
+    }
+
+    public ArticlesResponse getHouseArticles(
+        final Long houseId,
+        final Pageable pageable,
+        final String baseUrl
+    ) {
+        final List<Article> articles = articleRepository.findByHouseId(houseId, pageable);
         final List<ArticleResponse> articleResponses = articles.stream()
             .map(article -> ArticleResponse.of(
                 article,
