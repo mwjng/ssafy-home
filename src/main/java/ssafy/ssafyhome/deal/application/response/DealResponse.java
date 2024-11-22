@@ -4,7 +4,6 @@ import ssafy.ssafyhome.deal.domain.Deal;
 import ssafy.ssafyhome.deal.domain.DealStatus;
 import ssafy.ssafyhome.deal.domain.DealType;
 import ssafy.ssafyhome.member.presentation.response.MyDealHouseResponse;
-import ssafy.ssafyhome.member.presentation.response.MyDealResponse;
 
 import java.math.BigDecimal;
 import java.util.List;

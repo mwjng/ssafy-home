@@ -2,6 +2,8 @@ package ssafy.ssafyhome.deal.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +41,10 @@ public class DealController implements DealControllerDocs{
     @GetMapping("/{houseId}")
     public ResponseEntity<DealsResponse> getDeals(
         @PathVariable final Long houseId,
+        @RequestParam(defaultValue = "PENDING") final String dealStatus,
+        @RequestParam(defaultValue = "SALE") final String dealType,
+        @RequestParam(defaultValue = "APT") final String houseType,
+        @PageableDefault final Pageable pageable,
         final HttpServletRequest request
     ) {
         return ResponseEntity.ok(dealService.getDealsByHouseId(

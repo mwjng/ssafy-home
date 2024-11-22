@@ -15,7 +15,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 public class Deal extends BaseEntity {

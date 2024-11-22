@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import ssafy.ssafyhome.deal.domain.DealStatus;
 import ssafy.ssafyhome.deal.domain.DealType;
+import ssafy.ssafyhome.house.domain.HouseType;
 
 import java.math.BigDecimal;
 
@@ -16,25 +17,27 @@ public class DealCondition {
     private Integer minDeposit;
     private Integer maxPrice;
     private Integer minPrice;
-    private DealStatus status;
-    private DealType type;
+    private DealStatus dealStatus;
+    private DealType dealType;
+    private HouseType houseType;
     private DealSortCondition dealSortCondition;
     private Long memberId;
     private Long houseId;
 
     @Builder
     public DealCondition(
-            BigDecimal maxExclusiveArea,
-            BigDecimal minExclusiveArea,
-            Integer maxDeposit,
-            Integer minDeposit,
-            Integer maxPrice,
-            Integer minPrice,
-            DealStatus status,
-            DealType type,
-            DealSortCondition dealSortCondition,
-            Long memberId,
-            Long houseId
+        BigDecimal maxExclusiveArea,
+        BigDecimal minExclusiveArea,
+        Integer maxDeposit,
+        Integer minDeposit,
+        Integer maxPrice,
+        Integer minPrice,
+        DealStatus dealStatus,
+        HouseType houseType,
+        DealType dealType,
+        DealSortCondition dealSortCondition,
+        Long memberId,
+        Long houseId
     ) {
         this.maxExclusiveArea = maxExclusiveArea;
         this.minExclusiveArea = minExclusiveArea;
@@ -42,8 +45,9 @@ public class DealCondition {
         this.minDeposit = minDeposit;
         this.maxPrice = maxPrice;
         this.minPrice = minPrice;
-        this.status = status;
-        this.type = type;
+        this.dealStatus = dealStatus;
+        this.houseType = houseType;
+        this.dealType = dealType;
         this.dealSortCondition = dealSortCondition;
         this.memberId = memberId;
         this.houseId = houseId;

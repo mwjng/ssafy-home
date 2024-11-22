@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ssafy.ssafyhome.deal.domain.Deal;
+import ssafy.ssafyhome.house.domain.HouseType;
 
 import java.util.List;
 
@@ -13,15 +14,19 @@ public interface DealRepository extends JpaRepository<Deal, Long> {
         SELECT deal FROM Deal deal
         LEFT JOIN FETCH deal.house house
         LEFT JOIN FETCH house.region
-        WHERE deal.member.id = :memberId
+        WHERE house.type = :houseType
+        AND deal.member.id = :memberId
     """)
-    List<Deal> findDealsByMemberId(Long memberId, Pageable pageable);
+    List<Deal> findDealsByMemberId(final Long memberId,
+                                   final HouseType houseType);
 
     @Query("""
         SELECT deal FROM Deal deal
         LEFT JOIN FETCH deal.house house
         LEFT JOIN FETCH house.region
-        WHERE deal.house.id = :houseId
+        WHERE house.type = :houseType
+        AND deal.house.id = :houseId
     """)
-    List<Deal> findDealsByHouseId(Long houseId);
+    List<Deal> findDealsByHouseId(final Long houseId,
+                                  final HouseType houseType);
 }

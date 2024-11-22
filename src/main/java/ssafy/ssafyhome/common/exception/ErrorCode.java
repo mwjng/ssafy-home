@@ -20,6 +20,8 @@ public enum ErrorCode {
     INVALID_REGION_FIELD(1010, BAD_REQUEST, "유효하지 않은 지역 필드 요청입니다."),
     INVALID_REGION(1011, BAD_REQUEST, "유효하지 않은 지역 요청입니다."),
     INVALID_HOUSE_TYPE(1020, BAD_REQUEST, "올바르지 않은 주거 타입입니다."),
+    INVALID_DEAL_TYPE(1030, BAD_REQUEST, "올바르지 않은 거래 타입입니다."),
+    INVALID_DEAL_STATUS(1031, BAD_REQUEST, "올바르지 않은 거래 상태입니다."),
     INVALID_SELF_FOLLOW_REQUEST(1041, BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다."),
 
     INVALID_AUTHORITY(2001, FORBIDDEN, "해당 리소스에 접근할 권한이 없습니다."),

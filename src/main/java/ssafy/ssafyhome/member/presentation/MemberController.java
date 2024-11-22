@@ -3,8 +3,6 @@ package ssafy.ssafyhome.member.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,8 +21,15 @@ import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.presentation.request.*;
 import ssafy.ssafyhome.member.presentation.response.MyDealsResponse;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+import static java.time.LocalDateTime.*;
 import static org.springframework.http.HttpStatus.*;
 import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
+import static ssafy.ssafyhome.deal.domain.DealStatus.getDealStatus;
+import static ssafy.ssafyhome.deal.domain.DealType.getDealType;
+import static ssafy.ssafyhome.house.domain.HouseType.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/members")
@@ -51,13 +56,23 @@ public class MemberController {
     @AgentAccess
     public ResponseEntity<MyDealsResponse> getMyDeals(
         @AuthenticationPrincipal final AccessContext accessContext,
-        @PageableDefault(size = 10) final Pageable pageable,
+        @RequestParam(defaultValue = "SALE") final String dealType,
+        @RequestParam(defaultValue = "APT") final String houseType,
+        @RequestParam(defaultValue = "10") final int pageSize,
+        @RequestParam(required = false) final LocalDateTime cursor,
+        @RequestParam(defaultValue = "PENDING") final String dealStatus,
         final HttpServletRequest request
     ) {
-        return ResponseEntity.ok().body(dealService.getDealsByMemberId(
+        final MyDealsResponse myDealResponse = dealService.getDealsByMemberId(
             accessContext.getMemberId(),
-            pageable,
-            getBaseUrl(request)));
+            getDealStatus(dealStatus),
+            getDealType(dealType),
+            getHouseType(houseType),
+            pageSize,
+            Objects.requireNonNullElse(cursor, now()),
+            getBaseUrl(request));
+
+        return ResponseEntity.ok().body(myDealResponse);
     }
 
     @PatchMapping("/me")

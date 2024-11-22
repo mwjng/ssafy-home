@@ -2,7 +2,6 @@ package ssafy.ssafyhome.deal.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,10 +9,12 @@ import ssafy.ssafyhome.common.exception.BadRequestException;
 import ssafy.ssafyhome.deal.application.response.DealResponse;
 import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.domain.Deal;
+import ssafy.ssafyhome.deal.domain.DealStatus;
+import ssafy.ssafyhome.deal.domain.DealType;
 import ssafy.ssafyhome.deal.domain.repository.DealRepository;
-import ssafy.ssafyhome.deal.infrastructure.DealQueryRepository;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.house.domain.House;
+import ssafy.ssafyhome.house.domain.HouseType;
 import ssafy.ssafyhome.house.domain.repository.HouseRepository;
 import ssafy.ssafyhome.image.application.ImageService;
 import ssafy.ssafyhome.image.domain.ImageEvent;
@@ -22,6 +23,7 @@ import ssafy.ssafyhome.member.domain.repository.MemberRepository;
 import ssafy.ssafyhome.member.presentation.response.MyDealResponse;
 import ssafy.ssafyhome.member.presentation.response.MyDealsResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static ssafy.ssafyhome.common.exception.ErrorCode.*;
@@ -34,13 +36,22 @@ public class DealService {
 
     private final ImageService imageService;
     private final DealRepository dealRepository;
-    private final DealQueryRepository dealQueryRepository;
     private final MemberRepository memberRepository;
     private final HouseRepository houseRepository;
     private final ApplicationEventPublisher eventPublisher;
 
-    public MyDealsResponse getDealsByMemberId(Long memberId, Pageable pageable, String baseUrl) {
-        final List<Deal> deals = dealRepository.findDealsByMemberId(memberId, pageable);
+    public MyDealsResponse getDealsByMemberId(
+        final Long memberId,
+        final DealStatus dealStatus,
+        final DealType dealType,
+        final HouseType houseType,
+        final int pageSize,
+        final LocalDateTime cursor,
+        final String baseUrl
+    ) {
+        final List<Deal> deals = dealRepository.findDealsByMemberId(
+            memberId, dealStatus, dealType, houseType, pageSize, cursor
+        );
         final List<MyDealResponse> myDealResponses = deals.stream()
             .map(deal -> MyDealResponse.of(
                 deal,
@@ -51,7 +62,11 @@ public class DealService {
         return new MyDealsResponse(myDealResponses);
     }
 
-    private List<String> getImageUrlList(final String baseUrl, final String dirName, final String imgDir) {
+    private List<String> getImageUrlList(
+        final String baseUrl,
+        final String dirName,
+        final String imgDir
+    ) {
         final List<String> imageFileNames = imageService.getImageFileNames(dirName, imgDir);
         return imageService.getImageUrlList(baseUrl, imgDir, imageFileNames, dirName);
     }
