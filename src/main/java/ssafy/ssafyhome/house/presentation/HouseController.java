@@ -90,30 +90,6 @@ public class HouseController implements HouseControllerDocs{
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{houseId}/articles")
-    @UserAccess
-    public ResponseEntity<ArticlesResponse> getArticles(
-        @PathVariable final Long houseId,
-        final Pageable pageable
-    ) {
-
-        return null;
-    }
-
-    @PostMapping("/{houseId}/articles")
-    @UserAccess
-    public ResponseEntity<Void> createArticle(
-        @AuthenticationPrincipal final AccessContext accessContext,
-        @PathVariable final Long houseId,
-        @Valid @RequestPart ArticleCreateRequest articleCreateRequest,
-        @RequestPart final List<MultipartFile> images
-    ) {
-        articleService.createArticle(
-            accessContext.getMemberId(), houseId, articleCreateRequest.content(), images
-        );
-        return ResponseEntity.status(CREATED).build();
-    }
-
     @PostMapping("/{houseId}/deals")
     @AgentAccess
     public ResponseEntity<Void> createDeal(

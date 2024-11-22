@@ -9,27 +9,27 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.article.application.ArticleService;
 import ssafy.ssafyhome.article.application.response.ArticlesResponse;
+import ssafy.ssafyhome.article.presentation.request.ArticleCreateRequest;
 import ssafy.ssafyhome.article.presentation.request.ArticleUpdateRequest;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.comment.application.CommentService;
-import ssafy.ssafyhome.comment.application.response.CommentsResponse;
-import ssafy.ssafyhome.comment.presentation.request.CommentCreateRequest;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
 
 @RequiredArgsConstructor
-@RequestMapping("/articles")
+@RequestMapping
 @RestController
-public class ArticleController implements ArticleControllerDocs{
+public class ArticleController implements ArticleControllerDocs {
 
     private final ArticleService articleService;
     private final CommentService commentService;
 
-    @GetMapping
+    @GetMapping("/me/articles")
     @UserAccess
     public ResponseEntity<ArticlesResponse> getMyArticles(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -41,7 +41,34 @@ public class ArticleController implements ArticleControllerDocs{
             getBaseUrl(request)));
     }
 
-    @PutMapping("/{articleId}")
+    @GetMapping("/houses/{houseId}/articles")
+    @UserAccess
+    public ResponseEntity<ArticlesResponse> getArticles(
+        @PathVariable final Long houseId,
+        final Pageable pageable
+    ) {
+
+        return null;
+    }
+
+    @PostMapping("/houses/{houseId}/articles")
+    @UserAccess
+    public ResponseEntity<Void> createArticle(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long houseId,
+        @Valid @RequestPart ArticleCreateRequest articleCreateRequest,
+        @RequestPart final List<MultipartFile> images
+    ) {
+        articleService.createArticle(
+            accessContext.getMemberId(),
+            houseId,
+            articleCreateRequest.content(),
+            images
+        );
+        return ResponseEntity.status(CREATED).build();
+    }
+
+    @PutMapping("/articles/{articleId}")
     @UserAccess
     public ResponseEntity<Void> updateArticle(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -53,7 +80,7 @@ public class ArticleController implements ArticleControllerDocs{
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{articleId}")
+    @DeleteMapping("/articles/{articleId}")
     @UserAccess
     public ResponseEntity<Void> deleteArticle(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -61,22 +88,5 @@ public class ArticleController implements ArticleControllerDocs{
     ) {
         articleService.deleteArticle(articleId);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{articleId}/comments")
-    public ResponseEntity<CommentsResponse> getComments(
-        @PathVariable final Long articleId,
-        final Pageable pageable
-    ) {
-        return null;
-    }
-
-    @PostMapping("/{articleId}/comments")
-    public ResponseEntity<Void> createComment(
-        @AuthenticationPrincipal AccessContext accessContext,
-        @PathVariable Long articleId,
-        @RequestBody final CommentCreateRequest commentCreateRequest
-    ) {
-        return null;
     }
 }

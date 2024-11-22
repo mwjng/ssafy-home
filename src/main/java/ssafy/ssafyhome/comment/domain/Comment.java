@@ -1,6 +1,7 @@
 package ssafy.ssafyhome.comment.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.ssafyhome.article.domain.Article;
@@ -31,4 +32,11 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public Comment(final String content, final Article article, final Member member) {
+        this.content = content;
+        this.article = article;
+        this.member = member;
+    }
 }

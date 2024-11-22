@@ -12,7 +12,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query("""
         SELECT article FROM Article article
         LEFT JOIN FETCH article.member m
-        WHERE article.member.id = :memberid
+        WHERE article.member.id = :memberId
     """)
     List<Article> findByMemberId(@Param("memberId") Long memberId);
 }

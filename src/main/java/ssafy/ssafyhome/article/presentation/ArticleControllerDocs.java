@@ -16,6 +16,7 @@ import ssafy.ssafyhome.article.presentation.request.ArticleSearchCondition;
 import ssafy.ssafyhome.article.application.response.ArticlesResponse;
 import ssafy.ssafyhome.article.presentation.request.ArticleUpdateRequest;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.comment.application.response.ArticleCommentsResponse;
 import ssafy.ssafyhome.comment.application.response.CommentsResponse;
 import ssafy.ssafyhome.comment.presentation.request.CommentCreateRequest;
 import ssafy.ssafyhome.comment.presentation.request.CommentSearchCondition;
@@ -61,30 +62,5 @@ public interface ArticleControllerDocs {
     ResponseEntity<Void> deleteArticle(
             final AccessContext accessContext,
             @Parameter(name = "id") final Long articleId
-    );
-
-    @Operation(summary = "article에 해당하는 모든 comment 조회", description = "article에 해당하는 모든 comment 정보를 반환한다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CommentsResponse.class))),
-            @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
-    })
-    ResponseEntity<CommentsResponse> getComments(
-            @Parameter(name = "id") final Long articleId,
-            final Pageable pageable
-    );
-
-    @Operation(summary = "article에 해당하는 comment 생성", description = "article에 해당하는 comment를 생성한다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "요청이 처리되어서 새로운 리소스가 생성되었다.",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CommentsResponse.class))),
-            @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
-    })
-    ResponseEntity<Void> createComment(
-            final AccessContext accessContext,
-            @Parameter(name = "id") final Long articleId,
-            @Parameter(name = "댓글") final CommentCreateRequest commentCreateRequest
     );
 }
