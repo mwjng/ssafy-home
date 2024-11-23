@@ -1,4 +1,4 @@
 package ssafy.ssafyhome.deal.application.request;
 
-public record PriceRange(Long max, Long min) {
+public record PriceRange(Integer max, Integer min) {
 }

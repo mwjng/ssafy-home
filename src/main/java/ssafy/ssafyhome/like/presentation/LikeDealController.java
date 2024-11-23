@@ -1,5 +1,6 @@
 package ssafy.ssafyhome.like.presentation;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,8 +8,10 @@ import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.like.application.response.LikeDealsResponse;
 
-@RestController
+// TODO
+@RequiredArgsConstructor
 @RequestMapping("/deals/like")
+@RestController
 public class LikeDealController implements LikeDealControllerDocs{
 
     @Override

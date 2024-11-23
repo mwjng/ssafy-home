@@ -55,15 +55,15 @@ public class Deal extends BaseEntity {
     private Member member;
 
     public Deal(
-        final BigDecimal exclusiveArea,
-        final int floor,
-        final Integer deposit,
-        final Integer price,
-        final String dirName,
-        final DealStatus status,
-        final DealType type,
-        final House house,
-        final Member member
+            final BigDecimal exclusiveArea,
+            final int floor,
+            final Integer deposit,
+            final Integer price,
+            final String dirName,
+            final DealStatus status,
+            final DealType type,
+            final House house,
+            final Member member
     ) {
         this.exclusiveArea = exclusiveArea;
         this.floor = floor;
@@ -74,5 +74,9 @@ public class Deal extends BaseEntity {
         this.type = type;
         this.house = house;
         this.member = member;
+    }
+
+    public void changeImageUrl(final String dirName) {
+        this.dirName = dirName;
     }
 }

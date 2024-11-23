@@ -5,7 +5,6 @@ import ssafy.ssafyhome.deal.domain.Deal;
 
 public record DealQueryResponse(
         Deal deal,
-        int likeCount,
         Boolean likeStatus) {
 
     @QueryProjection

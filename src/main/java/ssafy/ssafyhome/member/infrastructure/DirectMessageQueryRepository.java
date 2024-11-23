@@ -14,8 +14,8 @@ import ssafy.ssafyhome.member.application.response.SentMessageQueryResponse;
 import java.util.List;
 
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
-import static ssafy.ssafyhome.member.domain.QDirectMessage.*;
-import static ssafy.ssafyhome.member.domain.QMember.*;
+import static ssafy.ssafyhome.member.domain.QDirectMessage.directMessage;
+import static ssafy.ssafyhome.member.domain.QMember.member;
 
 @RequiredArgsConstructor
 @Repository

@@ -40,6 +40,7 @@ public enum ErrorCode {
     UNAUTHORIZED_LIKE_REGION_ACCESS(2031, FORBIDDEN, "요청한 ID에 해당하는 관심 지역을 설정할 권한이 없습니다."),
     UNAUTHORIZED_FOLLOW_ACCESS(2040, FORBIDDEN, "팔로우 관계에 접근할 권한이 없습니다."),
     UNAUTHORIZED_DIRECT_MESSAGE_ACCESS(2050, FORBIDDEN, "요청한 ID에 해당하는 Direct Message를 설정할 권한이 없습니다."),
+    UNAUTHORIZED_DEAL_ACCESS(2060, FORBIDDEN, "요청한 ID에 해당하는 매물을 설정할 권한이 없습니다."),
     UNAUTHORIZED_LIKE_HOUSE_ACCESS(2070, FORBIDDEN, "요청한 ID에 해당하는 관심 House를 설정할 권한이 없습니다."),
 
     NOT_FOUND_USER_ID(3001, NOT_FOUND, "요청한 ID에 해당하는 사용자가 존재하지 않습니다."),
