@@ -2,18 +2,12 @@ package ssafy.ssafyhome.like.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ssafy.ssafyhome.article.presentation.request.ArticleSearchCondition;
 import ssafy.ssafyhome.auth.domain.AccessContext;
-import ssafy.ssafyhome.like.application.response.LikeArticlesResponse;
 
 @Tag(name = "관심 Article 컨트롤러", description = "관심 Article에 대한 조회, 생성, 삭제를 처리 하는 클래스.")
 public interface LikeArticleControllerDocs {

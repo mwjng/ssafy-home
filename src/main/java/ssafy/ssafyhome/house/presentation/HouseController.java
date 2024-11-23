@@ -58,7 +58,7 @@ public class HouseController implements HouseControllerDocs{
     public ResponseEntity<Void> createHouse(
         @AuthenticationPrincipal final AccessContext accessContext,
         @Valid @RequestPart final HouseRequest houseRequest,
-        @RequestPart final List<MultipartFile> images
+        @RequestPart(required = false) final List<MultipartFile> images
     ) {
         houseService.createHouse(houseRequest, images);
         return ResponseEntity.status(CREATED).build();
@@ -70,7 +70,7 @@ public class HouseController implements HouseControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long houseId,
         @Valid @RequestPart final HouseRequest houseRequest,
-        @RequestPart final List<MultipartFile> images
+        @RequestPart(required = false) final List<MultipartFile> images
     ) {
         houseService.updateHouse(houseId, houseRequest, images);
         return ResponseEntity.noContent().build();
@@ -93,7 +93,7 @@ public class HouseController implements HouseControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long houseId,
         @RequestPart final DealCreateRequest dealCreateRequest,
-        @RequestPart final List<MultipartFile> images
+        @RequestPart(required = false) final List<MultipartFile> images
     ) {
         return null;
     }

@@ -31,11 +31,11 @@ public class AuthController {
         @Validated(OAuthLoginCheck.class) @RequestBody final LoginRequest loginRequest
     ) {
         final AuthToken authToken = authService.socialLogin(loginRequest, now());
-        final ResponseCookie cookie = ResponseCookie.from("refreshToken", authToken.refreshToken())
+        final ResponseCookie cookie = ResponseCookie.from("refresh-token", authToken.refreshToken())
             .maxAge(COOKIE_MAX_AGE_SECONDS)
             .httpOnly(true)
             .sameSite("none")
-            .secure(true)
+            .secure(false)
             .build();
 
         return ResponseEntity.status(CREATED)
@@ -48,11 +48,11 @@ public class AuthController {
         @Validated(BasicLoginCheck.class) @RequestBody final LoginRequest loginRequest
     ) {
         final AuthToken authToken = authService.login(loginRequest, now());
-        final ResponseCookie cookie = ResponseCookie.from("refreshToken", authToken.refreshToken())
+        final ResponseCookie cookie = ResponseCookie.from("refresh-token", authToken.refreshToken())
             .maxAge(COOKIE_MAX_AGE_SECONDS)
             .httpOnly(true)
             .sameSite("none")
-            .secure(true)
+            .secure(false)
             .build();
 
         return ResponseEntity.status(CREATED)
@@ -62,9 +62,9 @@ public class AuthController {
 
     @GetMapping("/reissue")
     public ResponseEntity<AccessTokenResponse> reissueAccessToken(
-        @CookieValue("refreshToken") final String refreshToken
+        @CookieValue("refresh-token") final String refreshToken
     ) {
-        return ResponseEntity.status(CREATED)
+        return ResponseEntity.ok()
             .body(authService.renewalAccessToken(refreshToken));
     }
 
@@ -72,7 +72,7 @@ public class AuthController {
     @UserAccess
     public ResponseEntity<Void> logout(
         @AuthenticationPrincipal final AccessContext accessContext,
-        @CookieValue("refreshToken") final String refreshToken
+        @CookieValue("refresh-token") final String refreshToken
     ) {
         authService.removeRefreshToken(refreshToken);
         return ResponseEntity.noContent().build();
