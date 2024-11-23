@@ -10,10 +10,7 @@ import ssafy.ssafyhome.auth.presentation.AgentAccess;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.deal.application.DealService;
 import ssafy.ssafyhome.deal.application.request.DealCondition;
-import ssafy.ssafyhome.deal.application.request.DealSortCondition;
 import ssafy.ssafyhome.deal.application.response.DealsResponse;
-import ssafy.ssafyhome.deal.domain.DealStatus;
-import ssafy.ssafyhome.deal.domain.DealType;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
 import ssafy.ssafyhome.deal.presentation.request.DealUpdateRequest;
@@ -53,6 +50,7 @@ public class DealController implements DealControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @RequestPart final DealCreateRequest dealCreateRequest,
         @RequestPart final List<MultipartFile> images) {
+
         dealService.createDeal(accessContext.getMemberId(), dealCreateRequest, images);
         return ResponseEntity.status(CREATED).build();
     }
@@ -63,9 +61,9 @@ public class DealController implements DealControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long dealId,
         @RequestPart final DealUpdateRequest dealUpdateRequest,
-        @RequestPart final List<MultipartFile> images
-    ) {
-        dealService.updateDeal(accessContext.getMemberId(), dealId, dealUpdateRequest, images);
+        @RequestPart final List<MultipartFile> images) {
+
+        dealService.updateDeal(accessContext, dealId, dealUpdateRequest, images);
         return ResponseEntity.noContent().build();
     }
 
@@ -75,7 +73,7 @@ public class DealController implements DealControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long dealId) {
 
-        dealService.deleteDeal(dealId);
+        dealService.deleteDeal(accessContext, dealId);
         return ResponseEntity.noContent().build();
     }
 }

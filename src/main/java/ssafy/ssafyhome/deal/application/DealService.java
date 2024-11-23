@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.domain.Authority;
 import ssafy.ssafyhome.common.exception.BadRequestException;
 import ssafy.ssafyhome.deal.application.request.DealCondition;
 import ssafy.ssafyhome.deal.application.response.DealQueryResponse;
@@ -34,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.*;
+import static ssafy.ssafyhome.auth.domain.Authority.*;
 import static ssafy.ssafyhome.common.exception.ErrorCode.*;
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
 import static ssafy.ssafyhome.image.application.ImageDirectory.*;
@@ -112,7 +115,7 @@ public class DealService {
 
     @Transactional
     public void updateDeal(
-            final Long memberId,
+            final AccessContext accessContext,
             final Long dealId,
             final DealUpdateRequest dealUpdateRequest,
             final List<MultipartFile> images) {
@@ -120,13 +123,12 @@ public class DealService {
         final Deal deal = dealRepository.findMemberAndDealById(dealId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_DEAL_ID));
 
-        if(!deal.getMember().getId().equals(memberId)){
-            throw new DealException(UNAUTHORIZED_DEAL_ACCESS);
-        }
+        checkAuthority(accessContext, deal);
 
         String imagePath = imageService.save(images, DEAL.getDirectory());
         deleteExistedImage(deal);
         deal.changeImageUrl(imagePath);
+        deal.changeContent(dealUpdateRequest);
     }
 
     private void deleteExistedImage(final Deal deal) {
@@ -136,11 +138,22 @@ public class DealService {
     }
 
     @Transactional
-    public void deleteDeal(final Long dealId) {
-        final Deal deal = dealRepository.findById(dealId)
+    public void deleteDeal(final AccessContext accessContext ,final Long dealId) {
+        final Deal deal = dealRepository.findMemberAndDealById(dealId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_DEAL_ID));
+
+        checkAuthority(accessContext, deal);
         deleteImages(deal.getDirName(), DEAL.getDirectory());
         dealRepository.deleteById(dealId);
+    }
+
+    private void checkAuthority(final AccessContext accessContext, final Deal deal) {
+        final Long memberId = accessContext.getMemberId();
+        final Authority authority = accessContext.getAuthority();
+
+        if(authority.equals(AGENT) && !deal.getMember().getId().equals(memberId)){
+            throw new DealException(UNAUTHORIZED_DEAL_ACCESS);
+        }
     }
 
     private Map<Long, Long> getLikeCounts(final List<DealQueryResponse> dealQueryResponses) {

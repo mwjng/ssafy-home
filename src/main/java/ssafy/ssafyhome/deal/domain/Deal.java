@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.ssafyhome.common.auditing.BaseEntity;
+import ssafy.ssafyhome.deal.presentation.request.DealUpdateRequest;
 import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.member.domain.Member;
 
@@ -13,7 +14,9 @@ import java.time.LocalDateTime;
 import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.time.LocalDateTime.*;
 import static lombok.AccessLevel.PROTECTED;
+import static ssafy.ssafyhome.deal.domain.DealStatus.*;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -78,5 +81,17 @@ public class Deal extends BaseEntity {
 
     public void changeImageUrl(final String dirName) {
         this.dirName = dirName;
+    }
+
+    public void changeContent(final DealUpdateRequest dealUpdateRequest){
+        this.exclusiveArea = dealUpdateRequest.exclusiveArea();
+        this.floor = dealUpdateRequest.floor();
+        this.deposit = dealUpdateRequest.deposit();
+        this.price = dealUpdateRequest.price();
+        this.status = dealUpdateRequest.status();
+        if (this.status == PENDING && dealUpdateRequest.status() == COMPLETED) {
+            this.dealDate = now();
+        }
+        this.type = dealUpdateRequest.type();
     }
 }
