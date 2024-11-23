@@ -81,6 +81,10 @@ public class FollowServiceImpl implements FollowService {
             throw new MemberException(NOT_FOUND_USER_ID);
         }
 
+        if(followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)){
+            throw new FollowException(DUPLICATED_FOLLOWING);
+        }
+
         followRepository.save(makeFollow(followerId, followingId));
     }
 

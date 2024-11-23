@@ -13,9 +13,9 @@ import ssafy.ssafyhome.like.application.response.QLikeHouseQueryResponse;
 import java.util.List;
 
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
-import static ssafy.ssafyhome.house.domain.QHouse.*;
-import static ssafy.ssafyhome.like.domain.QLikeHouse.*;
-import static ssafy.ssafyhome.region.domain.QRegion.*;
+import static ssafy.ssafyhome.house.domain.QHouse.house;
+import static ssafy.ssafyhome.like.domain.QLikeHouse.likeHouse;
+import static ssafy.ssafyhome.region.domain.QRegion.region;
 
 @RequiredArgsConstructor
 @Repository

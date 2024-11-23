@@ -3,18 +3,14 @@ package ssafy.ssafyhome.house.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.article.application.ArticleService;
-import ssafy.ssafyhome.article.application.response.ArticlesResponse;
-import ssafy.ssafyhome.article.presentation.request.ArticleCreateRequest;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AdminAccess;
 import ssafy.ssafyhome.auth.presentation.AgentAccess;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
-import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.house.application.HouseService;
 import ssafy.ssafyhome.house.application.response.HouseResponse;
@@ -90,6 +86,7 @@ public class HouseController implements HouseControllerDocs{
         return ResponseEntity.noContent().build();
     }
 
+    // TODO
     @PostMapping("/{houseId}/deals")
     @AgentAccess
     public ResponseEntity<Void> createDeal(

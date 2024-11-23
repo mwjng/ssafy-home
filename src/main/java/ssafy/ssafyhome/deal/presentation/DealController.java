@@ -2,8 +2,6 @@ package ssafy.ssafyhome.deal.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,8 +9,10 @@ import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AgentAccess;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.deal.application.DealService;
+import ssafy.ssafyhome.deal.application.request.DealCondition;
 import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
+import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
 import ssafy.ssafyhome.deal.presentation.request.DealUpdateRequest;
 
 import java.util.List;
@@ -30,12 +30,18 @@ public class DealController implements DealControllerDocs{
     @GetMapping("/{houseId}")
     public ResponseEntity<DealsResponse> getDeals(
             @PathVariable final Long houseId,
-            @RequestParam(defaultValue = "PENDING") final String dealStatus,
-            @RequestParam(defaultValue = "SALE") final String dealType,
-            @RequestParam(defaultValue = "APT") final String houseType,
-            @PageableDefault final Pageable pageable,
+            @ModelAttribute DealSearchCondition dealSearchCondition,
+            @RequestParam(required = false, defaultValue = "10") int size,
+            @RequestParam(required = false) Long cursorId,
             final HttpServletRequest request) {
-        return null;
+
+        DealsResponse response = dealService.getDealsByHouseId(
+                houseId,
+                DealCondition.from(dealSearchCondition),
+                size,
+                cursorId,
+                getBaseUrl(request));
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping
@@ -44,20 +50,20 @@ public class DealController implements DealControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @RequestPart final DealCreateRequest dealCreateRequest,
         @RequestPart final List<MultipartFile> images) {
+
         dealService.createDeal(accessContext.getMemberId(), dealCreateRequest, images);
         return ResponseEntity.status(CREATED).build();
     }
 
-    // TODO update
     @PutMapping("/{dealId}")
     @AgentAccess
     public ResponseEntity<Void> updateDeal(
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long dealId,
         @RequestPart final DealUpdateRequest dealUpdateRequest,
-        @RequestPart final List<MultipartFile> images
-    ) {
+        @RequestPart final List<MultipartFile> images) {
 
+        dealService.updateDeal(accessContext, dealId, dealUpdateRequest, images);
         return ResponseEntity.noContent().build();
     }
 
@@ -67,7 +73,7 @@ public class DealController implements DealControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long dealId) {
 
-        dealService.deleteDeal(dealId);
+        dealService.deleteDeal(accessContext, dealId);
         return ResponseEntity.noContent().build();
     }
 }

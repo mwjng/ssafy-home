@@ -21,15 +21,8 @@ import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.presentation.request.*;
 import ssafy.ssafyhome.member.presentation.response.MyDealsResponse;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-
-import static java.time.LocalDateTime.*;
 import static org.springframework.http.HttpStatus.*;
 import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
-import static ssafy.ssafyhome.deal.domain.DealStatus.getDealStatus;
-import static ssafy.ssafyhome.deal.domain.DealType.getDealType;
-import static ssafy.ssafyhome.house.domain.HouseType.*;
 
 @RequiredArgsConstructor
 @RequestMapping
