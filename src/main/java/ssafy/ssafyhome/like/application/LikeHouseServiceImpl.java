@@ -33,8 +33,8 @@ public class LikeHouseServiceImpl implements LikeHouseService {
     private final ImageService imageService;
 
     public LikeHousesResponse searchAll(final Long memberId, final int size, final Long cursorId, final String baseUrl) {
-        PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
-        List<LikeHouseResponse> likeHouses = likeHouseQueryRepository.searchAll(memberId, pageRequest, cursorId)
+        final PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
+        final List<LikeHouseResponse> likeHouses = likeHouseQueryRepository.searchAll(memberId, pageRequest, cursorId)
                 .stream()
                 .map(likeHouse -> getHouseResponse(baseUrl, likeHouse))
                 .toList();
@@ -55,8 +55,9 @@ public class LikeHouseServiceImpl implements LikeHouseService {
     }
 
     public void delete(final Long memberId, final Long likeHouseId) {
-        LikeHouse likeHouse = likeHouseRepository.findById(likeHouseId)
+        final LikeHouse likeHouse = likeHouseRepository.findById(likeHouseId)
                 .orElseThrow(() -> new LikeHouseException(NOT_FOUND_LIKE_HOUSE_ID));
+
         if (!likeHouse.getMember().getId().equals(memberId)) {
             throw new LikeHouseException(UNAUTHORIZED_LIKE_HOUSE_ACCESS);
         }
@@ -64,9 +65,9 @@ public class LikeHouseServiceImpl implements LikeHouseService {
     }
 
     private LikeHouseResponse getHouseResponse(final String baseUrl, final LikeHouseQueryResponse likeHouse) {
-        String dirName = likeHouse.dirName();
-        List<String> imageFileNames = getFileNames(dirName);
-        List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, dirName);
+        final String dirName = likeHouse.dirName();
+        final List<String> imageFileNames = getFileNames(dirName);
+        final List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, dirName);
         return LikeHouseResponse.from(likeHouse, imageUrl);
     }
 

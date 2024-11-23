@@ -28,8 +28,8 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     private final DirectMessageQueryRepository directMessageQueryRepository;
 
     public ReceivedMessagesResponse searchReceivedMessages(final Long memberId, final int size, final Long cursorId) {
-        PageRequest pageRequest = createPageRequest(size);
-        List<ReceivedMessageResponse> receivedMessages = directMessageQueryRepository.searchReceivedMessages(memberId, pageRequest, cursorId)
+        final PageRequest pageRequest = createPageRequest(size);
+        final List<ReceivedMessageResponse> receivedMessages = directMessageQueryRepository.searchReceivedMessages(memberId, pageRequest, cursorId)
                 .stream()
                 .map(ReceivedMessageResponse::from)
                 .toList();
@@ -37,8 +37,8 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     public SentMessagesResponse searchSentMessages(final Long memberId, final int size, final Long cursorId) {
-        PageRequest pageRequest = createPageRequest(size);
-        List<SentMessageResponse> sentMessages = directMessageQueryRepository.searchSentMessages(memberId, pageRequest, cursorId)
+        final PageRequest pageRequest = createPageRequest(size);
+        final List<SentMessageResponse> sentMessages = directMessageQueryRepository.searchSentMessages(memberId, pageRequest, cursorId)
                 .stream()
                 .map(SentMessageResponse::from)
                 .toList();
@@ -46,7 +46,7 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     public ReceivedMessageResponse searchReceivedMessage(final Long memberId, final Long directMessageId) {
-        DirectMessage message = directMessageRepository.findById(directMessageId).orElseThrow(() -> new DirectMessageException(NOT_FOUND_DIRECT_MESSAGE));
+        final DirectMessage message = directMessageRepository.findById(directMessageId).orElseThrow(() -> new DirectMessageException(NOT_FOUND_DIRECT_MESSAGE));
 
         if (!message.getReceiver().getId().equals(memberId)) {
             throw new DirectMessageException(UNAUTHORIZED_DIRECT_MESSAGE_ACCESS);
@@ -55,7 +55,7 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     public SentMessageResponse searchSentMessage(final Long memberId, final Long directMessageId) {
-        DirectMessage message = directMessageRepository.findById(directMessageId).orElseThrow(() -> new DirectMessageException(NOT_FOUND_DIRECT_MESSAGE));
+        final DirectMessage message = directMessageRepository.findById(directMessageId).orElseThrow(() -> new DirectMessageException(NOT_FOUND_DIRECT_MESSAGE));
 
         if (!message.getSender().getId().equals(memberId)) {
             throw new DirectMessageException(UNAUTHORIZED_DIRECT_MESSAGE_ACCESS);
@@ -65,7 +65,7 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     public UnreadMessageResponse searchUnRead(final Long memberId) {
-        long unreadCount = directMessageRepository.countByReceiverIdAndStatus(memberId, UNREAD);
+        final long unreadCount = directMessageRepository.countByReceiverIdAndStatus(memberId, UNREAD);
         return new UnreadMessageResponse(unreadCount > 0, (int) unreadCount);
     }
 
@@ -74,9 +74,10 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     public void delete(final Long memberId, final Long directMessageId) {
-        Member sender = directMessageRepository.findSenderById(directMessageId).orElseThrow(() -> new DirectMessageException(NOT_FOUND_DIRECT_MESSAGE));
+        final DirectMessage directMessage = directMessageRepository.findById(directMessageId)
+                .orElseThrow(() -> new DirectMessageException(NOT_FOUND_DIRECT_MESSAGE));
 
-        if(!sender.getId().equals(memberId)){
+        if(!directMessage.getSender().getId().equals(memberId)){
             throw new DirectMessageException(UNAUTHORIZED_DIRECT_MESSAGE_ACCESS);
         }
 

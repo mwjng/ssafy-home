@@ -60,7 +60,7 @@ public class NoticeController implements NoticeControllerDocs {
     public ResponseEntity<Void> delete(
             @AuthenticationPrincipal final AccessContext accessContext,
             @PathVariable final Long id) {
-        noticeService.delete(accessContext.getMemberId(), id);
+        noticeService.delete(accessContext, id);
         return ResponseEntity.noContent().build();
     }
 }

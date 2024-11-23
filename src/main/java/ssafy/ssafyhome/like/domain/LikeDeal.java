@@ -28,4 +28,11 @@ public class LikeDeal extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "deal_id")
     private Deal deal;
+
+    public static LikeDeal of(Member member, Deal deal){
+        LikeDeal likeDeal = new LikeDeal();
+        likeDeal.member = member;
+        likeDeal.deal = deal;
+        return likeDeal;
+    }
 }

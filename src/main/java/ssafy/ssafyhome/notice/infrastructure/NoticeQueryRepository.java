@@ -23,7 +23,7 @@ public class NoticeQueryRepository {
 
     public Slice<NoticeQueryResponse> searchAll(final Long cursorId, Pageable pageable) {
         List<NoticeQueryResponse> notices = queryFactory
-                .select(new QNoticeQueryResponse(notice.id, member.nickname, notice.title, notice.content, notice.createdAt, notice.modifiedAt))
+                .select(new QNoticeQueryResponse(notice.id, member.id ,member.nickname, notice.title, notice.content, notice.createdAt, notice.modifiedAt))
                 .from(notice.member, member).fetchJoin()
                 .where(cursorLtExpression(notice.id, cursorId))
                 .orderBy(makeOrderSpecifiers(notice, pageable))
@@ -35,7 +35,7 @@ public class NoticeQueryRepository {
 
     public NoticeQueryResponse search(final Long noticeId) {
         return queryFactory
-                .select(new QNoticeQueryResponse(notice.id, member.nickname, notice.title, notice.content, notice.createdAt, notice.modifiedAt))
+                .select(new QNoticeQueryResponse(notice.id, member.id, member.nickname, notice.title, notice.content, notice.createdAt, notice.modifiedAt))
                 .from(notice.member, member).fetchJoin()
                 .where(toEqExpression(notice.id, noticeId))
                 .fetchOne();

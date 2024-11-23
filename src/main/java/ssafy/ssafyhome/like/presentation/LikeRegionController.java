@@ -26,7 +26,12 @@ public class LikeRegionController implements LikeRegionControllerDocs {
             @AuthenticationPrincipal final AccessContext accessContext,
             @RequestParam(required = false, defaultValue = "10") int size,
             @RequestParam(required = false) Long cursorId) {
-        LikeRegionsResponse response = likeRegionService.searchAll(accessContext.getMemberId(), size, cursorId);
+
+        LikeRegionsResponse response = likeRegionService.searchAll(
+                accessContext.getMemberId(),
+                size,
+                cursorId);
+
         return ResponseEntity.ok().body(response);
     }
 
@@ -35,13 +40,17 @@ public class LikeRegionController implements LikeRegionControllerDocs {
     public ResponseEntity<Void> create(
             @AuthenticationPrincipal final AccessContext accessContext,
             @Valid @RequestBody LikeRegionCreateRequest likeRegionCreateRequest) {
+
         likeRegionService.create(accessContext.getMemberId(), likeRegionCreateRequest);
         return ResponseEntity.status(CREATED).build();
     }
 
     @UserAccess
     @DeleteMapping("/{likeRegionId}")
-    public ResponseEntity<Void> delete(@AuthenticationPrincipal final AccessContext accessContext, @PathVariable final Long likeRegionId) {
+    public ResponseEntity<Void> delete(
+            @AuthenticationPrincipal final AccessContext accessContext,
+            @PathVariable final Long likeRegionId) {
+
         likeRegionService.delete(accessContext.getMemberId(), likeRegionId);
         return ResponseEntity.noContent().build();
     }

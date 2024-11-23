@@ -7,10 +7,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.like.application.response.LikeDealsResponse;
+import ssafy.ssafyhome.like.presentation.request.LikeDealCreateRequest;
 
 @Tag(name = "관심 매물 컨트롤러", description = "관심 매물에 대한 조회, 생성, 삭제를 처리 하는 클래스.")
 @RequestMapping("/deals/like")
@@ -27,7 +29,8 @@ public interface LikeDealControllerDocs {
     ResponseEntity<LikeDealsResponse> searchAll(
             final AccessContext accessContext,
             @Parameter(name = "페이징 개수") int size,
-            @Parameter(name = "마지막 관심 지역 ID") Long cursorId
+            @Parameter(name = "마지막 관심 지역 ID") Long cursorId,
+            HttpServletRequest request
     );
 
     @Operation(summary = "관심 매물 생성", description = "관심 매물을 생성한다.")
@@ -39,7 +42,7 @@ public interface LikeDealControllerDocs {
     @PostMapping("/{id}")
     ResponseEntity<Void> create(
             final AccessContext accessContext,
-            @Parameter(name = "id") final Long id
+            @Parameter(name = "dealId") final LikeDealCreateRequest likeDealCreateRequest
     );
 
     @Operation(summary = "관심 매물 삭제", description = "관심 매물을 삭제한다.")
