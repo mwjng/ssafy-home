@@ -28,7 +28,6 @@ public enum ErrorCode {
     DUPLICATED_LIKE_DEAL(1070, BAD_REQUEST, "이미 존재하는 관심 매물입니다."),
     DUPLICATED_LIKE_HOUSE(1070, BAD_REQUEST, "이미 존재하는 관심 House 입니다."),
     DUPLICATED_LIKE_ARTICLE(1070, BAD_REQUEST, "이미 존재하는 관심 Article 입니다."),
-    DUPLICATED_LIKE_REGION(1080, BAD_REQUEST, "이미 존재하는 관심 지역입니다."),
 
     INVALID_AUTHORITY(2001, FORBIDDEN, "해당 리소스에 접근할 권한이 없습니다."),
     INVALID_USER_ID(2002, UNAUTHORIZED, "아이디가 존재하지 않습니다."),
