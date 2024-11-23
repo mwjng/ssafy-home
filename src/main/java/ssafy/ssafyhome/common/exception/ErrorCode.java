@@ -22,6 +22,7 @@ public enum ErrorCode {
     INVALID_HOUSE_TYPE(1020, BAD_REQUEST, "올바르지 않은 주거 타입입니다."),
     INVALID_DEAL_TYPE(1030, BAD_REQUEST, "올바르지 않은 거래 타입입니다."),
     INVALID_DEAL_STATUS(1031, BAD_REQUEST, "올바르지 않은 거래 상태입니다."),
+    DUPLICATED_FOLLOWING(1040, BAD_REQUEST, "이미 존재하는 팔로우 관계입니다."),
     INVALID_SELF_FOLLOW_REQUEST(1041, BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다."),
     DUPLICATED_LIKE_HOUSE(1070, BAD_REQUEST, "이미 존재하는 관심 House입니다."),
     DUPLICATED_LIKE_REGION(1080, BAD_REQUEST, "이미 존재하는 관심 지역입니다."),
