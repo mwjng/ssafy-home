@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ssafy.ssafyhome.article.domain.Article;
 import ssafy.ssafyhome.article.domain.repository.ArticleRepository;
+import ssafy.ssafyhome.auth.exception.AuthException;
 import ssafy.ssafyhome.comment.application.response.ArticleCommentsResponse;
 import ssafy.ssafyhome.comment.application.response.CommentsResponse;
 import ssafy.ssafyhome.comment.domain.Comment;
@@ -26,12 +27,18 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final ArticleRepository articleRepository;
 
+    public void validateCommentByMember(final Long memberId, final Long commentId) {
+        if (!commentRepository.existsByMemberIdAndId(memberId, commentId)) {
+            throw new AuthException(INVALID_COMMENT_WITH_MEMBER);
+        }
+    }
+
     public CommentsResponse getMemberComments(final Long memberId, final Pageable pageable) {
-        return new CommentsResponse(commentRepository.findCommentsByMemberId(memberId, pageable));
+        return new CommentsResponse(commentRepository.findCommentsByMemberId(memberId, pageable.previousOrFirst()));
     }
 
     public ArticleCommentsResponse getArticleComments(final Long articleId, final Pageable pageable) {
-        return new ArticleCommentsResponse(commentRepository.findCommentsByArticleId(articleId, pageable));
+        return new ArticleCommentsResponse(commentRepository.findCommentsByArticleId(articleId, pageable.previousOrFirst()));
     }
 
     @Transactional

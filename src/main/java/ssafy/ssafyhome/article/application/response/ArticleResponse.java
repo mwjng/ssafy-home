@@ -8,6 +8,7 @@ import java.util.List;
 public record ArticleResponse(
         Long articleId,
         Long memberId,
+        String houseName,
         String nickname,
         String content,
         List<String> imageUrl,
@@ -18,6 +19,7 @@ public record ArticleResponse(
         return new ArticleResponse(
             article.getId(),
             article.getMember().getId(),
+            article.getHouse().getName(),
             article.getMember().getNickname(),
             article.getContent(),
             imageUrl,

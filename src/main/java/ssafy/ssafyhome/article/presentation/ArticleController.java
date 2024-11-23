@@ -42,6 +42,20 @@ public class ArticleController implements ArticleControllerDocs {
             getBaseUrl(request)));
     }
 
+    @GetMapping("/me/liked-articles")
+    @UserAccess
+    public ResponseEntity<ArticlesResponse> getLikeArticles(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        final Pageable pageable,
+        final HttpServletRequest request
+    ) {
+        return ResponseEntity.ok(articleService.getLikeArticles(
+            accessContext.getMemberId(),
+            pageable,
+            getBaseUrl(request)));
+    }
+
+
     @GetMapping("/houses/{houseId}/articles")
     @UserAccess
     public ResponseEntity<ArticlesResponse> getArticles(
@@ -80,6 +94,7 @@ public class ArticleController implements ArticleControllerDocs {
         @Valid @RequestPart final ArticleUpdateRequest articleUpdateRequest,
         @RequestPart final List<MultipartFile> images
     ) {
+        articleService.validateArticleByMember(accessContext.getMemberId(), articleId);
         articleService.updateArticle(articleId, articleUpdateRequest.content(), images);
         return ResponseEntity.noContent().build();
     }
@@ -90,6 +105,9 @@ public class ArticleController implements ArticleControllerDocs {
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long articleId
     ) {
+        if(!accessContext.isMaster()) {
+            articleService.validateArticleByMember(accessContext.getMemberId(), articleId);
+        }
         articleService.deleteArticle(articleId);
         return ResponseEntity.noContent().build();
     }

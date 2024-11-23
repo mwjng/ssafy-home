@@ -10,9 +10,12 @@ import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
+    boolean existsByMemberIdAndId(final Long memberId, final Long id);
+
     @Query("""
         SELECT article FROM Article article
         LEFT JOIN FETCH article.member member
+        LEFT JOIN FETCH article.house house
         WHERE article.member.id = :memberId
     """)
     List<Article> findByMemberId(@Param("memberId") final Long memberId, final Pageable pageable);
@@ -20,7 +23,17 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query("""
         SELECT article FROM Article article
         LEFT JOIN FETCH article.house house
+        LEFT JOIN FETCH article.member member
         WHERE article.house.id = :houseId
     """)
     List<Article> findByHouseId(@Param("houseId") final Long houseId, final Pageable pageable);
+
+    @Query("""
+        SELECT article FROM LikeArticle likeArticle
+        JOIN likeArticle.article article
+        LEFT JOIN FETCH article.house house
+        LEFT JOIN FETCH article.member member
+        WHERE likeArticle.member.id = :memberId
+    """)
+    List<Article> findLikeArticlesByMemberId(final Long memberId, final Pageable pageable);
 }

@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
+    boolean existsByMemberIdAndId(final Long memberId, final Long id);
+
     @Query("""
         SELECT new ssafy.ssafyhome.comment.application.response.CommentResponse (
             comment.id,
