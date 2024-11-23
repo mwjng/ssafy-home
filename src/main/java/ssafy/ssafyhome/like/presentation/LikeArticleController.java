@@ -1,32 +1,38 @@
 package ssafy.ssafyhome.like.presentation;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ssafy.ssafyhome.article.presentation.request.ArticleSearchCondition;
+import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
-import ssafy.ssafyhome.like.application.response.LikeArticlesResponse;
+import ssafy.ssafyhome.like.application.LikeArticleService;
 
+@RequiredArgsConstructor
+@RequestMapping
 @RestController
-@RequestMapping("/articles/like")
 public class LikeArticleController implements LikeArticleControllerDocs {
 
-    @Override
+    private final LikeArticleService likeArticleService;
+
+
+    @PostMapping("/articles/{articleId}/like")
     @UserAccess
-    public ResponseEntity<LikeArticlesResponse> searchAll(final AccessContext accessContext, final ArticleSearchCondition articleSearchCondition) {
-        return null;
+    public ResponseEntity<Void> createLikeArticle(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long articleId
+    ) {
+        likeArticleService.createLikeArticle(accessContext.getMemberId(), articleId);
+        return ResponseEntity.ok().build();
     }
 
-    @Override
+    @DeleteMapping("/articles/{articleId}/like")
     @UserAccess
-    public ResponseEntity<Void> create(final AccessContext accessContext, final Long id) {
-        return null;
-    }
-
-    @Override
-    @UserAccess
-    public ResponseEntity<Void> delete(final AccessContext accessContext, final Long id) {
-        return null;
+    public ResponseEntity<Void> deleteLikeArticle(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long articleId
+    ) {
+        likeArticleService.deleteLikeArticle(accessContext.getMemberId(), articleId);
+        return ResponseEntity.noContent().build();
     }
 }

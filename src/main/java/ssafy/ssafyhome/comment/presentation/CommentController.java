@@ -64,6 +64,7 @@ public class CommentController implements CommentControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long commentId
     ) {
+        commentService.validateCommentByMember(accessContext.getMemberId(), commentId);
         commentService.deleteComment(commentId);
         return ResponseEntity.noContent().build();
     }

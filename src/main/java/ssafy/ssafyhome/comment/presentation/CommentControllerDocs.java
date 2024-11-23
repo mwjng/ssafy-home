@@ -9,14 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.auth.domain.AccessContext;
-import ssafy.ssafyhome.comment.application.response.CommentResponse;
 import ssafy.ssafyhome.comment.application.response.CommentsResponse;
-import ssafy.ssafyhome.comment.presentation.request.CommentCreateRequest;
-import ssafy.ssafyhome.comment.presentation.request.CommentSearchCondition;
-import ssafy.ssafyhome.comment.presentation.request.CommentUpdateRequest;
 
 @Tag(name = "Comment 컨트롤러", description = "댓글에 대한 등록, 수정, 삭제, 목록, 상세보기등 전반적인 처리를 하는 클래스.")
 public interface CommentControllerDocs {

@@ -23,7 +23,8 @@ public enum ErrorCode {
     INVALID_DEAL_TYPE(1030, BAD_REQUEST, "올바르지 않은 거래 타입입니다."),
     INVALID_DEAL_STATUS(1031, BAD_REQUEST, "올바르지 않은 거래 상태입니다."),
     INVALID_SELF_FOLLOW_REQUEST(1041, BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다."),
-    DUPLICATED_LIKE_HOUSE(1070, BAD_REQUEST, "이미 존재하는 관심 House입니다."),
+    DUPLICATED_LIKE_HOUSE(1070, BAD_REQUEST, "이미 존재하는 관심 House 입니다."),
+    DUPLICATED_LIKE_ARTICLE(1070, BAD_REQUEST, "이미 존재하는 관심 Article 입니다."),
 
     INVALID_AUTHORITY(2001, FORBIDDEN, "해당 리소스에 접근할 권한이 없습니다."),
     INVALID_USER_ID(2002, UNAUTHORIZED, "아이디가 존재하지 않습니다."),
@@ -36,6 +37,8 @@ public enum ErrorCode {
     EXPIRED_REFRESH_TOKEN(2009, UNAUTHORIZED, "만료된 RefreshToken 입니다."),
     INVALID_MEMBER_ROLE(2010, UNAUTHORIZED, "유효하지 않은 권한 정보 입니다."),
     FAIL_OAUTH_USERINFO_RETRIEVAL(2011, UNAUTHORIZED, "회원 정보를 가져오는데 실패했습니다."),
+    INVALID_COMMENT_WITH_MEMBER(2012, UNAUTHORIZED, "요청한 회원과 ID에 해당하는 댓글이 없습니다."),
+    INVALID_ARTICLE_WITH_MEMBER(2013, UNAUTHORIZED, "요청한 회원과 ID에 해당하는 게시글이 없습니다."),
     UNAUTHORIZED_NOTICE_ACCESS(2021, FORBIDDEN, "요청한 ID에 해당하는 공지사항을 설정할 권한이 없습니다."),
     UNAUTHORIZED_LIKE_REGION_ACCESS(2031, FORBIDDEN, "요청한 ID에 해당하는 관심 지역을 설정할 권한이 없습니다."),
     UNAUTHORIZED_FOLLOW_ACCESS(2040, FORBIDDEN, "팔로우 관계에 접근할 권한이 없습니다."),

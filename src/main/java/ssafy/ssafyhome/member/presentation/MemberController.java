@@ -32,7 +32,7 @@ import static ssafy.ssafyhome.deal.domain.DealType.getDealType;
 import static ssafy.ssafyhome.house.domain.HouseType.*;
 
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping
 @RestController
 public class MemberController {
 
@@ -78,7 +78,7 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/nickname")
+    @GetMapping("/members/nickname")
     @UserAccess
     public ResponseEntity<MemberNicknameResponse> getMemberNickname(
         @AuthenticationPrincipal final AccessContext accessContext
@@ -86,7 +86,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getNicknameById(accessContext.getMemberId()));
     }
 
-    @PostMapping
+    @PostMapping("/members")
     public ResponseEntity<Void> createMember(
         @Valid @RequestBody final MemberCreateRequest memberCreateRequest
     ) {
@@ -104,7 +104,7 @@ public class MemberController {
         return ResponseEntity.status(CREATED).build();
     }
 
-    @PatchMapping("/nickname")
+    @PatchMapping("/members/nickname")
     @UserAccess
     public ResponseEntity<Void> updateNickname(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -114,7 +114,7 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/profile-image")
+    @PatchMapping("/members/profile-image")
     @UserAccess
     public ResponseEntity<Void> updateProfileImage(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -124,7 +124,7 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/login-id")
+    @PatchMapping("/members/login-id")
     @UserAccess
     public ResponseEntity<Void> updateLoginId(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -134,7 +134,7 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/password")
+    @PatchMapping("/members/password")
     @UserAccess
     public ResponseEntity<Void> updatePassword(
         @AuthenticationPrincipal final AccessContext accessContext,
@@ -144,7 +144,7 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/password-reset/request")
+    @PostMapping("/members/password-reset/request")
     public ResponseEntity<Void> requestResetPassword(
         @Valid @RequestBody final PasswordForgotRequest passwordForgotRequest
     ) {
@@ -154,7 +154,7 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/password-reset/verify")
+    @PostMapping("/members/password-reset/verify")
     public ResponseEntity<Void> verifyAndResetPassword(
         @Valid @RequestBody final VerificationRequest verificationRequest
     ) {

@@ -10,6 +10,7 @@ import ssafy.ssafyhome.article.application.response.ArticleResponse;
 import ssafy.ssafyhome.article.application.response.ArticlesResponse;
 import ssafy.ssafyhome.article.domain.Article;
 import ssafy.ssafyhome.article.domain.repository.ArticleRepository;
+import ssafy.ssafyhome.auth.exception.AuthException;
 import ssafy.ssafyhome.common.exception.BadRequestException;
 import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.repository.HouseRepository;
@@ -34,12 +35,14 @@ public class ArticleService {
     private final ImageService imageService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public ArticlesResponse getMemberArticles(
-        final Long memberId,
-        final Pageable pageable,
-        final String baseUrl
-    ) {
-        final List<Article> articles = articleRepository.findByMemberId(memberId, pageable);
+    public void validateArticleByMember(final Long memberId, final Long articleId) {
+        if (!articleRepository.existsByMemberIdAndId(memberId, articleId)) {
+            throw new AuthException(INVALID_ARTICLE_WITH_MEMBER);
+        }
+    }
+
+    public ArticlesResponse getMemberArticles(final Long memberId, final Pageable pageable, final String baseUrl) {
+        final List<Article> articles = articleRepository.findByMemberId(memberId, pageable.previousOrFirst());
         final List<ArticleResponse> articleResponses = articles.stream()
             .map(article -> ArticleResponse.of(
                 article,
@@ -48,12 +51,18 @@ public class ArticleService {
         return new ArticlesResponse(articleResponses);
     }
 
-    public ArticlesResponse getHouseArticles(
-        final Long houseId,
-        final Pageable pageable,
-        final String baseUrl
-    ) {
-        final List<Article> articles = articleRepository.findByHouseId(houseId, pageable);
+    public ArticlesResponse getHouseArticles(final Long houseId, final Pageable pageable, final String baseUrl) {
+        final List<Article> articles = articleRepository.findByHouseId(houseId, pageable.previousOrFirst());
+        final List<ArticleResponse> articleResponses = articles.stream()
+            .map(article -> ArticleResponse.of(
+                article,
+                getImageUrlList(baseUrl, article.getDirName(), ARTICLE.getDirectory())))
+            .toList();
+        return new ArticlesResponse(articleResponses);
+    }
+
+    public ArticlesResponse getLikeArticles(final Long memberId, final Pageable pageable, final String baseUrl) {
+        final List<Article> articles = articleRepository.findLikeArticlesByMemberId(memberId, pageable);
         final List<ArticleResponse> articleResponses = articles.stream()
             .map(article -> ArticleResponse.of(
                 article,

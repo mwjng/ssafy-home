@@ -10,16 +10,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ssafy.ssafyhome.article.presentation.request.ArticleSearchCondition;
 import ssafy.ssafyhome.article.application.response.ArticlesResponse;
 import ssafy.ssafyhome.article.presentation.request.ArticleUpdateRequest;
 import ssafy.ssafyhome.auth.domain.AccessContext;
-import ssafy.ssafyhome.comment.application.response.ArticleCommentsResponse;
-import ssafy.ssafyhome.comment.application.response.CommentsResponse;
-import ssafy.ssafyhome.comment.presentation.request.CommentCreateRequest;
-import ssafy.ssafyhome.comment.presentation.request.CommentSearchCondition;
 
 import java.util.List;
 
