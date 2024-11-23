@@ -6,6 +6,8 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 import ssafy.ssafyhome.deal.application.request.*;
 import ssafy.ssafyhome.deal.application.response.DealQueryResponse;
@@ -35,50 +37,41 @@ public class DealQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<DealQueryResponse> findDeals(Long houseId, DealCondition condition, Pageable pageable, Long cursorId) {
-        return queryFactory
+    public Slice<DealQueryResponse> findDeals(Long houseId, DealCondition condition, Pageable pageable, Long cursorId) {
+        List<DealQueryResponse> deals = queryFactory
                 .select(new QDealQueryResponse(deal, getLikeStatus()))
                 .from(deal.member, member).fetchJoin()
                 .where(getWhereClause(houseId, condition, cursorId))
                 .orderBy(getOrderSpecifier(condition))
                 .limit(pageable.getPageSize())
                 .fetch();
+        return new SliceImpl<>(deals);
     }
 
-    public List<LikeCountResponse> getCountByDealId(List<Long> dealsId) {
-        return queryFactory
+    public Slice<LikeCountResponse> getCountByDealId(List<Long> dealsId) {
+        List<LikeCountResponse> likeCounts = queryFactory
                 .select(new QLikeCountResponse(likeDeal.deal.id, likeDeal.count()))
                 .from(likeDeal)
                 .where(likeDeal.deal.id.in(dealsId))
                 .groupBy(likeDeal.deal.id)
                 .fetch();
+        return new SliceImpl<>(likeCounts);
     }
 
-
-    public List<Deal> findByMemberId(final Long memberId, Pageable pageable, Long cursorId) {
-        return queryFactory
+    public Slice<Deal> findByMemberId(final Long memberId, Pageable pageable, Long cursorId) {
+        List<Deal> deals = queryFactory
                 .selectFrom(deal)
                 .join(deal.member, member).fetchJoin()
                 .join(deal.house, house).fetchJoin()
                 .join(house.region, region).fetchJoin()
-                .where(toEqExpression(deal.member.id, memberId), cursorLtExpression(deal.id, cursorId))
+                .where(
+                        toEqExpression(deal.member.id, memberId),
+                        cursorLtExpression(deal.id, cursorId)
+                )
                 .orderBy(makeOrderSpecifiers(deal, pageable))
                 .limit(pageable.getPageSize())
                 .fetch();
-    }
-
-    public List<LikeDealQueryResponse> findLikeDealsByMemberId(final Long memberId, Pageable pageable, Long cursorId) {
-        return queryFactory
-                .select(new QLikeDealQueryResponse(deal, likeDeal.id))
-                .from(likeDeal)
-                .join(likeDeal.deal, deal).fetchJoin()
-                .join(deal.member, member).fetchJoin()
-                .join(deal.house, house).fetchJoin()
-                .join(house.region, region).fetchJoin()
-                .where(toEqExpression(likeDeal.member.id, memberId), cursorLtExpression(likeDeal.id, cursorId))
-                .orderBy(makeOrderSpecifiers(likeDeal, pageable))
-                .limit(pageable.getPageSize())
-                .fetch();
+        return new SliceImpl<>(deals);
     }
 
     private BooleanExpression getWhereClause(final Long houseId, final DealCondition condition, final Long cursorId) {
@@ -105,7 +98,7 @@ public class DealQueryRepository {
     }
 
     private OrderSpecifier<?> getOrderSpecifier(DealCondition dealCondition) {
-        if(dealCondition == null){
+        if (dealCondition == null) {
             return deal.id.desc();
         }
 
@@ -147,13 +140,6 @@ public class DealQueryRepository {
                 .from(likeDeal)
                 .where(likeDeal.deal.eq(deal))
                 .fetchFirst() != null);
-    }
-
-    private NumberExpression<Integer> getLikeCount() {
-        return asNumber(queryFactory
-                .select(likeDeal.count())
-                .from(likeDeal)
-                .where(likeDeal.deal.eq(deal))).intValue();
     }
 
     private BooleanExpression betweenExclusiveAreaRange(ExclusiveAreaRange exclusiveArea) {

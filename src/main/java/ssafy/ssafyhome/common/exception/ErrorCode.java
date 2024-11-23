@@ -24,6 +24,8 @@ public enum ErrorCode {
     INVALID_DEAL_STATUS(1031, BAD_REQUEST, "올바르지 않은 거래 상태입니다."),
     DUPLICATED_FOLLOWING(1040, BAD_REQUEST, "이미 존재하는 팔로우 관계입니다."),
     INVALID_SELF_FOLLOW_REQUEST(1041, BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다."),
+    DUPLICATED_LIKE_REGION(1070, BAD_REQUEST, "이미 존재하는 관심 지역입니다."),
+    DUPLICATED_LIKE_DEAL(1070, BAD_REQUEST, "이미 존재하는 관심 매물입니다."),
     DUPLICATED_LIKE_HOUSE(1070, BAD_REQUEST, "이미 존재하는 관심 House 입니다."),
     DUPLICATED_LIKE_ARTICLE(1070, BAD_REQUEST, "이미 존재하는 관심 Article 입니다."),
     DUPLICATED_LIKE_REGION(1080, BAD_REQUEST, "이미 존재하는 관심 지역입니다."),
@@ -47,6 +49,7 @@ public enum ErrorCode {
     UNAUTHORIZED_DIRECT_MESSAGE_ACCESS(2050, FORBIDDEN, "요청한 ID에 해당하는 Direct Message를 설정할 권한이 없습니다."),
     UNAUTHORIZED_DEAL_ACCESS(2060, FORBIDDEN, "요청한 ID에 해당하는 매물을 설정할 권한이 없습니다."),
     UNAUTHORIZED_LIKE_HOUSE_ACCESS(2070, FORBIDDEN, "요청한 ID에 해당하는 관심 House를 설정할 권한이 없습니다."),
+    UNAUTHORIZED_LIKE_DEAL_ACCESS(2100, FORBIDDEN, "요청한 ID에 해당하는 관심 매물을 설정할 권한이 없습니다."),
 
     NOT_FOUND_USER_ID(3001, NOT_FOUND, "요청한 ID에 해당하는 사용자가 존재하지 않습니다."),
     NOT_FOUND_USER_LOGIN_ID(3002, NOT_FOUND, "요청한 Login ID에 해당하는 사용자가 존재하지 않습니다."),
@@ -65,6 +68,7 @@ public enum ErrorCode {
     NOT_FOUND_LIKE_HOUSE_ID(3070, NOT_FOUND, "요청한 ID에 해당하는 관심 House가 없습니다."),
     NOT_FOUND_ARTICLE_ID(3080, NOT_FOUND, "요청한 ID에 해당하는 게시글이 없습니다."),
     NOT_FOUND_COMMENT_ID(3090, NOT_FOUND, "요청한 ID에 해당하는 댓글이 없습니다."),
+    NOT_FOUND_LIKE_DEAL(3100, NOT_FOUND, "요청한 ID에 해당하는 관심 매물이 없습니다."),
 
     SERVER_ERROR(4000, INTERNAL_SERVER_ERROR, "서버 에러가 발생하였습니다."),
     DIRECTORY_ACCESS_ERROR(4001, INTERNAL_SERVER_ERROR, "디렉토리에서 파일을 읽는 중 문제가 발생했습니다.");

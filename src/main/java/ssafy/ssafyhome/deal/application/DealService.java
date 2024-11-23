@@ -24,9 +24,6 @@ import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.repository.HouseRepository;
 import ssafy.ssafyhome.image.application.ImageService;
 import ssafy.ssafyhome.image.domain.ImageEvent;
-import ssafy.ssafyhome.like.application.response.LikeDealQueryResponse;
-import ssafy.ssafyhome.like.application.response.LikeDealResponse;
-import ssafy.ssafyhome.like.application.response.LikeDealsResponse;
 import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.domain.repository.MemberRepository;
 import ssafy.ssafyhome.member.presentation.response.MyDealResponse;
@@ -77,7 +74,7 @@ public class DealService {
                         houseId,
                         condition,
                         PageRequest.of(0, size, defaultSort()),
-                        cursorId);
+                        cursorId).getContent();
 
         final List<DealResponse> dealResponses = dealQueryResponses.stream()
                 .map(dealQueryResponse ->
@@ -88,14 +85,6 @@ public class DealService {
                 .toList();
 
         return new DealsResponse(dealResponses);
-    }
-
-    public LikeDealsResponse getLikeDealsByMemberId(final Long memberId, final String baseUrl, final int size, final Long cursorId) {
-        final PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
-        final List<LikeDealResponse> likeDealResponses = dealQueryRepository.findLikeDealsByMemberId(memberId, pageRequest, cursorId).stream()
-                .map(likeDeal -> getLikeDealResponse(baseUrl, likeDeal))
-                .toList();
-        return new LikeDealsResponse(likeDealResponses);
     }
 
     @Transactional
@@ -115,31 +104,27 @@ public class DealService {
 
     @Transactional
     public void updateDeal(
-            final AccessContext accessContext,
+            final Long agentId,
             final Long dealId,
             final DealUpdateRequest dealUpdateRequest,
             final List<MultipartFile> images) {
 
-        final Deal deal = dealRepository.findMemberAndDealById(dealId)
+        final Deal deal = dealRepository.findById(dealId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_DEAL_ID));
 
-        checkAuthority(accessContext, deal);
+        if(!deal.getMember().getId().equals(agentId)){
+            throw new DealException(UNAUTHORIZED_DEAL_ACCESS);
+        }
 
-        String imagePath = imageService.save(images, DEAL.getDirectory());
-        deleteExistedImage(deal);
+        final String imagePath = imageService.save(images, DEAL.getDirectory());
+        deleteImages(deal.getDirName(), DEAL.getDirectory());
         deal.changeImageUrl(imagePath);
         deal.changeContent(dealUpdateRequest);
     }
 
-    private void deleteExistedImage(final Deal deal) {
-        List<String> imageFilePaths = imageService.getImageFilePaths(deal.getDirName(), DEAL.getDirectory());
-        String imageFileDirPath = imageService.getImageFileDirPath(deal.getDirName(), DEAL.getDirectory());
-        eventPublisher.publishEvent(new ImageEvent(imageFileDirPath, imageFilePaths));
-    }
-
     @Transactional
     public void deleteDeal(final AccessContext accessContext ,final Long dealId) {
-        final Deal deal = dealRepository.findMemberAndDealById(dealId)
+        final Deal deal = dealRepository.findById(dealId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_DEAL_ID));
 
         checkAuthority(accessContext, deal);
@@ -173,19 +158,12 @@ public class DealService {
             final DealQueryResponse dealQueryResponse,
             final Map<Long, Long> likeCountMap) {
 
-        Deal deal = dealQueryResponse.deal();
-        Long likeCount = likeCountMap.getOrDefault(deal.getId(), 0L);
+        final Deal deal = dealQueryResponse.deal();
+        final Long likeCount = likeCountMap.getOrDefault(deal.getId(), 0L);
 
-        List<String> imageFileNames = getFileNames(deal.getDirName());
-        List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, deal.getDirName());
+        final List<String> imageFileNames = getFileNames(deal.getDirName());
+        final List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, deal.getDirName());
         return DealResponse.of(deal, likeCount, dealQueryResponse.likeStatus(), imageUrl);
-    }
-
-    private LikeDealResponse getLikeDealResponse(final String baseUrl, final LikeDealQueryResponse likeDeal) {
-        final String dirName = likeDeal.deal().getDirName();
-        final List<String> imageFileNames = getFileNames(dirName);
-        final List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, dirName);
-        return LikeDealResponse.from(likeDeal, imageUrl);
     }
 
     private MyDealResponse getMyDealsResponse(final String baseUrl, final Deal deal) {

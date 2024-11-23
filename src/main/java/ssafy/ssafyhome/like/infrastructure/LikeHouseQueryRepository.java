@@ -12,9 +12,12 @@ import ssafy.ssafyhome.like.application.response.QLikeHouseQueryResponse;
 
 import java.util.List;
 
+import static ssafy.ssafyhome.article.domain.QArticle.article;
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
 import static ssafy.ssafyhome.house.domain.QHouse.house;
+import static ssafy.ssafyhome.like.domain.QLikeArticle.likeArticle;
 import static ssafy.ssafyhome.like.domain.QLikeHouse.likeHouse;
+import static ssafy.ssafyhome.member.domain.QMember.member;
 import static ssafy.ssafyhome.region.domain.QRegion.region;
 
 @RequiredArgsConstructor

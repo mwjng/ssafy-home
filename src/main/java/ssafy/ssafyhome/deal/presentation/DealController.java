@@ -63,7 +63,7 @@ public class DealController implements DealControllerDocs{
         @RequestPart final DealUpdateRequest dealUpdateRequest,
         @RequestPart(required = false) final List<MultipartFile> images) {
 
-        dealService.updateDeal(accessContext, dealId, dealUpdateRequest, images);
+        dealService.updateDeal(accessContext.getMemberId(), dealId, dealUpdateRequest, images);
         return ResponseEntity.noContent().build();
     }
 

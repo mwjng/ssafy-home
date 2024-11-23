@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public record NoticeResponse(
         Long noticeId,
+        Long memberId,
         String writer,
         String title,
         String content,
@@ -13,6 +14,7 @@ public record NoticeResponse(
     public static NoticeResponse from(NoticeQueryResponse queryResponse) {
         return new NoticeResponse(
                 queryResponse.noticeId(),
+                queryResponse.memberId(),
                 queryResponse.writer(),
                 queryResponse.title(),
                 queryResponse.content(),

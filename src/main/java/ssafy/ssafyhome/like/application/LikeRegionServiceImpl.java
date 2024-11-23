@@ -12,7 +12,6 @@ import ssafy.ssafyhome.like.exception.LikeRegionException;
 import ssafy.ssafyhome.like.infrastructure.LikeRegionQueryRepository;
 import ssafy.ssafyhome.like.presentation.request.LikeRegionCreateRequest;
 import ssafy.ssafyhome.member.domain.Member;
-import ssafy.ssafyhome.region.application.RegionService;
 import ssafy.ssafyhome.region.domain.Region;
 import ssafy.ssafyhome.region.domain.repository.RegionRepository;
 import ssafy.ssafyhome.region.exception.RegionException;
@@ -32,8 +31,8 @@ public class LikeRegionServiceImpl implements LikeRegionService {
     private final LikeRegionQueryRepository likeRegionQueryRepository;
 
     public LikeRegionsResponse searchAll(final Long memberId, final int size, final Long cursorId) {
-        PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
-        List<LikeRegionResponse> likeRegions = likeRegionQueryRepository.searchAll(memberId, pageRequest, cursorId).stream()
+        final PageRequest pageRequest = PageRequest.of(0, size, defaultSort());
+        final List<LikeRegionResponse> likeRegions = likeRegionQueryRepository.searchAll(memberId, pageRequest, cursorId).stream()
                 .map(LikeRegionResponse::from)
                 .toList();
 
@@ -42,12 +41,12 @@ public class LikeRegionServiceImpl implements LikeRegionService {
 
     @Transactional
     public void create(final Long memberId, final LikeRegionCreateRequest likeRegionCreateRequest) {
-        Region region = regionRepository.findBySidoAndGugunAndDong(
+        final Region region = regionRepository.findBySidoAndGugunAndDong(
                 likeRegionCreateRequest.sido(),
                 likeRegionCreateRequest.gugun(),
                 likeRegionCreateRequest.dong()).orElseThrow(() -> new RegionException(NOT_FOUND_REGION));
 
-        if(likeRegionRepository.existsByRegionAndMemberId(region, memberId)){
+        if(likeRegionRepository.existsByRegionIdAndMemberId(region.getId(), memberId)){
             throw new LikeRegionException(DUPLICATED_LIKE_REGION);
         }
 
@@ -56,10 +55,10 @@ public class LikeRegionServiceImpl implements LikeRegionService {
 
     @Transactional
     public void delete(final Long memberId, final Long likeRegionId) {
-        Member member = likeRegionRepository.findMemberById(likeRegionId)
+        final LikeRegion likeRegion = likeRegionRepository.findById(likeRegionId)
                 .orElseThrow(() -> new LikeRegionException(NOT_FOUND_LIKE_REGION));
 
-        if (!member.getId().equals(memberId)) {
+        if (!likeRegion.getMember().getId().equals(memberId)) {
             throw new LikeRegionException(UNAUTHORIZED_LIKE_REGION_ACCESS);
         }
 

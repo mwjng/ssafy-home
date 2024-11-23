@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public record NoticeQueryResponse(
         Long noticeId,
+        Long memberId,
         String writer,
         String title,
         String content,
