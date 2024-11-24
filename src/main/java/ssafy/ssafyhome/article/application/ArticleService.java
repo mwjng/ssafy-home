@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import ssafy.ssafyhome.article.application.response.ArticleCount;
 import ssafy.ssafyhome.article.application.response.ArticleResponse;
 import ssafy.ssafyhome.article.application.response.ArticlesResponse;
 import ssafy.ssafyhome.article.domain.Article;
@@ -20,7 +21,10 @@ import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.domain.repository.MemberRepository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
+import static java.util.stream.Collectors.toMap;
 import static ssafy.ssafyhome.common.exception.ErrorCode.*;
 import static ssafy.ssafyhome.image.application.ImageDirectory.ARTICLE;
 
@@ -43,32 +47,57 @@ public class ArticleService {
 
     public ArticlesResponse getMemberArticles(final Long memberId, final Pageable pageable, final String baseUrl) {
         final List<Article> articles = articleRepository.findByMemberId(memberId, pageable.previousOrFirst());
-        final List<ArticleResponse> articleResponses = articles.stream()
-            .map(article -> ArticleResponse.of(
-                article,
-                getImageUrlList(baseUrl, article.getDirName(), ARTICLE.getDirectory())))
-            .toList();
-        return new ArticlesResponse(articleResponses);
+        final List<Long> articleIds = getArticleIds(articles);
+
+        final Map<Long, Long> commentCountMap = getCountMap(articleRepository.countArticleCommentsByArticleIds(articleIds));
+        final Map<Long, Long> likeCountMap = getCountMap(articleRepository.countArticleLikesByArticleIds(articleIds));
+
+        return new ArticlesResponse(articles.stream()
+            .map(getArticleResponse(baseUrl, likeCountMap, commentCountMap))
+            .toList());
     }
 
     public ArticlesResponse getHouseArticles(final Long houseId, final Pageable pageable, final String baseUrl) {
         final List<Article> articles = articleRepository.findByHouseId(houseId, pageable.previousOrFirst());
-        final List<ArticleResponse> articleResponses = articles.stream()
-            .map(article -> ArticleResponse.of(
-                article,
-                getImageUrlList(baseUrl, article.getDirName(), ARTICLE.getDirectory())))
+        final List<Long> articleIds = getArticleIds(articles);
+
+        final Map<Long, Long> commentCountMap = getCountMap(articleRepository.countArticleCommentsByArticleIds(articleIds));
+        final Map<Long, Long> likeCountMap = getCountMap(articleRepository.countArticleLikesByArticleIds(articleIds));
+
+        return new ArticlesResponse(articles.stream()
+            .map(getArticleResponse(baseUrl, likeCountMap, commentCountMap))
+            .toList());
+    }
+
+    private Map<Long, Long> getCountMap(final List<ArticleCount> articleRepository) {
+        return articleRepository.stream()
+            .collect(toMap(ArticleCount::articleId, ArticleCount::count));
+    }
+
+    private List<Long> getArticleIds(final List<Article> articles) {
+        return articles.stream()
+            .map(Article::getId)
             .toList();
-        return new ArticlesResponse(articleResponses);
     }
 
     public ArticlesResponse getLikeArticles(final Long memberId, final Pageable pageable, final String baseUrl) {
         final List<Article> articles = articleRepository.findLikeArticlesByMemberId(memberId, pageable);
-        final List<ArticleResponse> articleResponses = articles.stream()
-            .map(article -> ArticleResponse.of(
-                article,
-                getImageUrlList(baseUrl, article.getDirName(), ARTICLE.getDirectory())))
-            .toList();
-        return new ArticlesResponse(articleResponses);
+        final List<Long> articleIds = getArticleIds(articles);
+
+        final Map<Long, Long> commentCountMap = getCountMap(articleRepository.countArticleCommentsByArticleIds(articleIds));
+        final Map<Long, Long> likeCountMap = getCountMap(articleRepository.countArticleLikesByArticleIds(articleIds));
+
+        return new ArticlesResponse(articles.stream()
+            .map(getArticleResponse(baseUrl, likeCountMap, commentCountMap))
+            .toList());
+    }
+
+    private Function<Article, ArticleResponse> getArticleResponse(final String baseUrl, final Map<Long, Long> likeCountMap, final Map<Long, Long> commentCountMap) {
+        return article -> ArticleResponse.of(
+            article,
+            likeCountMap.getOrDefault(article.getId(), 0L),
+            commentCountMap.getOrDefault(article.getId(), 0L),
+            getImageUrlList(baseUrl, article.getDirName(), ARTICLE.getDirectory()));
     }
 
     private List<String> getImageUrlList(

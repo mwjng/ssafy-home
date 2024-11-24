@@ -11,17 +11,21 @@ public record ArticleResponse(
         String houseName,
         String nickname,
         String content,
+        Long likeCount,
+        Long commentCount,
         List<String> imageUrl,
         LocalDateTime createdAt,
         LocalDateTime modified_at
 ) {
-    public static ArticleResponse of(Article article, List<String> imageUrl) {
+    public static ArticleResponse of(Article article, Long likeCount, Long commentCount, List<String> imageUrl) {
         return new ArticleResponse(
             article.getId(),
             article.getMember().getId(),
             article.getHouse().getName(),
             article.getMember().getNickname(),
             article.getContent(),
+            likeCount,
+            commentCount,
             imageUrl,
             article.getCreatedAt(),
             article.getModifiedAt()

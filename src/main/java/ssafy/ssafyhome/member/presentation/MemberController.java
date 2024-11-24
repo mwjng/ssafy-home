@@ -3,6 +3,7 @@ package ssafy.ssafyhome.member.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,9 +37,10 @@ public class MemberController {
     @AdminAccess
     public ResponseEntity<MembersResponse> getAllMembers(
         @AuthenticationPrincipal final AccessContext accessContext,
+        final Pageable pageable,
         final HttpServletRequest request
     ) {
-        return ResponseEntity.ok(memberService.getAllMembers(getBaseUrl(request)));
+        return ResponseEntity.ok(memberService.getAllMembers(pageable, getBaseUrl(request)));
     }
 
     @GetMapping("/me")

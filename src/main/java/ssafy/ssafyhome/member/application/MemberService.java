@@ -3,6 +3,7 @@ package ssafy.ssafyhome.member.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,8 +46,8 @@ public class MemberService {
             .orElseThrow(() -> new UserNotFoundException(NOT_FOUND_USER_ID));
     }
 
-    public MembersResponse getAllMembers(final String baseUrl) {
-        final List<MyInfoResponse> myInfoResponses = memberRepository.findAll().stream()
+    public MembersResponse getAllMembers(final Pageable pageable, final String baseUrl) {
+        final List<MyInfoResponse> myInfoResponses = memberRepository.findAllBy(pageable).stream()
             .map(member -> getMemberResponse(member, baseUrl))
             .toList();
         return new MembersResponse(myInfoResponses);

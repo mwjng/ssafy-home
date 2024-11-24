@@ -1,12 +1,27 @@
 package ssafy.ssafyhome.region.application;
 
-import ssafy.ssafyhome.region.application.response.RegionIdResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ssafy.ssafyhome.region.application.response.RegionSearchResponse;
-import ssafy.ssafyhome.region.presentation.request.RegionSearchCondition;
+import ssafy.ssafyhome.region.domain.repository.RegionRepository;
 
-public interface RegionService {
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+@Service
+public class RegionService {
 
-    RegionSearchResponse search(final RegionSearchCondition regionSearchCondition);
+    private final RegionRepository regionRepository;
 
-    RegionIdResponse searchId(final String sido, final String gugun, final String dong);
+    public RegionSearchResponse searchSidos() {
+        return new RegionSearchResponse(regionRepository.findAllSidos());
+    }
+
+    public RegionSearchResponse searchGuguns(final String sido) {
+        return new RegionSearchResponse(regionRepository.findGugunsBySido(sido));
+    }
+
+    public RegionSearchResponse searchDongs(final String sido, final String gugun) {
+        return new RegionSearchResponse(regionRepository.findDongsBySidoAndGuguns(sido, gugun));
+    }
 }
