@@ -34,6 +34,9 @@ public class ImageService {
     }
 
     public String save(final List<MultipartFile> images, final String dirName) {
+        if(images == null) {
+            return null;
+        }
         return imageUploader.uploadImages(images, dirName, imageDirPath);
     }
 

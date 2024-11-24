@@ -20,6 +20,6 @@ public enum HouseType {
         return Arrays.stream(HouseType.values())
             .filter(type -> type.name().equalsIgnoreCase(houseType))
             .findFirst()
-            .orElseThrow(() -> new BadRequestException(INVALID_HOUSE_TYPE));
+            .orElse(null);
     }
 }

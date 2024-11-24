@@ -55,9 +55,7 @@ public class ArticleController implements ArticleControllerDocs {
             getBaseUrl(request)));
     }
 
-
     @GetMapping("/houses/{houseId}/articles")
-    @UserAccess
     public ResponseEntity<ArticlesResponse> getArticles(
         @PathVariable final Long houseId,
         final Pageable pageable,
@@ -75,7 +73,7 @@ public class ArticleController implements ArticleControllerDocs {
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long houseId,
         @Valid @RequestPart ArticleCreateRequest articleCreateRequest,
-        @RequestPart final List<MultipartFile> images
+        @RequestPart(required = false) final List<MultipartFile> images
     ) {
         articleService.createArticle(
             accessContext.getMemberId(),
@@ -92,7 +90,7 @@ public class ArticleController implements ArticleControllerDocs {
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long articleId,
         @Valid @RequestPart final ArticleUpdateRequest articleUpdateRequest,
-        @RequestPart final List<MultipartFile> images
+        @RequestPart(required = false) final List<MultipartFile> images
     ) {
         articleService.validateArticleByMember(accessContext.getMemberId(), articleId);
         articleService.updateArticle(articleId, articleUpdateRequest.content(), images);

@@ -49,7 +49,7 @@ public class DealController implements DealControllerDocs{
     public ResponseEntity<Void> createDeal(
         @AuthenticationPrincipal final AccessContext accessContext,
         @RequestPart final DealCreateRequest dealCreateRequest,
-        @RequestPart final List<MultipartFile> images) {
+        @RequestPart(required = false) final List<MultipartFile> images) {
 
         dealService.createDeal(accessContext.getMemberId(), dealCreateRequest, images);
         return ResponseEntity.status(CREATED).build();
@@ -61,7 +61,7 @@ public class DealController implements DealControllerDocs{
         @AuthenticationPrincipal final AccessContext accessContext,
         @PathVariable final Long dealId,
         @RequestPart final DealUpdateRequest dealUpdateRequest,
-        @RequestPart final List<MultipartFile> images) {
+        @RequestPart(required = false) final List<MultipartFile> images) {
 
         dealService.updateDeal(accessContext.getMemberId(), dealId, dealUpdateRequest, images);
         return ResponseEntity.noContent().build();
