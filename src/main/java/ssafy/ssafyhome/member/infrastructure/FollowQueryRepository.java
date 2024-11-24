@@ -30,7 +30,8 @@ public class FollowQueryRepository {
                         follow.follower.nickname,
                         follow.follower.memberRole,
                         follow.follower.dirName))
-                .from(follow.follower, member).fetchJoin()
+                .from(follow)
+                .join(follow.follower, member)
                 .where(toEqExpression(follow.following.id, memberId), cursorLtExpression(follow.id, cursorId))
                 .orderBy(makeOrderSpecifiers(follow, pageable))
                 .limit(pageable.getPageSize())
@@ -47,7 +48,8 @@ public class FollowQueryRepository {
                         follow.following.nickname,
                         follow.following.memberRole,
                         follow.following.dirName))
-                .from(follow.following, member).fetchJoin()
+                .from(follow)
+                .join(follow.following, member)
                 .where(toEqExpression(follow.follower.id, memberId), cursorLtExpression(follow.id, cursorId))
                 .orderBy(makeOrderSpecifiers(follow, pageable))
                 .limit(pageable.getPageSize())

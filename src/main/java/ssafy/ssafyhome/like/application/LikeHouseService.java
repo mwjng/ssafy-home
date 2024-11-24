@@ -7,5 +7,5 @@ public interface LikeHouseService {
 
     void create(Long memberId, Long houseId);
 
-    void delete(Long memberId, Long likeHouseId);
+    void delete(Long memberId, Long houseId);
 }

@@ -28,10 +28,10 @@ public class LikeDealQueryRepository {
         List<LikeDealQueryResponse> likeDeals = queryFactory
                 .select(new QLikeDealQueryResponse(deal, likeDeal.id))
                 .from(likeDeal)
-                .join(likeDeal.deal, deal).fetchJoin()
-                .join(deal.member, member).fetchJoin()
-                .join(deal.house, house).fetchJoin()
-                .join(house.region, region).fetchJoin()
+                .join(likeDeal.deal, deal)
+                .join(deal.member, member)
+                .join(deal.house, house)
+                .join(house.region, region)
                 .where(
                         toEqExpression(likeDeal.member.id, memberId),
                         cursorLtExpression(likeDeal.id, cursorId)

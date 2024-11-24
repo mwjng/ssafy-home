@@ -5,4 +5,6 @@ import ssafy.ssafyhome.like.domain.LikeHouse;
 
 public interface LikeHouseRepository extends JpaRepository<LikeHouse, Long> {
     Boolean existsByMemberIdAndHouseId(Long memberId, Long houseId);
+
+    LikeHouse findByMemberIdAndHouseId(Long memberId, Long houseId);
 }

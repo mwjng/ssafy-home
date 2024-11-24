@@ -10,12 +10,10 @@ import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.like.application.LikeDealServiceImpl;
 import ssafy.ssafyhome.like.application.response.LikeDealsResponse;
-import ssafy.ssafyhome.like.presentation.request.LikeDealCreateRequest;
 
 import static org.springframework.http.HttpStatus.*;
 import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
 
-// TODO
 @RequiredArgsConstructor
 @RequestMapping("/deals/like")
 @RestController
@@ -40,20 +38,20 @@ public class LikeDealController implements LikeDealControllerDocs{
     }
 
     @UserAccess
-    @PostMapping
+    @PostMapping("/{dealId}")
     public ResponseEntity<Void> create(
             @AuthenticationPrincipal final AccessContext accessContext,
-            @Valid @RequestBody final LikeDealCreateRequest likeDealCreateRequest) {
-        likeDealService.create(accessContext.getMemberId(), likeDealCreateRequest);
+            @PathVariable final Long dealId) {
+        likeDealService.create(accessContext.getMemberId(), dealId);
         return ResponseEntity.status(CREATED).build();
     }
 
     @UserAccess
-    @DeleteMapping("/{likeDealId}")
+    @DeleteMapping("/{dealId}")
     public ResponseEntity<Void> delete(
             @AuthenticationPrincipal final AccessContext accessContext,
-            @PathVariable final Long likeDealId) {
-        likeDealService.delete(accessContext.getMemberId(), likeDealId);
+            @PathVariable final Long dealId) {
+        likeDealService.delete(accessContext.getMemberId(), dealId);
         return ResponseEntity.noContent().build();
     }
 }

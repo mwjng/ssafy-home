@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import ssafy.ssafyhome.article.application.response.ArticleLikeCount;
 import ssafy.ssafyhome.article.domain.Article;
 
 import java.util.List;
@@ -36,4 +37,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
         WHERE likeArticle.member.id = :memberId
     """)
     List<Article> findLikeArticlesByMemberId(final Long memberId, final Pageable pageable);
+
+    @Query("""
+        SELECT COUNT(article.id), article.id FROM LikeArticle likeArticle
+        WHERE likeArticle.article.id IN :articleIds 
+        GROUP BY likeArticle.article.id
+    """)
+    List<ArticleLikeCount> findArticleLikesCountByArticleIds(List<Long> articleIds);
 }

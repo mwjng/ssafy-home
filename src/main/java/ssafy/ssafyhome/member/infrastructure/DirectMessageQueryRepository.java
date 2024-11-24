@@ -33,7 +33,8 @@ public class DirectMessageQueryRepository {
                         directMessage.status,
                         directMessage.createdAt,
                         directMessage.modifiedAt))
-                .from(directMessage.sender, member).fetchJoin()
+                .from(directMessage)
+                .join(directMessage.sender, member)
                 .where(toEqExpression(directMessage.receiver.id, receiverId), cursorLtExpression(directMessage.id, cursorId))
                 .orderBy(makeOrderSpecifiers(directMessage, pageable))
                 .limit(pageable.getPageSize())
@@ -52,7 +53,8 @@ public class DirectMessageQueryRepository {
                         directMessage.status,
                         directMessage.createdAt,
                         directMessage.modifiedAt))
-                .from(directMessage.receiver, member).fetchJoin()
+                .from(directMessage)
+                .join(directMessage.receiver, member)
                 .where(toEqExpression(directMessage.sender.id, senderId), cursorLtExpression(directMessage.id, cursorId))
                 .orderBy(makeOrderSpecifiers(directMessage, pageable))
                 .limit(pageable.getPageSize())

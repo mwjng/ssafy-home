@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ssafy.ssafyhome.deal.domain.Deal;
 import ssafy.ssafyhome.deal.domain.repository.DealRepository;
+import ssafy.ssafyhome.deal.exception.DealException;
 import ssafy.ssafyhome.image.application.ImageService;
 import ssafy.ssafyhome.like.application.response.LikeDealQueryResponse;
 import ssafy.ssafyhome.like.application.response.LikeDealResponse;
@@ -16,6 +17,8 @@ import ssafy.ssafyhome.like.exception.LikeDealException;
 import ssafy.ssafyhome.like.infrastructure.LikeDealQueryRepository;
 import ssafy.ssafyhome.like.presentation.request.LikeDealCreateRequest;
 import ssafy.ssafyhome.member.domain.Member;
+import ssafy.ssafyhome.member.domain.repository.MemberRepository;
+import ssafy.ssafyhome.member.exception.MemberException;
 
 import java.util.List;
 
@@ -31,6 +34,7 @@ public class LikeDealServiceImpl {
     private final LikeDealRepository likeDealRepository;
     private final LikeDealQueryRepository likeDealQueryRepository;
     private final DealRepository dealRepository;
+    private final MemberRepository memberRepository;
     private final ImageService imageService;
 
     public LikeDealsResponse getLikeDeals(
@@ -62,25 +66,30 @@ public class LikeDealServiceImpl {
         return imageService.getImageUrlList(baseUrl, DEAL.getDirectory(), imageFileNames, dirName);
     }
 
-    public void create(final Long memberId, final LikeDealCreateRequest likeDealCreateRequest) {
-        Deal deal = dealRepository.findById(likeDealCreateRequest.dealId())
+    public void create(final Long memberId, final Long dealId) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(NOT_FOUND_USER_ID));
+        final Deal deal = dealRepository.findById(dealId)
                 .orElseThrow(() -> new LikeDealException(NOT_FOUND_DEAL_ID));
 
         if(likeDealRepository.existsByMemberIdAndDealId(memberId, deal.getId())){
             throw new LikeDealException(DUPLICATED_LIKE_DEAL);
         }
 
-        likeDealRepository.save(LikeDeal.of(Member.withId(memberId), deal));
+        likeDealRepository.save(LikeDeal.of(member, deal));
     }
 
-    public void delete(final Long memberId, final Long likeDealId) {
-        LikeDeal likeDeal = likeDealRepository.findById(likeDealId)
-                .orElseThrow(() -> new LikeDealException(NOT_FOUND_LIKE_DEAL));
-
-        if (!likeDeal.getMember().getId().equals(memberId)) {
-            throw new LikeDealException(UNAUTHORIZED_LIKE_DEAL_ACCESS);
+    public void delete(final Long memberId, final Long dealId) {
+        if(!memberRepository.existsById(memberId)){
+            throw new MemberException(NOT_FOUND_USER_ID);
         }
 
-        likeDealRepository.deleteById(likeDealId);
+        if(!dealRepository.existsById(dealId)){
+            throw new DealException(NOT_FOUND_DEAL_ID);
+        }
+
+        LikeDeal likeDeal = likeDealRepository.findByMemberIdAndDealId(memberId, dealId);
+
+        likeDealRepository.delete(likeDeal);
     }
 }

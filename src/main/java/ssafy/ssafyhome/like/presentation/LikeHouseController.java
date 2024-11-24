@@ -1,7 +1,6 @@
 package ssafy.ssafyhome.like.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +9,6 @@ import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.like.application.LikeHouseService;
 import ssafy.ssafyhome.like.application.response.LikeHousesResponse;
-import ssafy.ssafyhome.member.presentation.request.LikeHouseCreateRequest;
 
 import static org.springframework.http.HttpStatus.*;
 import static ssafy.ssafyhome.common.util.UrlUtil.*;
@@ -34,20 +32,20 @@ public class LikeHouseController implements LikeHouseControllerDocs{
     }
 
     @UserAccess
-    @PostMapping
+    @PostMapping("/{houseId}")
     public ResponseEntity<Void> create(
             @AuthenticationPrincipal final AccessContext accessContext,
-            @Valid @RequestBody final LikeHouseCreateRequest likeHouseCreateRequest) {
-        likeHouseService.create(accessContext.getMemberId(), likeHouseCreateRequest.houseId());
+            @PathVariable final Long houseId) {
+        likeHouseService.create(accessContext.getMemberId(), houseId);
         return ResponseEntity.status(CREATED).build();
     }
 
     @UserAccess
-    @DeleteMapping("/{likeHouseId}")
+    @DeleteMapping("/{houseId}")
     public ResponseEntity<Void> delete(
             @AuthenticationPrincipal final AccessContext accessContext,
-            @PathVariable final Long likeHouseId) {
-        likeHouseService.delete(accessContext.getMemberId(), likeHouseId);
+            @PathVariable final Long houseId) {
+        likeHouseService.delete(accessContext.getMemberId(), houseId);
         return ResponseEntity.noContent().build();
     }
 }

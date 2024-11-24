@@ -11,6 +11,7 @@ import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AdminAccess;
 import ssafy.ssafyhome.auth.presentation.AgentAccess;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
+import ssafy.ssafyhome.deal.application.DealService;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.house.application.HouseService;
 import ssafy.ssafyhome.house.application.response.HouseResponse;
@@ -29,7 +30,7 @@ import static ssafy.ssafyhome.common.util.UrlUtil.*;
 public class HouseController implements HouseControllerDocs{
 
     private final HouseService houseService;
-    private final ArticleService articleService;
+    private final DealService dealService;
 
     @GetMapping
     public ResponseEntity<HousesResponse> getHouses(
@@ -86,7 +87,6 @@ public class HouseController implements HouseControllerDocs{
         return ResponseEntity.noContent().build();
     }
 
-    // TODO
     @PostMapping("/{houseId}/deals")
     @AgentAccess
     public ResponseEntity<Void> createDeal(
@@ -95,6 +95,7 @@ public class HouseController implements HouseControllerDocs{
         @RequestPart final DealCreateRequest dealCreateRequest,
         @RequestPart(required = false) final List<MultipartFile> images
     ) {
-        return null;
+        dealService.createDeal(accessContext.getMemberId(), dealCreateRequest, images);
+        return ResponseEntity.status(CREATED).build();
     }
 }

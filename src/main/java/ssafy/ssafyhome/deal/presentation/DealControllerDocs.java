@@ -57,9 +57,9 @@ public interface DealControllerDocs {
 
     @Operation(summary = "deal 수정", description = "deal을 수정한다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다."),
+            @ApiResponse(responseCode = "204", description = "처리를 성공하였지만, 클라이언트에게 돌려줄 콘텐츠가 없다."),
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
-            @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
+            @ApiResponse(responseCode = "404", description = "해당 매물을 찾을 수 없습니다.")
     })
     ResponseEntity<Void> updateDeal(
             final AccessContext accessContext,
@@ -72,7 +72,7 @@ public interface DealControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "처리를 성공하였지만, 클라이언트에게 돌려줄 콘텐츠가 없다."),
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
-            @ApiResponse(responseCode = "404", description = "해당 게시글을 찾을 수 없다.")
+            @ApiResponse(responseCode = "404", description = "해당 매물을 찾을 수 없습니다.")
     })
     ResponseEntity<Void> deleteDeal(
             final AccessContext accessContext,

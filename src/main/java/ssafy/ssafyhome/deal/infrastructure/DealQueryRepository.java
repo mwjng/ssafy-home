@@ -2,7 +2,6 @@ package ssafy.ssafyhome.deal.infrastructure;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +16,6 @@ import ssafy.ssafyhome.deal.application.response.QLikeCountResponse;
 import ssafy.ssafyhome.deal.domain.Deal;
 import ssafy.ssafyhome.deal.domain.DealStatus;
 import ssafy.ssafyhome.deal.domain.DealType;
-import ssafy.ssafyhome.like.application.response.LikeDealQueryResponse;
-import ssafy.ssafyhome.like.application.response.QLikeDealQueryResponse;
 
 import java.util.List;
 
@@ -40,7 +37,8 @@ public class DealQueryRepository {
     public Slice<DealQueryResponse> findDeals(Long houseId, DealCondition condition, Pageable pageable, Long cursorId) {
         List<DealQueryResponse> deals = queryFactory
                 .select(new QDealQueryResponse(deal, getLikeStatus()))
-                .from(deal.member, member).fetchJoin()
+                .from(deal)
+                .join(deal.member, member)
                 .where(getWhereClause(houseId, condition, cursorId))
                 .orderBy(getOrderSpecifier(condition))
                 .limit(pageable.getPageSize())

@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.like.application.response.LikeDealsResponse;
-import ssafy.ssafyhome.like.presentation.request.LikeDealCreateRequest;
 
 @Tag(name = "관심 매물 컨트롤러", description = "관심 매물에 대한 조회, 생성, 삭제를 처리 하는 클래스.")
 @RequestMapping("/deals/like")
@@ -39,10 +38,10 @@ public interface LikeDealControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @PostMapping("/{id}")
+    @PostMapping("/{dealId}")
     ResponseEntity<Void> create(
             final AccessContext accessContext,
-            @Parameter(name = "dealId") final LikeDealCreateRequest likeDealCreateRequest
+            @Parameter(name = "dealId") final Long dealId
     );
 
     @Operation(summary = "관심 매물 삭제", description = "관심 매물을 삭제한다.")
@@ -51,9 +50,9 @@ public interface LikeDealControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{dealId}")
     ResponseEntity<Void> delete(
             final AccessContext accessContext,
-            @Parameter(name = "id") final Long id
+            @Parameter(name = "dealId") final Long dealId
     );
 }

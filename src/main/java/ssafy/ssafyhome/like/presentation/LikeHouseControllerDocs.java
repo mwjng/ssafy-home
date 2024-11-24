@@ -39,10 +39,10 @@ public interface LikeHouseControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @PostMapping
+    @PostMapping("/{houseId}")
     ResponseEntity<Void> create(
             final AccessContext accessContext,
-            @Parameter(name = "houseId") final LikeHouseCreateRequest likeHouseCreateRequest
+            @Parameter(name = "houseId") final Long houseId
     );
 
     @Operation(summary = "관심 House 삭제", description = "관심 House를 삭제한다.")
@@ -51,9 +51,9 @@ public interface LikeHouseControllerDocs {
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
             @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
     })
-    @DeleteMapping("/{likeHouseId}")
+    @DeleteMapping("/{houseId}")
     ResponseEntity<Void> delete(
             final AccessContext accessContext,
-            @Parameter(name = "likeHouseId") final Long likeHouseId
+            @Parameter(name = "houseId") final Long houseId
     );
 }

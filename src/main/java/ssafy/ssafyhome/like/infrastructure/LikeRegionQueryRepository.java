@@ -24,7 +24,8 @@ public class LikeRegionQueryRepository {
     public Slice<LikeRegionQueryResponse> searchAll(final Long memberId, final Pageable pageable, final Long cursorId) {
         List<LikeRegionQueryResponse> likeRegions = queryFactory
                 .select(new QLikeRegionQueryResponse(likeRegion.id, region.sido, region.gugun, region.dong))
-                .from(likeRegion.region, region).fetchJoin()
+                .from(likeRegion)
+                .join(likeRegion.region, region)
                 .where(toEqExpression(likeRegion.member.id, memberId), cursorLtExpression(likeRegion.id, cursorId))
                 .orderBy(makeOrderSpecifiers(likeRegion, pageable))
                 .limit(pageable.getPageSize())

@@ -44,8 +44,8 @@ public class LikeHouseQueryRepository {
                         house.dirName
                 ))
                 .from(likeHouse)
-                .join(likeHouse.house, house).fetchJoin()
-                .join(house.region, region).fetchJoin()
+                .join(likeHouse.house, house)
+                .join(house.region, region)
                 .where(
                         toEqExpression(likeHouse.member.id, memberId),
                         cursorLtExpression(likeHouse.id, cursorId)

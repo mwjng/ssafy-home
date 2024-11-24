@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ssafy.ssafyhome.common.exception.BadRequestException;
 import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.repository.HouseRepository;
 import ssafy.ssafyhome.image.application.ImageService;
@@ -15,6 +16,7 @@ import ssafy.ssafyhome.like.domain.repository.LikeHouseRepository;
 import ssafy.ssafyhome.like.infrastructure.LikeHouseQueryRepository;
 import ssafy.ssafyhome.like.exception.LikeHouseException;
 import ssafy.ssafyhome.member.domain.Member;
+import ssafy.ssafyhome.member.domain.repository.MemberRepository;
 
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class LikeHouseServiceImpl implements LikeHouseService {
 
     private final LikeHouseRepository likeHouseRepository;
     private final HouseRepository houseRepository;
+    private final MemberRepository memberRepository;
     private final LikeHouseQueryRepository likeHouseQueryRepository;
     private final ImageService imageService;
 
@@ -43,8 +46,8 @@ public class LikeHouseServiceImpl implements LikeHouseService {
     }
 
     public void create(final Long memberId, final Long houseId) {
-        if (!houseRepository.existsById(houseId)) {
-            throw new LikeHouseException(NOT_FOUND_HOUSE_ID);
+        if(!houseRepository.existsById(houseId)){
+            throw new BadRequestException(NOT_FOUND_HOUSE_ID);
         }
 
         if(likeHouseRepository.existsByMemberIdAndHouseId(memberId, houseId)){
@@ -54,13 +57,16 @@ public class LikeHouseServiceImpl implements LikeHouseService {
         likeHouseRepository.save(makeLikeHouse(memberId, houseId));
     }
 
-    public void delete(final Long memberId, final Long likeHouseId) {
-        final LikeHouse likeHouse = likeHouseRepository.findById(likeHouseId)
-                .orElseThrow(() -> new LikeHouseException(NOT_FOUND_LIKE_HOUSE_ID));
+    public void delete(final Long memberId, final Long houseId) {
+        if(!houseRepository.existsById(houseId)){
+            throw new BadRequestException(NOT_FOUND_HOUSE_ID);
+        }
+        LikeHouse likeHouse = likeHouseRepository.findByMemberIdAndHouseId(memberId, houseId);
 
         if (!likeHouse.getMember().getId().equals(memberId)) {
             throw new LikeHouseException(UNAUTHORIZED_LIKE_HOUSE_ACCESS);
         }
+
         likeHouseRepository.delete(likeHouse);
     }
 

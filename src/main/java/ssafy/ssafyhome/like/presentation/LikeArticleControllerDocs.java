@@ -16,22 +16,23 @@ public interface LikeArticleControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "요청이 처리되어서 새로운 리소스가 생성되었다."),
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
-            @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
+            @ApiResponse(responseCode = "404", description = "해당 article을 찾을 수 없습니다.")
     })
+    @PostMapping("/articles/{articleId}/like")
     ResponseEntity<Void> createLikeArticle(
             final AccessContext accessContext,
-            @Parameter(name = "id") final Long id
+            @Parameter(name = "articleId") final Long articleId
     );
 
     @Operation(summary = "관심 Article 삭제", description = "관심 Article을 삭제한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "처리를 성공하였지만, 클라이언트에게 돌려줄 콘텐츠가 없다."),
             @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다."),
-            @ApiResponse(responseCode = "404", description = "검색 결과가 없습니다.")
+            @ApiResponse(responseCode = "404", description = "해당 article을 찾을 수 없습니다.")
     })
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/articles/{articleId}/like")
     ResponseEntity<Void> deleteLikeArticle(
             final AccessContext accessContext,
-            @Parameter(name = "id") final Long id
+            @Parameter(name = "articleId") final Long articleId
     );
 }
