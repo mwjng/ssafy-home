@@ -63,7 +63,7 @@ public class DealService {
             final DealCondition condition,
             final int size,
             final Long cursorId,
-            final String baseUrl) {
+            final String baseUrl){
 
         if (!houseRepository.existsById(houseId)) {
             throw new BadRequestException(NOT_FOUND_HOUSE_ID);
@@ -76,15 +76,54 @@ public class DealService {
                         PageRequest.of(0, size, defaultSort()),
                         cursorId).getContent();
 
+        Map<Long, Long> likeCounts = getLikeCounts(dealQueryResponses);
+
         final List<DealResponse> dealResponses = dealQueryResponses.stream()
                 .map(dealQueryResponse ->
                         getDealResponse(
                                 baseUrl,
                                 dealQueryResponse,
-                                getLikeCounts(dealQueryResponses)))
+                                getLikeCount(dealQueryResponse, likeCounts)))
                 .toList();
 
         return new DealsResponse(dealResponses);
+    }
+
+    public DealsResponse getDealsByHouseIdOnLogin(
+            final Long houseId,
+            final Long memberId,
+            final DealCondition condition,
+            final int size,
+            final Long cursorId,
+            final String baseUrl) {
+
+        if (!houseRepository.existsById(houseId)) {
+            throw new BadRequestException(NOT_FOUND_HOUSE_ID);
+        }
+
+        final List<DealQueryResponse> dealQueryResponses =
+                dealQueryRepository.findDealsOnLogin(
+                        houseId,
+                        memberId,
+                        condition,
+                        PageRequest.of(0, size, defaultSort()),
+                        cursorId).getContent();
+
+        Map<Long, Long> likeCounts = getLikeCounts(dealQueryResponses);
+
+        final List<DealResponse> dealResponses = dealQueryResponses.stream()
+                .map(dealQueryResponse ->
+                        getDealResponse(
+                                baseUrl,
+                                dealQueryResponse,
+                                getLikeCount(dealQueryResponse, likeCounts)))
+                .toList();
+
+        return new DealsResponse(dealResponses);
+    }
+
+    private Long getLikeCount(final DealQueryResponse dealQueryResponse, final Map<Long, Long> likeCounts) {
+        return likeCounts.get(dealQueryResponse.deal().getId());
     }
 
     @Transactional
@@ -156,11 +195,9 @@ public class DealService {
     private DealResponse getDealResponse(
             final String baseUrl,
             final DealQueryResponse dealQueryResponse,
-            final Map<Long, Long> likeCountMap) {
+            final Long likeCount) {
 
         final Deal deal = dealQueryResponse.deal();
-        final Long likeCount = likeCountMap.getOrDefault(deal.getId(), 0L);
-
         final List<String> imageFileNames = getFileNames(deal.getDirName());
         final List<String> imageUrl = getImageUrl(baseUrl, imageFileNames, deal.getDirName());
         return DealResponse.of(deal, likeCount, dealQueryResponse.likeStatus(), imageUrl);

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.deal.application.request.DealCondition;
 import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
@@ -40,9 +41,26 @@ public interface DealControllerDocs {
             @Parameter(name = "houseId") final Long houseId,
             @Parameter(name = "검색 조건") DealSearchCondition dealSearchCondition,
             @Parameter(name = "한번에 가져올 갯수") int size,
-            @Parameter(name = "cursorId")  Long cursorId,
+            @Parameter(name = "cursorId") Long cursorId,
             final HttpServletRequest request
     );
+
+    @Operation(summary = "Login한 사용자가 deal 조회", description = "Login한 사용자가 houseId에 해당하는 deal을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DealsResponse.class))),
+            @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다.")
+    })
+    ResponseEntity<DealsResponse> getDealsOnLogin(
+            final AccessContext accessContext,
+            @Parameter(name = "houseId") final Long houseId,
+            @Parameter(name = "검색 조건") DealSearchCondition dealSearchCondition,
+            @Parameter(name = "한번에 가져올 갯수") int size,
+            @Parameter(name = "cursorId") Long cursorId,
+            final HttpServletRequest request
+    );
+
 
     @Operation(summary = "deal 생성", description = "deal을 생성한다.")
     @ApiResponses(value = {

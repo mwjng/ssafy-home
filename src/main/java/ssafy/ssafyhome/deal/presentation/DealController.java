@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AgentAccess;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
+import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.deal.application.DealService;
 import ssafy.ssafyhome.deal.application.request.DealCondition;
 import ssafy.ssafyhome.deal.application.response.DealsResponse;
@@ -42,6 +43,32 @@ public class DealController implements DealControllerDocs{
                 cursorId,
                 getBaseUrl(request));
         return ResponseEntity.ok().body(response);
+    }
+
+    @UserAccess
+    @GetMapping("/login/{houseId}")
+    public ResponseEntity<DealsResponse> getDealsOnLogin(
+            @AuthenticationPrincipal final AccessContext accessContext,
+            @PathVariable final Long houseId,
+            @ModelAttribute DealSearchCondition dealSearchCondition,
+            @RequestParam(required = false, defaultValue = "10") int size,
+            @RequestParam(required = false) Long cursorId,
+            final HttpServletRequest request) {
+
+        Long memberId = getMemberId(accessContext);
+
+        DealsResponse response = dealService.getDealsByHouseIdOnLogin(
+                houseId,
+                memberId,
+                DealCondition.from(dealSearchCondition),
+                size,
+                cursorId,
+                getBaseUrl(request));
+        return ResponseEntity.ok().body(response);
+    }
+
+    private Long getMemberId(final AccessContext accessContext) {
+        return accessContext != null ? accessContext.getMemberId() : null;
     }
 
     @PostMapping

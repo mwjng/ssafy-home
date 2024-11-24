@@ -20,6 +20,7 @@ import ssafy.ssafyhome.deal.domain.DealType;
 import java.util.List;
 
 import static com.querydsl.core.types.dsl.Expressions.*;
+import static com.querydsl.core.types.dsl.Expressions.FALSE;
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
 import static ssafy.ssafyhome.deal.domain.QDeal.deal;
 import static ssafy.ssafyhome.house.domain.QHouse.house;
@@ -36,9 +37,22 @@ public class DealQueryRepository {
 
     public Slice<DealQueryResponse> findDeals(Long houseId, DealCondition condition, Pageable pageable, Long cursorId) {
         List<DealQueryResponse> deals = queryFactory
-                .select(new QDealQueryResponse(deal, getLikeStatus()))
+                .select(new QDealQueryResponse(deal, FALSE))
                 .from(deal)
-                .join(deal.member, member)
+                .join(deal.member, member).fetchJoin()
+                .where(getWhereClause(houseId, condition, cursorId))
+                .orderBy(getOrderSpecifier(condition))
+                .limit(pageable.getPageSize())
+                .fetch();
+        return new SliceImpl<>(deals);
+    }
+
+    public Slice<DealQueryResponse> findDealsOnLogin(Long houseId, Long memberId, DealCondition condition, Pageable pageable, Long cursorId) {
+        List<DealQueryResponse> deals = queryFactory
+                .select(new QDealQueryResponse(deal, likeDeal.id.isNotNull()))
+                .from(deal)
+                .join(deal.member, member).fetchJoin()
+                .leftJoin(likeDeal).on(likeDeal.deal.eq(deal).and(likeDeal.member.id.eq(memberId)))
                 .where(getWhereClause(houseId, condition, cursorId))
                 .orderBy(getOrderSpecifier(condition))
                 .limit(pageable.getPageSize())
