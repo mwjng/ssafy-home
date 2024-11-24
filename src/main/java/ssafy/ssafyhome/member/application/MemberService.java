@@ -175,4 +175,11 @@ public class MemberService {
             .findMemberById(memberId)
             .orElseThrow(() -> new UserNotFoundException(NOT_FOUND_USER_ID));
     }
+
+    @Transactional
+    public void updateStatus(final Long memberId) {
+        final Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new UserNotFoundException(NOT_FOUND_USER_ID));
+        member.changeStatus();
+    }
 }

@@ -8,6 +8,7 @@ import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.question.application.QuestionService;
+import ssafy.ssafyhome.question.application.response.QuestionResponse;
 import ssafy.ssafyhome.question.application.response.QuestionsResponse;
 import ssafy.ssafyhome.question.presentation.request.QuestionRequest;
 
@@ -32,8 +33,13 @@ public class QuestionController {
         final Pageable pageable
     ) {
         return ResponseEntity.ok(
-            questionService.getQuestionById(accessContext.getMemberId(), pageable)
+            questionService.getQuestionsByMemberId(accessContext.getMemberId(), pageable)
         );
+    }
+
+    @GetMapping("/questions/{questionId}")
+    public ResponseEntity<QuestionResponse> getQuestionById(final @PathVariable Long questionId) {
+        return ResponseEntity.ok(questionService.getQuestionById(questionId));
     }
 
     @PostMapping("/questions")
