@@ -13,6 +13,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 import static org.springframework.util.StringUtils.*;
 import static ssafy.ssafyhome.member.domain.MemberStatus.ACTIVE;
+import static ssafy.ssafyhome.member.domain.MemberStatus.DORMANT;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -121,5 +122,9 @@ public class Member extends BaseEntity {
         Member member = new Member();
         member.id = id;
         return member;
+    }
+
+    public void changeStatus() {
+        this.status = status == ACTIVE ? DORMANT : ACTIVE;
     }
 }

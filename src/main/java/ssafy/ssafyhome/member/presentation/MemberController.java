@@ -166,4 +166,14 @@ public class MemberController {
         mailService.sendTemporaryPassword(member.getEmail(), temporaryPassword);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/members/{memberId}/status")
+    @AdminAccess
+    public ResponseEntity<Void> updateStatus(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @PathVariable final Long memberId
+    ) {
+        memberService.updateStatus(memberId);
+        return ResponseEntity.noContent().build();
+    }
 }
