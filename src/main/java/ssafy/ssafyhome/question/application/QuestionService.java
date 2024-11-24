@@ -41,7 +41,7 @@ public class QuestionService {
     }
 
     public QuestionResponse getQuestionById(final Long questionId) {
-        final Question question = questionRepository.findById(questionId)
+        final Question question = questionRepository.findByQuestionId(questionId)
             .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUESTION_ID));
         return QuestionResponse.of(question);
     }

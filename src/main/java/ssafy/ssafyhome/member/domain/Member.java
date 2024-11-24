@@ -74,6 +74,10 @@ public class Member extends BaseEntity {
         this.lastLogin = lastLogin;
     }
 
+    public boolean isActive() {
+        return status == ACTIVE;
+    }
+
     public void updateLoginDate(LocalDateTime loginDateTime) {
         this.lastLogin = loginDateTime;
     }

@@ -36,6 +36,7 @@ public class AuthService {
         final OAuthUserInfo userInfo = provider.getOAuthUserInfo(request.code());
 
         final Member member = findOrCreateMember(userInfo, request.getMemberRole());
+        validateMemberStatus(member);
         member.updateLoginDate(time);
 
         final AuthToken authToken = jwtProvider.generateAccessAndRefreshToken(member.getId().toString());
@@ -49,6 +50,7 @@ public class AuthService {
             .findBySocialLoginId(request.loginId())
             .orElseThrow(() -> new AuthException(INVALID_USER_ID));
 
+        validateMemberStatus(member);
         if(passwordEncoder.matches(request.password(), member.getPassword())) {
             member.updateLoginDate(time);
             final AuthToken authToken = jwtProvider.generateAccessAndRefreshToken(member.getId().toString());
@@ -71,6 +73,12 @@ public class AuthService {
     @Transactional
     public void removeRefreshToken(final String refreshToken) {
         refreshTokenRepository.deleteById(refreshToken);
+    }
+
+    private static void validateMemberStatus(final Member member) {
+        if(!member.isActive()) {
+            throw new AuthException(INVALID_MEMBER_STATUS);
+        }
     }
 
     private void validateMemberRole(final LoginRequest request) {

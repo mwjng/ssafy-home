@@ -43,6 +43,7 @@ public enum ErrorCode {
     INVALID_COMMENT_WITH_MEMBER(2012, UNAUTHORIZED, "요청한 회원과 ID에 해당하는 댓글이 없습니다."),
     INVALID_ARTICLE_WITH_MEMBER(2013, UNAUTHORIZED, "요청한 회원과 ID에 해당하는 게시글이 없습니다."),
     INVALID_QUESTION_WITH_MEMBER(2014, UNAUTHORIZED, "요청한 회원과 ID에 해당하는 질문글이 없습니다."),
+    INVALID_MEMBER_STATUS(2015, UNAUTHORIZED, "유효하지 않은 회원 상태입니다."),
     UNAUTHORIZED_NOTICE_ACCESS(2021, FORBIDDEN, "요청한 ID에 해당하는 공지사항을 설정할 권한이 없습니다."),
     UNAUTHORIZED_LIKE_REGION_ACCESS(2031, FORBIDDEN, "요청한 ID에 해당하는 관심 지역을 설정할 권한이 없습니다."),
     UNAUTHORIZED_FOLLOW_ACCESS(2040, FORBIDDEN, "팔로우 관계에 접근할 권한이 없습니다."),

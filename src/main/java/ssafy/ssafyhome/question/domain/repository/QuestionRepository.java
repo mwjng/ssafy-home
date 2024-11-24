@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import ssafy.ssafyhome.question.domain.Question;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
@@ -25,4 +26,12 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
         WHERE member.id = :memberId
     """)
     List<Question> findByMemberId(final Long memberId, final Pageable pageable);
+
+    @Query("""
+        SELECT question FROM Question question
+        LEFT JOIN FETCH question.member member
+        LEFT JOIN FETCH question.answer answer
+        WHERE question.id = :id
+    """)
+    Optional<Question> findByQuestionId(final Long id);
 }
