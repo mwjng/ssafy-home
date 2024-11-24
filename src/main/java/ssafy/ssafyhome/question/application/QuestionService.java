@@ -40,6 +40,12 @@ public class QuestionService {
             .toList());
     }
 
+    public QuestionResponse getQuestionById(final Long questionId) {
+        final Question question = questionRepository.findById(questionId)
+            .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUESTION_ID));
+        return QuestionResponse.of(question);
+    }
+
     @Transactional
     public void saveQuestion(Long memberId, String title, String content) {
         final Member member = memberRepository.findById(memberId)
@@ -58,7 +64,7 @@ public class QuestionService {
         question.changeQuestion(title, content);
     }
 
-    public QuestionsResponse getQuestionById(final Long memberId, final Pageable pageable) {
+    public QuestionsResponse getQuestionsByMemberId(final Long memberId, final Pageable pageable) {
         final List<Question> questions = questionRepository.findByMemberId(memberId, pageable.previousOrFirst());
         return new QuestionsResponse(questions.stream()
             .map(QuestionResponse::of)
