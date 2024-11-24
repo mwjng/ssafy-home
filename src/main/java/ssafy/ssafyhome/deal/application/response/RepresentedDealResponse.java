@@ -8,13 +8,15 @@ import java.time.LocalDateTime;
 public record RepresentedDealResponse(
         Integer price,
         BigDecimal exclusiveArea,
-        LocalDateTime dealDate) {
+        LocalDateTime dealDate,
+        Integer floor) {
 
     public static RepresentedDealResponse from(Deal deal) {
         return new RepresentedDealResponse(
                 deal.getPrice(),
                 deal.getExclusiveArea(),
-                deal.getDealDate()
+                deal.getDealDate(),
+                deal.getFloor()
         );
     }
 }
