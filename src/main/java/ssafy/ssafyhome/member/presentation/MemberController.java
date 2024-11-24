@@ -7,15 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.auth.domain.AccessContext;
-import ssafy.ssafyhome.auth.presentation.AgentAccess;
-import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
-import ssafy.ssafyhome.auth.presentation.MasterAccess;
-import ssafy.ssafyhome.auth.presentation.UserAccess;
+import ssafy.ssafyhome.auth.presentation.*;
 import ssafy.ssafyhome.deal.application.DealService;
 import ssafy.ssafyhome.member.application.MailService;
 import ssafy.ssafyhome.member.application.MemberService;
 import ssafy.ssafyhome.member.application.VerificationCodeService;
 import ssafy.ssafyhome.member.application.response.MemberNicknameResponse;
+import ssafy.ssafyhome.member.application.response.MembersResponse;
 import ssafy.ssafyhome.member.application.response.MyInfoResponse;
 import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.presentation.request.*;
@@ -33,6 +31,15 @@ public class MemberController {
     private final DealService dealService;
     private final VerificationCodeService verificationCodeService;
     private final MailService mailService;
+
+    @GetMapping("/members")
+    @AdminAccess
+    public ResponseEntity<MembersResponse> getAllMembers(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        final HttpServletRequest request
+    ) {
+        return ResponseEntity.ok(memberService.getAllMembers(getBaseUrl(request)));
+    }
 
     @GetMapping("/me")
     @UserAccess

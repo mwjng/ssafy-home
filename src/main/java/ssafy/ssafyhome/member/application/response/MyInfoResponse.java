@@ -2,6 +2,7 @@ package ssafy.ssafyhome.member.application.response;
 
 import ssafy.ssafyhome.member.domain.Member;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record MyInfoResponse(
@@ -14,7 +15,8 @@ public record MyInfoResponse(
     String memberRole,
     String socialType,
     String status,
-    LocalDateTime lastLogin
+    LocalDateTime lastLogin,
+    LocalDateTime createdAt
 ) {
     public static MyInfoResponse from(final Member member) {
         return new MyInfoResponse(
@@ -27,7 +29,8 @@ public record MyInfoResponse(
             member.getMemberRole().name(),
             member.getSocialType().name(),
             member.getStatus().name(),
-            member.getLastLogin()
+            member.getLastLogin(),
+            member.getCreatedAt()
         );
     }
 
@@ -42,7 +45,8 @@ public record MyInfoResponse(
             member.getMemberRole().name(),
             member.getSocialType().name(),
             member.getStatus().name(),
-            member.getLastLogin()
+            member.getLastLogin(),
+            member.getCreatedAt()
         );
     }
 }

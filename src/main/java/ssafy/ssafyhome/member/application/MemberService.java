@@ -11,6 +11,7 @@ import ssafy.ssafyhome.common.exception.BadRequestException;
 import ssafy.ssafyhome.image.application.ImageService;
 import ssafy.ssafyhome.image.domain.ImageEvent;
 import ssafy.ssafyhome.member.application.response.MemberNicknameResponse;
+import ssafy.ssafyhome.member.application.response.MembersResponse;
 import ssafy.ssafyhome.member.application.response.MyInfoResponse;
 import ssafy.ssafyhome.member.domain.Member;
 import ssafy.ssafyhome.member.domain.repository.MemberRepository;
@@ -44,14 +45,28 @@ public class MemberService {
             .orElseThrow(() -> new UserNotFoundException(NOT_FOUND_USER_ID));
     }
 
+    public MembersResponse getAllMembers(final String baseUrl) {
+        final List<MyInfoResponse> myInfoResponses = memberRepository.findAll().stream()
+            .map(member -> getMemberResponse(member, baseUrl))
+            .toList();
+        return new MembersResponse(myInfoResponses);
+    }
+
     public MyInfoResponse getMyInfo(final Long memberId, final String baseUrl) {
         final Member member = findMember(memberId);
-        final List<String> imageFileNames = imageService.getImageFileNames(member.getDirName(), PROFILE.getDirectory());
-        final List<String> imageUrlList = imageService.getImageUrlList(
-            baseUrl, PROFILE.getDirectory(), imageFileNames, member.getDirName());
+        return getMemberResponse(member, baseUrl);
+    }
+
+    private MyInfoResponse getMemberResponse(final Member member, String baseUrl) {
+        final List<String> imageUrlList = getProfileImageUrlList(baseUrl, member);
         return MyInfoResponse.of(
             member,
             imageUrlList.stream().findFirst().orElse(null));
+    }
+
+    private List<String> getProfileImageUrlList(final String baseUrl, final Member member) {
+        final List<String> imageFileNames = imageService.getImageFileNames(member.getDirName(), PROFILE.getDirectory());
+        return imageService.getImageUrlList(baseUrl, PROFILE.getDirectory(), imageFileNames, member.getDirName());
     }
 
     public Member getMemberByLoginId(final String loginId) {
