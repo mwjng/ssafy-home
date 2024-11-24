@@ -28,7 +28,6 @@ public enum ErrorCode {
     DUPLICATED_LIKE_DEAL(1070, BAD_REQUEST, "이미 존재하는 관심 매물입니다."),
     DUPLICATED_LIKE_HOUSE(1070, BAD_REQUEST, "이미 존재하는 관심 House 입니다."),
     DUPLICATED_LIKE_ARTICLE(1070, BAD_REQUEST, "이미 존재하는 관심 Article 입니다."),
-    DUPLICATED_FOLLOWING(1042, BAD_REQUEST, "이미 존재하는 팔로우 관계입니다."),
 
     INVALID_AUTHORITY(2001, FORBIDDEN, "해당 리소스에 접근할 권한이 없습니다."),
     INVALID_USER_ID(2002, UNAUTHORIZED, "아이디가 존재하지 않습니다."),
@@ -50,7 +49,6 @@ public enum ErrorCode {
     UNAUTHORIZED_DEAL_ACCESS(2060, FORBIDDEN, "요청한 ID에 해당하는 매물을 설정할 권한이 없습니다."),
     UNAUTHORIZED_LIKE_HOUSE_ACCESS(2070, FORBIDDEN, "요청한 ID에 해당하는 관심 House를 설정할 권한이 없습니다."),
     UNAUTHORIZED_LIKE_DEAL_ACCESS(2100, FORBIDDEN, "요청한 ID에 해당하는 관심 매물을 설정할 권한이 없습니다."),
-    UNAUTHORIZED_DEAL_ACCESS(2060, FORBIDDEN, "요청한 ID에 해당하는 매물을 설정할 권한이 없습니다."),
 
     NOT_FOUND_USER_ID(3001, NOT_FOUND, "요청한 ID에 해당하는 사용자가 존재하지 않습니다."),
     NOT_FOUND_USER_LOGIN_ID(3002, NOT_FOUND, "요청한 Login ID에 해당하는 사용자가 존재하지 않습니다."),
