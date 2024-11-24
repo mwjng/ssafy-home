@@ -88,8 +88,8 @@ public class Deal extends BaseEntity {
         this.floor = dealUpdateRequest.floor();
         this.deposit = dealUpdateRequest.deposit();
         this.price = dealUpdateRequest.price();
-        this.status = dealUpdateRequest.status();
         if (this.status == PENDING && dealUpdateRequest.status() == COMPLETED) {
+            this.status = dealUpdateRequest.status();
             this.dealDate = now();
         }
         this.type = dealUpdateRequest.type();

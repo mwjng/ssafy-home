@@ -8,9 +8,6 @@ import java.math.BigDecimal;
 
 public record DealUpdateRequest(
 
-        @NotNull(message = "dealId 값을 입력해주세요.")
-        Long dealId,
-
         @NotNull(message = "houseId 값을 입력해주세요.")
         Long houseId,
 
