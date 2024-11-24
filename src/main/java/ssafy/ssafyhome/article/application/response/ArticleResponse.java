@@ -15,7 +15,7 @@ public record ArticleResponse(
         Long commentCount,
         List<String> imageUrl,
         LocalDateTime createdAt,
-        LocalDateTime modified_at
+        LocalDateTime modifiedAt
 ) {
     public static ArticleResponse of(Article article, Long likeCount, Long commentCount, List<String> imageUrl) {
         return new ArticleResponse(
