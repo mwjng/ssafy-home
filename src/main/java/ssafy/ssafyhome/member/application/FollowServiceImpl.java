@@ -62,7 +62,7 @@ public class FollowServiceImpl implements FollowService {
 
     @Transactional
     public void deleteFollowing(final Long memberId, final Long followId) {
-        final Follow follow = followRepository.findById(followId).orElseThrow(() -> new FollowException(NOT_FOUND_FOLLOWER));
+        final Follow follow = followRepository.findById(followId).orElseThrow(() -> new FollowException(NOT_FOUND_FOLLOWING));
 
         if(!follow.getFollowing().getId().equals(memberId)){
             throw new FollowException(UNAUTHORIZED_FOLLOW_ACCESS);
