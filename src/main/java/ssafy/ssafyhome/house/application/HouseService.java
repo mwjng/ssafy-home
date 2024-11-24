@@ -2,6 +2,7 @@ package ssafy.ssafyhome.house.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,9 +38,14 @@ public class HouseService {
     private final ImageService imageService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public HousesResponse searchAll(final Long memberId, final HouseSearchRequest request, final String baseUrl) {
+    public HousesResponse searchAll(
+        final Long memberId,
+        final HouseSearchRequest request,
+        final Pageable pageable,
+        final String baseUrl
+    ) {
         List<HouseAllQueryResponse> houseQueryResponses = houseQueryRepository
-                .findAllWithLikeStatus(memberId, request.toHouseSearchCondition());
+                .findAllWithLikeStatus(memberId, request.toHouseSearchCondition(), pageable.previousOrFirst());
 
         List<Long> houseIds = houseQueryResponses.stream()
                 .map(HouseAllQueryResponse::house)
@@ -69,6 +75,7 @@ public class HouseService {
 
         return HouseAllResponse.of(
                 house,
+                houseQueryResponse.region(),
                 houseDealsMap.get(house.getId()),
                 getHouseImageUrlList(baseUrl, house),
                 houseQueryResponse.likeStatus()

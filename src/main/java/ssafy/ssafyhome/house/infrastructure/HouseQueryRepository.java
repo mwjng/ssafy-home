@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import ssafy.ssafyhome.deal.domain.Deal;
 import ssafy.ssafyhome.deal.domain.DealStatus;
@@ -28,18 +29,25 @@ public class HouseQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<HouseAllQueryResponse> findAllWithLikeStatus(final Long memberId, final HouseSearchCondition condition) {
+    public List<HouseAllQueryResponse> findAllWithLikeStatus(
+        final Long memberId,
+        final HouseSearchCondition condition,
+        final Pageable pageable
+    ) {
         return createBaseQuery(memberId)
-                .select(new QHouseAllQueryResponse(
-                        house,
-                        getLikeStatus(memberId)))
-                .where(
-                        sidoEq(condition.sido()),
-                        gugunEq(condition.gugun()),
-                        dongEq(condition.dong()),
-                        typeEq(condition.type())
-                )
-                .fetch();
+            .select(new QHouseAllQueryResponse(
+                house,
+                region,
+                getLikeStatus(memberId)))
+            .where(
+                sidoEq(condition.sido()),
+                gugunEq(condition.gugun()),
+                dongEq(condition.dong()),
+                typeEq(condition.type())
+            )
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
     }
 
     public List<Deal> findLatestDealsByHouseIds(final List<Long> houseIds) {
@@ -57,13 +65,13 @@ public class HouseQueryRepository {
     public HouseDetailsQueryResponse findOne(Long memberId, Long houseId) {
         return createBaseQuery(memberId)
                 .select(new QHouseDetailsQueryResponse(house, getLikeStatus(memberId)))
-                .from(house)
+                .from(house).leftJoin(house.region)
                 .where(idEq(houseId))
                 .fetchOne();
     }
 
     private JPAQuery<?> createBaseQuery(Long memberId) {
-        JPAQuery<?> query = queryFactory.from(house);
+        JPAQuery<?> query = queryFactory.from(house).leftJoin(house.region);
         if (memberId != null) {
             query.leftJoin(likeHouse)
                     .on(likeHouse.house.eq(house).and(likeHouse.member.id.eq(memberId)));
@@ -91,7 +99,8 @@ public class HouseQueryRepository {
         return dong != null ? region.dong.eq(dong) : null;
     }
 
-    private BooleanExpression typeEq(final HouseType type) {
-        return type != null ? house.type.eq(type) : null;
+    private BooleanExpression typeEq(final List<HouseType> types) {
+        return (types != null && !types.isEmpty()) ? house.type.in(types) : null;
     }
+
 }

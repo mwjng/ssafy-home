@@ -3,6 +3,7 @@ package ssafy.ssafyhome.house.presentation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,11 +36,13 @@ public class HouseController implements HouseControllerDocs{
     @GetMapping
     public ResponseEntity<HousesResponse> getHouses(
         @Valid @ModelAttribute final HouseSearchRequest houseSearchRequest,
+        final Pageable pageable,
         final HttpServletRequest httpServletRequest
     ) {
         return ResponseEntity.ok(houseService.searchAll(
-                null,
+            null,
             houseSearchRequest,
+            pageable,
             getBaseUrl(httpServletRequest)
         ));
     }
@@ -61,11 +64,13 @@ public class HouseController implements HouseControllerDocs{
     public ResponseEntity<HousesResponse> getHousesLike(
             @AuthenticationPrincipal AccessContext accessContext,
             @Valid @ModelAttribute final HouseSearchRequest houseSearchRequest,
+            final Pageable pageable,
             final HttpServletRequest httpServletRequest) {
 
         return ResponseEntity.ok(houseService.searchAll(
                 accessContext.getMemberId(),
                 houseSearchRequest,
+                pageable,
                 getBaseUrl(httpServletRequest)
         ));
     }

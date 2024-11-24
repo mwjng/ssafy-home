@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public interface HouseControllerDocs {
     })
     ResponseEntity<HousesResponse> getHouses(
             @Parameter(name = "검색 조건") final HouseSearchRequest houseSearchRequest,
+            final Pageable pageable,
             final HttpServletRequest request);
 
     @Operation(summary = "houseId에 해당하는 house 조회", description = "houseId에 해당하는 house의 정보를 반환한다.")
