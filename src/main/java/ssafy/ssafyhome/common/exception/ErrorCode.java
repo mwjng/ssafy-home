@@ -42,6 +42,7 @@ public enum ErrorCode {
     FAIL_OAUTH_USERINFO_RETRIEVAL(2011, UNAUTHORIZED, "회원 정보를 가져오는데 실패했습니다."),
     INVALID_COMMENT_WITH_MEMBER(2012, UNAUTHORIZED, "요청한 회원과 ID에 해당하는 댓글이 없습니다."),
     INVALID_ARTICLE_WITH_MEMBER(2013, UNAUTHORIZED, "요청한 회원과 ID에 해당하는 게시글이 없습니다."),
+    INVALID_QUESTION_WITH_MEMBER(2014, UNAUTHORIZED, "요청한 회원과 ID에 해당하는 질문글이 없습니다."),
     UNAUTHORIZED_NOTICE_ACCESS(2021, FORBIDDEN, "요청한 ID에 해당하는 공지사항을 설정할 권한이 없습니다."),
     UNAUTHORIZED_LIKE_REGION_ACCESS(2031, FORBIDDEN, "요청한 ID에 해당하는 관심 지역을 설정할 권한이 없습니다."),
     UNAUTHORIZED_FOLLOW_ACCESS(2040, FORBIDDEN, "팔로우 관계에 접근할 권한이 없습니다."),
@@ -57,6 +58,7 @@ public enum ErrorCode {
     NOT_FOUND_VERIFICATION_CODE(3005, NOT_FOUND, "요청에 해당하는 검증 코드가 존재하지 않습니다."),
     NOT_FOUND_HOUSE_ID(3006, NOT_FOUND, "요청한 ID에 해당하는 집이 존재하지 않습니다."),
     NOT_FOUND_REGION(3007, NOT_FOUND, "해당 지역이 존재하지 않습니다."),
+    NOT_FOUND_QUESTION_ID(3008, NOT_FOUND, "요청한 ID에 해당하는 질문이 존재하지 않습니다."),
 
     NOT_FOUND_NOTICE(3020, NOT_FOUND, "요청한 ID에 해당하는 공지사항이 없습니다."),
     NOT_FOUND_LIKE_REGION(3030, NOT_FOUND, "요청한 ID에 해당하는 관심 지역이 없습니다."),
