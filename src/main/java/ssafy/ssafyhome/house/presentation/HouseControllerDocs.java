@@ -8,23 +8,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
-import ssafy.ssafyhome.article.application.response.ArticlesResponse;
-import ssafy.ssafyhome.article.presentation.request.ArticleCreateRequest;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
-import ssafy.ssafyhome.house.application.response.HouseResponse;
+import ssafy.ssafyhome.house.application.response.HouseAllResponse;
+import ssafy.ssafyhome.house.application.response.HouseDetailsResponse;
 import ssafy.ssafyhome.house.application.response.HousesResponse;
 import ssafy.ssafyhome.house.presentation.request.HouseRequest;
 import ssafy.ssafyhome.house.presentation.request.HouseSearchRequest;
 
 import java.util.List;
-
-import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
 
 @Tag(name = "House 컨트롤러", description = "house에 대한 등록, 수정, 삭제, 목록, 상세보기등 전반적인 처리를 하는 클래스.")
 public interface HouseControllerDocs {
@@ -44,11 +40,11 @@ public interface HouseControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청을 성공적으로 처리하였다.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = HouseResponse.class))),
+                            schema = @Schema(implementation = HouseDetailsResponse.class))),
             @ApiResponse(responseCode = "404", description = "해당 house를 찾을 수 없습니다.")
     })
     @GetMapping("/{houseId}")
-    ResponseEntity<HouseResponse> getHouse(
+    ResponseEntity<HouseDetailsResponse> getHouse(
             @PathVariable final Long houseId,
             final HttpServletRequest httpServletRequest
     );

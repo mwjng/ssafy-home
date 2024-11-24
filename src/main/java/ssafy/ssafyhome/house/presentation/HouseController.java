@@ -6,15 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ssafy.ssafyhome.article.application.ArticleService;
 import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.presentation.AdminAccess;
 import ssafy.ssafyhome.auth.presentation.AgentAccess;
 import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
+import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.deal.application.DealService;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.house.application.HouseService;
-import ssafy.ssafyhome.house.application.response.HouseResponse;
+import ssafy.ssafyhome.house.application.response.HouseDetailsResponse;
 import ssafy.ssafyhome.house.application.response.HousesResponse;
 import ssafy.ssafyhome.house.presentation.request.HouseRequest;
 import ssafy.ssafyhome.house.presentation.request.HouseSearchRequest;
@@ -38,19 +38,49 @@ public class HouseController implements HouseControllerDocs{
         final HttpServletRequest httpServletRequest
     ) {
         return ResponseEntity.ok(houseService.searchAll(
+                null,
             houseSearchRequest,
             getBaseUrl(httpServletRequest)
         ));
     }
 
     @GetMapping("/{houseId}")
-    public ResponseEntity<HouseResponse> getHouse(
+    public ResponseEntity<HouseDetailsResponse> getHouse(
         @PathVariable final Long houseId,
-        final HttpServletRequest httpServletRequest
+        final HttpServletRequest httpServletRequest) {
+
+        return ResponseEntity.ok(houseService.search(
+               null,
+                houseId,
+                getBaseUrl(httpServletRequest)
+        ));
+    }
+
+    @UserAccess
+    @GetMapping("/like-check")
+    public ResponseEntity<HousesResponse> getHousesLike(
+            @AuthenticationPrincipal AccessContext accessContext,
+            @Valid @ModelAttribute final HouseSearchRequest houseSearchRequest,
+            final HttpServletRequest httpServletRequest) {
+
+        return ResponseEntity.ok(houseService.searchAll(
+                accessContext.getMemberId(),
+                houseSearchRequest,
+                getBaseUrl(httpServletRequest)
+        ));
+    }
+
+    @UserAccess
+    @GetMapping("/like-check/{houseId}")
+    public ResponseEntity<HouseDetailsResponse> getHouseLike(
+            @AuthenticationPrincipal AccessContext accessContext,
+            @PathVariable final Long houseId,
+            final HttpServletRequest httpServletRequest
     ) {
         return ResponseEntity.ok(houseService.search(
-            houseId,
-            getBaseUrl(httpServletRequest)
+                accessContext.getMemberId(),
+                houseId,
+                getBaseUrl(httpServletRequest)
         ));
     }
 

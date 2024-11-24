@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.common.exception.BadRequestException;
-import ssafy.ssafyhome.house.application.response.HouseResponse;
-import ssafy.ssafyhome.house.application.response.HousesResponse;
+import ssafy.ssafyhome.deal.domain.Deal;
+import ssafy.ssafyhome.house.application.response.*;
 import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.repository.HouseRepository;
 import ssafy.ssafyhome.house.infrastructure.HouseQueryRepository;
@@ -18,7 +18,9 @@ import ssafy.ssafyhome.image.domain.ImageEvent;
 import ssafy.ssafyhome.region.domain.Region;
 import ssafy.ssafyhome.region.domain.repository.RegionRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static ssafy.ssafyhome.common.exception.ErrorCode.NOT_FOUND_HOUSE_ID;
 import static ssafy.ssafyhome.common.exception.ErrorCode.NOT_FOUND_REGION;
@@ -35,24 +37,59 @@ public class HouseService {
     private final ImageService imageService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public HousesResponse searchAll(final HouseSearchRequest request, final String baseUrl) {
-        final List<HouseResponse> houseResponses = houseQueryRepository
-            .findHousesByRegionAndType(request.toHouseSearchCondition()).stream()
-            .map(house -> getHouseResponse(baseUrl, house))
-            .toList();
+    public HousesResponse searchAll(final Long memberId, final HouseSearchRequest request, final String baseUrl) {
+        List<HouseAllQueryResponse> houseQueryResponses = houseQueryRepository
+                .findAllWithLikeStatus(memberId, request.toHouseSearchCondition());
+
+        List<Long> houseIds = houseQueryResponses.stream()
+                .map(HouseAllQueryResponse::house)
+                .map(House::getId)
+                .toList();
+
+        List<Deal> latestDeals = houseQueryRepository.findLatestDealsByHouseIds(houseIds);
+
+        Map<Long, Deal> houseDealsMap = new HashMap<>();
+        latestDeals.forEach(deal -> houseDealsMap.put(deal.getHouse().getId(), deal));
+
+        List<HouseAllResponse> houseResponses = houseQueryResponses
+                .stream()
+                .map(houseQueryResponse ->
+                        getHouseAllResponse(baseUrl, houseQueryResponse, houseDealsMap))
+                .toList();
 
         return new HousesResponse(houseResponses);
     }
 
-    public HouseResponse search(final Long houseId, final String baseUrl) {
-        final House house = houseRepository.findById(houseId)
-            .orElseThrow(() -> new BadRequestException(NOT_FOUND_HOUSE_ID));
-        return getHouseResponse(baseUrl, house);
+    private HouseAllResponse getHouseAllResponse(
+            final String baseUrl,
+            final HouseAllQueryResponse houseQueryResponse,
+            final Map<Long, Deal> houseDealsMap) {
+
+        House house = houseQueryResponse.house();
+
+        return HouseAllResponse.of(
+                house,
+                houseDealsMap.get(house.getId()),
+                getHouseImageUrlList(baseUrl, house),
+                houseQueryResponse.likeStatus()
+        );
     }
 
-    private HouseResponse getHouseResponse(final String baseUrl, final House house) {
-        final List<String> imageUrlList = getHouseImageUrlList(baseUrl, house);
-        return HouseResponse.of(house, imageUrlList);
+    public HouseDetailsResponse search(final Long memberId, final Long houseId, final String baseUrl) {
+        if(!houseRepository.existsById(houseId)) {
+            throw new BadRequestException(NOT_FOUND_HOUSE_ID);
+        }
+        return getHouseDetailsResponse(baseUrl, houseQueryRepository.findOne(memberId, houseId));
+    }
+
+    private HouseDetailsResponse getHouseDetailsResponse(
+            final String baseUrl,
+            final HouseDetailsQueryResponse houseDetailsQueryResponse) {
+        House house = houseDetailsQueryResponse.house();
+        return HouseDetailsResponse.of(
+                house,
+                getHouseImageUrlList(baseUrl, house),
+                houseDetailsQueryResponse.likeStatus());
     }
 
     private List<String> getHouseImageUrlList(final String baseUrl, final House house) {
