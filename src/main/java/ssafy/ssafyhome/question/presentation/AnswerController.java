@@ -39,7 +39,7 @@ public class AnswerController {
         @PathVariable final Long questionId,
         @Valid @RequestBody final AnswerRequest answerRequest
     ) {
-        answerService.updateAnswer(questionId, answerRequest.content());
+        answerService.updateAnswer(questionId, answerRequest);
         return ResponseEntity.noContent().build();
     }
 }

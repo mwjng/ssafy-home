@@ -1,6 +1,7 @@
 package ssafy.ssafyhome.question.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.ssafyhome.common.auditing.BaseEntity;
@@ -27,6 +28,10 @@ public class Answer extends BaseEntity {
     private Question question;
 
     public Answer(final String content) {
+        this.content = content;
+    }
+
+    public void updateAnswer(final String content) {
         this.content = content;
     }
 }

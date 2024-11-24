@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ###
-POST localhost:8080/members/admin
+POST localhost:8080/admin
 Content-Type: application/json
 Authorization: Bearer
 

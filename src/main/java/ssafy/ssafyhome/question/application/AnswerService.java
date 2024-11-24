@@ -28,9 +28,10 @@ public class AnswerService {
         question.registerAnswer(answer);
     }
 
-    public void updateAnswer(final Long questionId, final String content) {
+    public void updateAnswer(final Long questionId, final AnswerRequest request) {
         final Question question = questionRepository.findById(questionId)
             .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUESTION_ID));
-        question.registerAnswer(new Answer(content));
+        final Answer answer = question.getAnswer();
+        answer.updateAnswer(request.content());
     }
 }

@@ -1,6 +1,9 @@
 package ssafy.ssafyhome.question.application.response;
 
+import ssafy.ssafyhome.question.domain.Answer;
 import ssafy.ssafyhome.question.domain.Question;
+
+import java.util.Optional;
 
 public record QuestionResponse(
     Long questionId,
@@ -15,7 +18,9 @@ public record QuestionResponse(
             question.getTitle(),
             question.getContent(),
             question.getMember().getNickname(),
-            question.getAnswer().getContent()
+            Optional.ofNullable(question.getAnswer())
+                .map(Answer::getContent)
+                .orElse(null)
         );
     }
 }
