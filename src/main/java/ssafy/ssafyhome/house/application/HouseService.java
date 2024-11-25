@@ -95,6 +95,7 @@ public class HouseService {
         House house = houseDetailsQueryResponse.house();
         return HouseDetailsResponse.of(
                 house,
+                house.getRegion(),
                 getHouseImageUrlList(baseUrl, house),
                 houseDetailsQueryResponse.likeStatus());
     }

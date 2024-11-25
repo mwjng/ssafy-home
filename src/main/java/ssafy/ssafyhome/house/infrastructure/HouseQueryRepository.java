@@ -65,7 +65,7 @@ public class HouseQueryRepository {
     public HouseDetailsQueryResponse findOne(Long memberId, Long houseId) {
         return createBaseQuery(memberId)
                 .select(new QHouseDetailsQueryResponse(house, getLikeStatus(memberId)))
-                .from(house).leftJoin(house.region)
+                .join(house.region, region).fetchJoin()
                 .where(idEq(houseId))
                 .fetchOne();
     }
