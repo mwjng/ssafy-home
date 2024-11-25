@@ -9,10 +9,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 import ssafy.ssafyhome.deal.application.request.*;
-import ssafy.ssafyhome.deal.application.response.DealQueryResponse;
-import ssafy.ssafyhome.deal.application.response.LikeCountResponse;
-import ssafy.ssafyhome.deal.application.response.QDealQueryResponse;
-import ssafy.ssafyhome.deal.application.response.QLikeCountResponse;
+import ssafy.ssafyhome.deal.application.response.*;
 import ssafy.ssafyhome.deal.domain.Deal;
 import ssafy.ssafyhome.deal.domain.DealStatus;
 import ssafy.ssafyhome.deal.domain.DealType;
@@ -84,6 +81,22 @@ public class DealQueryRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
         return new SliceImpl<>(deals);
+    }
+
+    public List<AverageQueryResponse> getAverageByHouseId(final Long houseId) {
+        return queryFactory
+                .select(new QAverageQueryResponse(
+                        deal.exclusiveArea,
+                        deal.type,
+                        deal.price.avg()
+                ))
+                .from(deal)
+                .where(
+                        deal.house.id.eq(houseId),
+                        deal.status.eq(DealStatus.COMPLETED)
+                )
+                .groupBy(deal.exclusiveArea, deal.type)
+                .fetch();
     }
 
     private BooleanExpression getWhereClause(final Long houseId, final DealCondition condition, final Long cursorId) {

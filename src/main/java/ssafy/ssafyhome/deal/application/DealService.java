@@ -10,12 +10,9 @@ import ssafy.ssafyhome.auth.domain.AccessContext;
 import ssafy.ssafyhome.auth.domain.Authority;
 import ssafy.ssafyhome.common.exception.BadRequestException;
 import ssafy.ssafyhome.deal.application.request.DealCondition;
-import ssafy.ssafyhome.deal.application.response.DealQueryResponse;
-import ssafy.ssafyhome.deal.application.response.DealResponse;
-import ssafy.ssafyhome.deal.application.response.LikeCountResponse;
+import ssafy.ssafyhome.deal.application.response.*;
 import ssafy.ssafyhome.deal.exception.DealException;
 import ssafy.ssafyhome.deal.infrastructure.DealQueryRepository;
-import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.domain.Deal;
 import ssafy.ssafyhome.deal.domain.repository.DealRepository;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
@@ -29,8 +26,10 @@ import ssafy.ssafyhome.member.domain.repository.MemberRepository;
 import ssafy.ssafyhome.member.presentation.response.MyDealResponse;
 import ssafy.ssafyhome.member.presentation.response.MyDealsResponse;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 import static ssafy.ssafyhome.auth.domain.Authority.*;
@@ -63,7 +62,7 @@ public class DealService {
             final DealCondition condition,
             final int size,
             final Long cursorId,
-            final String baseUrl){
+            final String baseUrl) {
 
         if (!houseRepository.existsById(houseId)) {
             throw new BadRequestException(NOT_FOUND_HOUSE_ID);
@@ -126,6 +125,25 @@ public class DealService {
         return likeCounts.get(dealQueryResponse.deal().getId());
     }
 
+    public AverageResponses getAverageByHouseId(final Long houseId) {
+        Map<BigDecimal, List<AverageQueryResponse>> groupedByArea = dealQueryRepository.getAverageByHouseId(houseId).stream()
+                .collect(groupingBy(AverageQueryResponse::exclusiveArea));
+
+        List<AverageResponse> averageResponses = groupedByArea.entrySet().stream()
+                .map(this::getAverageResponse)
+                .toList();
+
+        return new AverageResponses(averageResponses);
+    }
+
+    private AverageResponse getAverageResponse(final Map.Entry<BigDecimal, List<AverageQueryResponse>> entry) {
+        BigDecimal exclusiveArea = entry.getKey();
+        List<TypeAndPrice> typeAndPrices = entry.getValue().stream()
+                .map(TypeAndPrice::from)
+                .toList();
+        return AverageResponse.of(exclusiveArea, typeAndPrices);
+    }
+
     @Transactional
     public void createDeal(
             final Long memberId,
@@ -151,7 +169,7 @@ public class DealService {
         final Deal deal = dealRepository.findById(dealId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_DEAL_ID));
 
-        if(!deal.getMember().getId().equals(agentId)){
+        if (!deal.getMember().getId().equals(agentId)) {
             throw new DealException(UNAUTHORIZED_DEAL_ACCESS);
         }
 
@@ -162,7 +180,7 @@ public class DealService {
     }
 
     @Transactional
-    public void deleteDeal(final AccessContext accessContext ,final Long dealId) {
+    public void deleteDeal(final AccessContext accessContext, final Long dealId) {
         final Deal deal = dealRepository.findById(dealId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_DEAL_ID));
 
@@ -175,7 +193,7 @@ public class DealService {
         final Long memberId = accessContext.getMemberId();
         final Authority authority = accessContext.getAuthority();
 
-        if(authority.equals(AGENT) && !deal.getMember().getId().equals(memberId)){
+        if (authority.equals(AGENT) && !deal.getMember().getId().equals(memberId)) {
             throw new DealException(UNAUTHORIZED_DEAL_ACCESS);
         }
     }

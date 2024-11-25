@@ -11,6 +11,8 @@ import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
 import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.deal.application.DealService;
 import ssafy.ssafyhome.deal.application.request.DealCondition;
+import ssafy.ssafyhome.deal.application.response.AverageResponse;
+import ssafy.ssafyhome.deal.application.response.AverageResponses;
 import ssafy.ssafyhome.deal.application.response.DealsResponse;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
@@ -42,6 +44,12 @@ public class DealController implements DealControllerDocs{
                 size,
                 cursorId,
                 getBaseUrl(request));
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/average/{houseId}")
+    public ResponseEntity<AverageResponses> getAverage(@PathVariable final Long houseId){
+        AverageResponses response = dealService.getAverageByHouseId(houseId);
         return ResponseEntity.ok().body(response);
     }
 
