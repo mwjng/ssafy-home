@@ -18,7 +18,7 @@ import static ssafy.ssafyhome.ai.domain.PromptType.*;
 @RequiredArgsConstructor
 @RequestMapping("/chat")
 @RestController
-public class ChatController {
+public class AiController {
 
     private final OpenAiChatModel chatModel;
     private final PromptTemplateLoader promptLoader;
