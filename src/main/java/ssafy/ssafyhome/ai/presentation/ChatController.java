@@ -7,12 +7,17 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-import ssafy.ssafyhome.ai.domain.PromptType;
 import ssafy.ssafyhome.ai.presentation.request.ChatRequest;
 import ssafy.ssafyhome.ai.presentation.request.PromptRequest;
 import ssafy.ssafyhome.common.util.PromptTemplateLoader;
+
+import java.util.function.Predicate;
+
+import static org.springframework.http.HttpStatus.*;
+import static ssafy.ssafyhome.ai.domain.PromptType.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/chat")
@@ -23,17 +28,27 @@ public class ChatController {
     private final PromptTemplateLoader promptLoader;
 
     @PostMapping
-    public Flux<String> chatStream(@Valid @RequestBody final ChatRequest chatRequest) {
-        String customPrompt = "당신은 부동산 매물과 관련된 정보를 제공하는 AI 도우미입니다. 질문에 명확하고 간결하게 답변해주세요.\n";
-        Prompt prompt = new Prompt(new UserMessage(customPrompt + chatRequest.message()));
-        return this.chatModel.stream(prompt)
-                .map(chatResponse -> chatResponse.getResult().getOutput().getContent());
+    public ResponseEntity<Flux<String>> chatStream(@Valid @RequestBody final ChatRequest chatRequest) {
+        Prompt prompt = new Prompt(new UserMessage(promptLoader.getPromptResource(DEFAULT) + chatRequest.message()));
+        return getBody(prompt);
     }
 
     @PostMapping("/prompts")
     public ResponseEntity<Flux<String>> promptChatStream(@RequestBody final PromptRequest promptRequest) {
-        Prompt prompt = new Prompt(new UserMessage("안녕"));
-        return ResponseEntity.ok().body(this.chatModel.stream(prompt)
+        Prompt prompt = new Prompt(new UserMessage(promptLoader.getPromptResource(promptRequest.promptType())));
+        return getBody(prompt);
+    }
+
+    @Async
+    private ResponseEntity<Flux<String>> getBody(final Prompt prompt) {
+        return ResponseEntity.status(CREATED).body(this.chatModel.stream(prompt)
+                .filter(checkNullResponse())
                 .map(chatResponse -> chatResponse.getResult().getOutput().getContent()));
+    }
+
+    private Predicate<ChatResponse> checkNullResponse() {
+        return chatResponse -> chatResponse != null && chatResponse.getResult() != null &&
+                chatResponse.getResult().getOutput() != null &&
+                chatResponse.getResult().getOutput().getContent() != null;
     }
 }
