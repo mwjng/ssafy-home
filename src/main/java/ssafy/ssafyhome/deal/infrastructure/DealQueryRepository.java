@@ -14,11 +14,15 @@ import ssafy.ssafyhome.deal.domain.Deal;
 import ssafy.ssafyhome.deal.domain.DealStatus;
 import ssafy.ssafyhome.deal.domain.DealType;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.querydsl.core.types.dsl.Expressions.*;
 import static com.querydsl.core.types.dsl.Expressions.FALSE;
+import static java.time.LocalDate.*;
 import static ssafy.ssafyhome.common.querydsl.QueryDslUtil.*;
+import static ssafy.ssafyhome.deal.domain.DealStatus.*;
 import static ssafy.ssafyhome.deal.domain.QDeal.deal;
 import static ssafy.ssafyhome.house.domain.QHouse.house;
 import static ssafy.ssafyhome.like.domain.QLikeDeal.likeDeal;
@@ -92,8 +96,9 @@ public class DealQueryRepository {
                 ))
                 .from(deal)
                 .where(
-                        deal.house.id.eq(houseId),
-                        deal.status.eq(DealStatus.COMPLETED)
+                        houseIdEq(houseId),
+                        statusEq(COMPLETED),
+                        dealDateLt(now(), 5L)
                 )
                 .groupBy(deal.exclusiveArea, deal.type)
                 .fetch();
@@ -159,14 +164,6 @@ public class DealQueryRepository {
         }
     }
 
-    private BooleanExpression getLikeStatus() {
-        return asBoolean(queryFactory
-                .selectOne()
-                .from(likeDeal)
-                .where(likeDeal.deal.eq(deal))
-                .fetchFirst() != null);
-    }
-
     private BooleanExpression betweenExclusiveAreaRange(ExclusiveAreaRange exclusiveArea) {
         return exclusiveArea != null ? deal.exclusiveArea.between(exclusiveArea.min(), exclusiveArea.max()) : null;
     }
@@ -189,5 +186,10 @@ public class DealQueryRepository {
 
     private BooleanExpression typeEq(DealType type) {
         return type != null ? deal.type.eq(type) : null;
+    }
+
+    private BooleanExpression dealDateLt(final LocalDate date, final Long year) {
+        return date != null ?
+                year != null ? deal.dealDate.after(date.minusYears(year).atStartOfDay()) : deal.dealDate.after(date.atStartOfDay()) : null;
     }
 }

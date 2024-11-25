@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import ssafy.ssafyhome.ai.presentation.request.ChatRequest;
 
-import java.util.Map;
-
 @RequiredArgsConstructor
 @RequestMapping("/chat")
 @RestController
@@ -19,13 +17,9 @@ public class ChatController {
     private final OpenAiChatModel chatModel;
 
     @PostMapping
-    public Map<String,String> generate(@RequestBody ChatRequest chatRequest) {
-        return Map.of("generation", this.chatModel.call(chatRequest.message()));
-    }
-
-    @GetMapping("/ai/generateStream")
-    public Flux<ChatResponse> generateStream(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
-        Prompt prompt = new Prompt(new UserMessage(message));
+    public Flux<ChatResponse> generateStream(@RequestBody ChatRequest chatRequest) {
+        String customPrompt = "당신은 부동산 매물과 관련된 정보를 제공하는 AI 도우미입니다. 질문에 명확하고 간결하게 답변해주세요.\n";
+        Prompt prompt = new Prompt(new UserMessage(customPrompt + chatRequest.message()));
         return this.chatModel.stream(prompt);
     }
 }
