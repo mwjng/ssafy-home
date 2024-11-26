@@ -1,0 +1,54 @@
+###
+GET localhost:8080/members/nickname
+Authorization: Bearer
+
+###
+GET localhost:8080/members/myinfo
+Authorization: Bearer
+
+###
+GET localhost:8080/auth/reissue
+
+###
+POST localhost:8080/members
+Content-Type: application/json
+
+{
+  "nickname": "ssafy2",
+  "name": "ssafy",
+  "email": "dbtjsdn980818@naver.com",
+  "loginId": "abcdef",
+  "password": "abc123",
+  "memberRole": "user"
+}
+
+###
+POST localhost:8080/admin
+Content-Type: application/json
+Authorization: Bearer
+
+{
+  "nickname": "admin",
+  "name": "admin",
+  "email": "abc@abc",
+  "loginId": "admin",
+  "password": "abc123"
+}
+
+###
+POST localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "loginId": "master",
+  "password": "abc123"
+}
+
+###
+POST localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "loginId": "abcde",
+  "password": "abc123"
+}

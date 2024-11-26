@@ -1,0 +1,18 @@
+<included>
+    <appender name="file-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>[%highlight(%level)][%d{MM-dd HH:mm:ss}][%magenta(%8X{CORRELATION_ID})][%highlight(%replace(%logger{20}){'\\w\\.', ''})] %msg %n</pattern>
+            <charset>utf-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>../../board-project-logs/%d{yyyy-MM-dd}.log</fileNamePattern>
+            <totalSizeCap>2GB</totalSizeCap>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+    </appender>
+</included>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<included>
+    <appender name="console-appender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%highlight(%level)][%d{MM-dd HH:mm:ss}][%magenta(%8X{CORRELATION_ID})][%highlight(%replace(%logger{20}){'\\w\\.', ''})] %msg %n</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+</included>
