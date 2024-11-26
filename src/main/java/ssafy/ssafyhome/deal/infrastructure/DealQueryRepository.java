@@ -139,11 +139,6 @@ public class DealQueryRepository {
     }
 
     private OrderSpecifier<?> getOrderSpecifier(DealCondition dealCondition) {
-
-        if(dealCondition.getDealStatus() == COMPLETED){
-            return deal.dealDate.desc();
-        }
-
         if (dealCondition == null) {
             return deal.id.desc();
         }
@@ -155,6 +150,8 @@ public class DealQueryRepository {
         }
 
         switch (sortCondition) {
+            case DEAL_DATE_NEWEST_FIRST:
+                return deal.dealDate.desc();
             case NEWEST_FIRST:
                 return deal.createdAt.desc();
             case OLDEST_FIRST:
