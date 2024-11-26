@@ -139,6 +139,11 @@ public class DealQueryRepository {
     }
 
     private OrderSpecifier<?> getOrderSpecifier(DealCondition dealCondition) {
+
+        if(dealCondition.getDealStatus() == COMPLETED){
+            return deal.dealDate.desc();
+        }
+
         if (dealCondition == null) {
             return deal.id.desc();
         }

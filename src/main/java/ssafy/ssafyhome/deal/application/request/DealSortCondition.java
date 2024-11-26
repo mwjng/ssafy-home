@@ -1,6 +1,7 @@
 package ssafy.ssafyhome.deal.application.request;
 
 public enum DealSortCondition {
+    DEAL_DATE_NEWEST_FIRST, // 거래 완료 일자가 최신 순
     NEWEST_FIRST,       // 최신순
     OLDEST_FIRST,       // 오래된순
     HIGHEST_DEPOSIT,    // 보증금 비싼순

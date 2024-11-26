@@ -94,7 +94,7 @@ public class HouseQueryRepository {
         JPAQuery<?> query = queryFactory.from(house).leftJoin(house.region);
         if (memberId != null) {
             query.leftJoin(likeHouse)
-                    .on(likeHouse.house.eq(house).and(likeHouse.member.id.eq(memberId)));
+                    .on(likeHouse.house.id.eq(house.id).and(likeHouse.member.id.eq(memberId)));
         }
         return query;
     }
