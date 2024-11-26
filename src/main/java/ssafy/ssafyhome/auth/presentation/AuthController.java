@@ -51,8 +51,8 @@ public class AuthController {
         final ResponseCookie cookie = ResponseCookie.from("refresh-token", authToken.refreshToken())
             .maxAge(COOKIE_MAX_AGE_SECONDS)
             .httpOnly(true)
-            .sameSite("None")
-            .secure(false)
+            // .sameSite("None")
+            // .secure(false)
             .build();
 
         return ResponseEntity.status(CREATED)
