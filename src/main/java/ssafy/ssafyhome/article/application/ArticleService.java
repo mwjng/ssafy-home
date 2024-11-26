@@ -47,26 +47,12 @@ public class ArticleService {
 
     public ArticlesResponse getMemberArticles(final Long memberId, final Pageable pageable, final String baseUrl) {
         final List<Article> articles = articleRepository.findByMemberId(memberId, pageable.previousOrFirst());
-        final List<Long> articleIds = getArticleIds(articles);
-
-        final Map<Long, Long> commentCountMap = getCountMap(articleRepository.countArticleCommentsByArticleIds(articleIds));
-        final Map<Long, Long> likeCountMap = getCountMap(articleRepository.countArticleLikesByArticleIds(articleIds));
-
-        return new ArticlesResponse(articles.stream()
-            .map(getArticleResponse(baseUrl, likeCountMap, commentCountMap))
-            .toList());
+        return getArticlesResponse(baseUrl, articles);
     }
 
     public ArticlesResponse getHouseArticles(final Long houseId, final Pageable pageable, final String baseUrl) {
         final List<Article> articles = articleRepository.findByHouseId(houseId, pageable.previousOrFirst());
-        final List<Long> articleIds = getArticleIds(articles);
-
-        final Map<Long, Long> commentCountMap = getCountMap(articleRepository.countArticleCommentsByArticleIds(articleIds));
-        final Map<Long, Long> likeCountMap = getCountMap(articleRepository.countArticleLikesByArticleIds(articleIds));
-
-        return new ArticlesResponse(articles.stream()
-            .map(getArticleResponse(baseUrl, likeCountMap, commentCountMap))
-            .toList());
+        return getArticlesResponse(baseUrl, articles);
     }
 
     private Map<Long, Long> getCountMap(final List<ArticleCount> articleRepository) {
@@ -82,18 +68,22 @@ public class ArticleService {
 
     public ArticlesResponse getLikeArticles(final Long memberId, final Pageable pageable, final String baseUrl) {
         final List<Article> articles = articleRepository.findLikeArticlesByMemberId(memberId, pageable);
+        return getArticlesResponse(baseUrl, articles);
+    }
+
+    private ArticlesResponse getArticlesResponse(final String baseUrl, final List<Article> articles) {
         final List<Long> articleIds = getArticleIds(articles);
 
         final Map<Long, Long> commentCountMap = getCountMap(articleRepository.countArticleCommentsByArticleIds(articleIds));
         final Map<Long, Long> likeCountMap = getCountMap(articleRepository.countArticleLikesByArticleIds(articleIds));
 
         return new ArticlesResponse(articles.stream()
-            .map(getArticleResponse(baseUrl, likeCountMap, commentCountMap))
+            .map(article -> getArticleResponse(article, baseUrl, likeCountMap, commentCountMap))
             .toList());
     }
 
-    private Function<Article, ArticleResponse> getArticleResponse(final String baseUrl, final Map<Long, Long> likeCountMap, final Map<Long, Long> commentCountMap) {
-        return article -> ArticleResponse.of(
+    private ArticleResponse getArticleResponse(final Article article, final String baseUrl, final Map<Long, Long> likeCountMap, final Map<Long, Long> commentCountMap) {
+        return ArticleResponse.of(
             article,
             likeCountMap.getOrDefault(article.getId(), 0L),
             commentCountMap.getOrDefault(article.getId(), 0L),
@@ -107,6 +97,16 @@ public class ArticleService {
     ) {
         final List<String> imageFileNames = imageService.getImageFileNames(dirName, imgDir);
         return imageService.getImageUrlList(baseUrl, imgDir, imageFileNames, dirName);
+    }
+
+    public ArticleResponse getArticle(final Long articleId, final String baseUrl) {
+        final Article article = articleRepository.findById(articleId)
+            .orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTICLE_ID));
+
+        final Map<Long, Long> commentCountMap = getCountMap(articleRepository.countArticleCommentsByArticleIds(List.of(articleId)));
+        final Map<Long, Long> likeCountMap = getCountMap(articleRepository.countArticleLikesByArticleIds(List.of(articleId)));
+
+        return getArticleResponse(article, baseUrl, likeCountMap, commentCountMap);
     }
 
     @Transactional

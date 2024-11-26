@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.article.application.ArticleService;
+import ssafy.ssafyhome.article.application.response.ArticleResponse;
 import ssafy.ssafyhome.article.application.response.ArticlesResponse;
 import ssafy.ssafyhome.article.presentation.request.ArticleCreateRequest;
 import ssafy.ssafyhome.article.presentation.request.ArticleUpdateRequest;
@@ -82,6 +83,14 @@ public class ArticleController implements ArticleControllerDocs {
             images
         );
         return ResponseEntity.status(CREATED).build();
+    }
+
+    @GetMapping("/articles/{articleId}")
+    public ResponseEntity<ArticleResponse> getArticle(
+        @PathVariable final Long articleId,
+        final HttpServletRequest request
+    ) {
+        return ResponseEntity.ok(articleService.getArticle(articleId, getBaseUrl(request)));
     }
 
     @PutMapping("/articles/{articleId}")
