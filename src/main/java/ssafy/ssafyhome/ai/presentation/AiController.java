@@ -11,6 +11,9 @@ import ssafy.ssafyhome.ai.application.PromptResponse;
 import ssafy.ssafyhome.ai.domain.PromptType;
 import ssafy.ssafyhome.ai.presentation.request.ChatRequest;
 import ssafy.ssafyhome.ai.presentation.request.PromptRequest;
+import ssafy.ssafyhome.auth.domain.AccessContext;
+import ssafy.ssafyhome.auth.presentation.AuthenticationPrincipal;
+import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.common.ai.PromptTemplateLoader;
 
 import static ssafy.ssafyhome.ai.domain.PromptType.*;
@@ -24,22 +27,27 @@ public class AiController {
     private final PromptTemplateLoader promptLoader;
 
     @PostMapping
-    public ResponseEntity<PromptResponse> chat(@Valid @RequestBody final ChatRequest chatRequest) {
+    @UserAccess
+    public ResponseEntity<PromptResponse> chat(
+            @AuthenticationPrincipal AccessContext accessContext,
+            @Valid@RequestBody final ChatRequest chatRequest) {
         return ResponseEntity.ok().body(PromptResponse.from(getResponse(DEFAULT, chatRequest.message())));
     }
 
     @PostMapping("/prompts")
-    public ResponseEntity<PromptResponse> prompt(@RequestBody final PromptRequest promptRequest) {
+    @UserAccess
+    public ResponseEntity<PromptResponse> prompt(
+            @AuthenticationPrincipal AccessContext accessContext,
+            @RequestBody final PromptRequest promptRequest) {
         return ResponseEntity.ok().body(PromptResponse.from(getResponse(promptRequest.promptType(), null)));
     }
 
     private String getResponse(final PromptType promptType, final String message) {
         SystemMessage systemMessage = new SystemMessage(promptLoader.getSystemPromptResource(promptType));
-        UserMessage userMessage = getUserMessage(promptType, message);
+        if(message == null){
+            return chatModel.call(systemMessage);
+        }
+        UserMessage userMessage = new UserMessage(message);
         return chatModel.call(systemMessage, userMessage);
-    }
-
-    private UserMessage getUserMessage(final PromptType promptType, final String message) {
-        return promptType == DEFAULT ? new UserMessage(message) : null;
     }
 }
