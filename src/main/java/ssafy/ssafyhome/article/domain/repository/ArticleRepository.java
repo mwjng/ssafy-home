@@ -44,7 +44,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
         FROM Article article
         LEFT JOIN article.comments comment
         WHERE comment.article.id IN :articleIds
-        GROUP BY comment.article.id
+        GROUP BY article.id
     """)
     List<ArticleCount> countArticleCommentsByArticleIds(final List<Long> articleIds);
 
@@ -54,7 +54,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
         FROM Article article
         LEFT JOIN article.likeArticles likeArticle
         WHERE likeArticle.article.id IN :articleIds
-        GROUP BY likeArticle.article.id
+        GROUP BY article.id
     """)
     List<ArticleCount> countArticleLikesByArticleIds(List<Long> articleIds);
 }
