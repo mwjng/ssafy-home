@@ -80,6 +80,17 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/me/all")
+    @UserAccess
+    public ResponseEntity<Void> updateMyInfos(
+        @AuthenticationPrincipal final AccessContext accessContext,
+        @Valid @RequestPart final MemberUpdateAllRequest memberUpdateAllRequest,
+        @RequestPart final MultipartFile file
+    ) {
+        memberService.updateMyInfos(accessContext.getMemberId(), memberUpdateAllRequest, file);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/members/nickname")
     @UserAccess
     public ResponseEntity<MemberNicknameResponse> getMemberNickname(

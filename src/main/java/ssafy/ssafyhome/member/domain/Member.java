@@ -106,6 +106,8 @@ public class Member extends BaseEntity {
         }
     }
 
+    public void changeEmail(String email) { this.email = email; }
+
     public void changeProfileImageUrl(String imageUrl) {
         this.dirName = imageUrl;
     }
