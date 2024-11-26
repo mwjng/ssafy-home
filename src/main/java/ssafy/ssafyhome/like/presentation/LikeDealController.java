@@ -24,7 +24,7 @@ public class LikeDealController implements LikeDealControllerDocs{
     @UserAccess
     @GetMapping
     public ResponseEntity<LikeDealsResponse> searchAll(
-            final AccessContext accessContext,
+            @AuthenticationPrincipal final AccessContext accessContext,
             @RequestParam(required = false, defaultValue = "10") int size,
             @RequestParam(required = false) Long cursorId,
             HttpServletRequest request) {

@@ -15,7 +15,6 @@ public class LikeArticleController implements LikeArticleControllerDocs {
 
     private final LikeArticleService likeArticleService;
 
-
     @PostMapping("/articles/{articleId}/like")
     @UserAccess
     public ResponseEntity<Void> createLikeArticle(

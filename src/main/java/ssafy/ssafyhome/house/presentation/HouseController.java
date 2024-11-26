@@ -15,10 +15,13 @@ import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.deal.application.DealService;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.house.application.HouseService;
+import ssafy.ssafyhome.house.application.request.HouseNameSearchCondition;
 import ssafy.ssafyhome.house.application.response.HouseDetailsResponse;
+import ssafy.ssafyhome.house.application.response.HouseNamesResponse;
 import ssafy.ssafyhome.house.application.response.HousesResponse;
 import ssafy.ssafyhome.house.presentation.request.HouseRequest;
 import ssafy.ssafyhome.house.presentation.request.HouseSearchRequest;
+import ssafy.ssafyhome.house.presentation.request.SearchHouseNameRequest;
 
 import java.util.List;
 
@@ -32,6 +35,15 @@ public class HouseController implements HouseControllerDocs{
 
     private final HouseService houseService;
     private final DealService dealService;
+
+    @GetMapping("/name")
+    public ResponseEntity<HouseNamesResponse> getHouseNames(
+            @Valid @ModelAttribute final SearchHouseNameRequest searchHouseNameRequest){
+
+        HouseNamesResponse response = houseService
+                .searchByHouseName(HouseNameSearchCondition.from(searchHouseNameRequest));
+        return ResponseEntity.ok().body(response);
+    }
 
     @GetMapping
     public ResponseEntity<HousesResponse> getHouses(

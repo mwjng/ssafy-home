@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.ssafyhome.common.exception.BadRequestException;
 import ssafy.ssafyhome.deal.domain.Deal;
+import ssafy.ssafyhome.house.application.request.HouseNameSearchCondition;
 import ssafy.ssafyhome.house.application.response.*;
 import ssafy.ssafyhome.house.domain.House;
 import ssafy.ssafyhome.house.domain.repository.HouseRepository;
@@ -37,6 +38,14 @@ public class HouseService {
     private final RegionRepository regionRepository;
     private final ImageService imageService;
     private final ApplicationEventPublisher eventPublisher;
+
+
+    public HouseNamesResponse searchByHouseName(final HouseNameSearchCondition condition) {
+        List<HouseNameResponse> houseNames = houseQueryRepository.searchByHouseName(condition).stream()
+                .map(HouseNameResponse::from)
+                .toList();
+        return new HouseNamesResponse(houseNames);
+    }
 
     public HousesResponse searchAll(
         final Long memberId,

@@ -8,11 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import ssafy.ssafyhome.deal.domain.Deal;
 import ssafy.ssafyhome.deal.domain.DealStatus;
+import ssafy.ssafyhome.house.application.request.HouseNameSearchCondition;
 import ssafy.ssafyhome.house.application.request.HouseSearchCondition;
-import ssafy.ssafyhome.house.application.response.HouseAllQueryResponse;
-import ssafy.ssafyhome.house.application.response.HouseDetailsQueryResponse;
-import ssafy.ssafyhome.house.application.response.QHouseAllQueryResponse;
-import ssafy.ssafyhome.house.application.response.QHouseDetailsQueryResponse;
+import ssafy.ssafyhome.house.application.response.*;
 import ssafy.ssafyhome.house.domain.HouseType;
 
 import java.util.List;
@@ -28,6 +26,23 @@ import static ssafy.ssafyhome.region.domain.QRegion.region;
 public class HouseQueryRepository {
 
     private final JPAQueryFactory queryFactory;
+
+    public List<HouseNameQueryResponse> searchByHouseName(final HouseNameSearchCondition condition) {
+        return queryFactory
+                .select(new QHouseNameQueryResponse(
+                        house.id,
+                        house.name,
+                        house.region,
+                        house.road,
+                        house.jibun,
+                        house.bonbun,
+                        house.bubun,
+                        house.type))
+                .from(house)
+                .join(house.region, region)
+                .where(nameContains(condition.name()), typeEq(condition.types()))
+                .fetch();
+    }
 
     public List<HouseAllQueryResponse> findAllWithLikeStatus(
         final Long memberId,
@@ -103,4 +118,7 @@ public class HouseQueryRepository {
         return (types != null && !types.isEmpty()) ? house.type.in(types) : null;
     }
 
+    private BooleanExpression nameContains(final String name) {
+        return name != null ? house.name.contains(name) : null;
+    }
 }
