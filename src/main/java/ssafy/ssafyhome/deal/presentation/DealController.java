@@ -14,13 +14,11 @@ import ssafy.ssafyhome.deal.application.request.DealCondition;
 import ssafy.ssafyhome.deal.application.response.AverageResponses;
 import ssafy.ssafyhome.deal.application.response.DealResponse;
 import ssafy.ssafyhome.deal.application.response.DealsResponse;
-import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.deal.presentation.request.DealSearchCondition;
 import ssafy.ssafyhome.deal.presentation.request.DealUpdateRequest;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
 import static ssafy.ssafyhome.common.util.UrlUtil.getBaseUrl;
 
 @RequiredArgsConstructor
