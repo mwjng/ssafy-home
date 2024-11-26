@@ -95,17 +95,6 @@ public class DealController implements DealControllerDocs{
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping
-    @AgentAccess
-    public ResponseEntity<Void> createDeal(
-        @AuthenticationPrincipal final AccessContext accessContext,
-        @RequestPart final DealCreateRequest dealCreateRequest,
-        @RequestPart(required = false) final List<MultipartFile> images) {
-
-        dealService.createDeal(accessContext.getMemberId(), dealCreateRequest, images);
-        return ResponseEntity.status(CREATED).build();
-    }
-
     @PutMapping("/{dealId}")
     @AgentAccess
     public ResponseEntity<Void> updateDeal(

@@ -109,7 +109,6 @@ public interface HouseControllerDocs {
     })
     ResponseEntity<Void> createDeal(
             final AccessContext accessContext,
-            @Parameter(name = "houseId") final Long houseId,
             @Parameter(name = "deal") final DealCreateRequest dealCreateRequest,
             @Parameter(name = "image") final List<MultipartFile> images
     );

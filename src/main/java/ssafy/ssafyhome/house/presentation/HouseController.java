@@ -15,7 +15,6 @@ import ssafy.ssafyhome.auth.presentation.UserAccess;
 import ssafy.ssafyhome.deal.application.DealService;
 import ssafy.ssafyhome.deal.presentation.request.DealCreateRequest;
 import ssafy.ssafyhome.house.application.HouseService;
-import ssafy.ssafyhome.house.application.request.HouseNameSearchCondition;
 import ssafy.ssafyhome.house.application.response.HouseDetailsResponse;
 import ssafy.ssafyhome.house.application.response.HouseNamesResponse;
 import ssafy.ssafyhome.house.application.response.HousesResponse;
@@ -134,11 +133,10 @@ public class HouseController implements HouseControllerDocs{
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{houseId}/deals")
+    @PostMapping("/deals")
     @AgentAccess
     public ResponseEntity<Void> createDeal(
         @AuthenticationPrincipal final AccessContext accessContext,
-        @PathVariable final Long houseId,
         @RequestPart final DealCreateRequest dealCreateRequest,
         @RequestPart(required = false) final List<MultipartFile> images
     ) {

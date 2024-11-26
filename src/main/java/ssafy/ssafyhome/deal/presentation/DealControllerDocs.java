@@ -61,18 +61,6 @@ public interface DealControllerDocs {
             final HttpServletRequest request
     );
 
-
-    @Operation(summary = "deal 생성", description = "deal을 생성한다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "요청이 처리되어서 새로운 리소스가 생성되었다."),
-            @ApiResponse(responseCode = "403", description = "해당 리소스에 접근할 권한이 없습니다.")
-    })
-    ResponseEntity<Void> createDeal(
-            final AccessContext accessContext,
-            @Parameter(name = "deal") final DealCreateRequest dealCreateRequest,
-            @Parameter(name = "image") List<MultipartFile> images
-    );
-
     @Operation(summary = "deal 수정", description = "deal을 수정한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "처리를 성공하였지만, 클라이언트에게 돌려줄 콘텐츠가 없다."),
