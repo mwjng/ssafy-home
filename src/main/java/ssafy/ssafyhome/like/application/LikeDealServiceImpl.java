@@ -92,6 +92,10 @@ public class LikeDealServiceImpl {
 
         LikeDeal likeDeal = likeDealRepository.findByMemberIdAndDealId(memberId, dealId);
 
+        if(likeDeal == null){
+            throw new LikeDealException(NOT_FOUND_LIKE_DEAL);
+        }
+
         likeDealRepository.delete(likeDeal);
     }
 }
