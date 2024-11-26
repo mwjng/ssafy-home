@@ -48,12 +48,6 @@ public class DealController implements DealControllerDocs{
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/average/{houseId}")
-    public ResponseEntity<AverageResponses> getAverage(@PathVariable final Long houseId){
-        AverageResponses response = dealService.getAverageByHouseId(houseId);
-        return ResponseEntity.ok().body(response);
-    }
-
     @UserAccess
     @GetMapping("/house/login/{houseId}")
     public ResponseEntity<DealsResponse> getDealsOnLogin(
@@ -76,10 +70,6 @@ public class DealController implements DealControllerDocs{
         return ResponseEntity.ok().body(response);
     }
 
-    private Long getMemberId(final AccessContext accessContext) {
-        return accessContext != null ? accessContext.getMemberId() : null;
-    }
-
     @GetMapping("/{dealId}")
     public ResponseEntity<DealResponse> searchDeal(
             @PathVariable final Long dealId,
@@ -96,6 +86,12 @@ public class DealController implements DealControllerDocs{
             HttpServletRequest request
         ){
         DealResponse response = dealService.getDealByDealId(dealId, accessContext.getMemberId(), getBaseUrl(request));
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/average/{houseId}")
+    public ResponseEntity<AverageResponses> getAverage(@PathVariable final Long houseId){
+        AverageResponses response = dealService.getAverageByHouseId(houseId);
         return ResponseEntity.ok().body(response);
     }
 
@@ -130,5 +126,9 @@ public class DealController implements DealControllerDocs{
 
         dealService.deleteDeal(accessContext, dealId);
         return ResponseEntity.noContent().build();
+    }
+
+    private Long getMemberId(final AccessContext accessContext) {
+        return accessContext != null ? accessContext.getMemberId() : null;
     }
 }

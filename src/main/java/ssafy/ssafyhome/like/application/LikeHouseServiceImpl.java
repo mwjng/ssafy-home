@@ -65,6 +65,10 @@ public class LikeHouseServiceImpl implements LikeHouseService {
         }
         LikeHouse likeHouse = likeHouseRepository.findByMemberIdAndHouseId(memberId, houseId);
 
+        if(likeHouse == null){
+            throw new LikeHouseException(NOT_FOUND_LIKE_HOUSE_ID);
+        }
+
         if (!likeHouse.getMember().getId().equals(memberId)) {
             throw new LikeHouseException(UNAUTHORIZED_LIKE_HOUSE_ACCESS);
         }
