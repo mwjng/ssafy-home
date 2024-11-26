@@ -39,7 +39,6 @@ public class HouseService {
     private final ImageService imageService;
     private final ApplicationEventPublisher eventPublisher;
 
-
     public HouseNamesResponse searchByHouseName(final HouseNameSearchCondition condition) {
         List<HouseNameResponse> houseNames = houseQueryRepository.searchByHouseName(condition).stream()
                 .map(HouseNameResponse::from)

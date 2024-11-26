@@ -41,7 +41,7 @@ public class HouseController implements HouseControllerDocs{
             @Valid @ModelAttribute final SearchHouseNameRequest searchHouseNameRequest){
 
         HouseNamesResponse response = houseService
-                .searchByHouseName(HouseNameSearchCondition.from(searchHouseNameRequest));
+                .searchByHouseName(searchHouseNameRequest.toHouseNameSearchCondition());
         return ResponseEntity.ok().body(response);
     }
 
