@@ -14,10 +14,10 @@ POST localhost:8080/members
 Content-Type: application/json
 
 {
-  "nickname": "ssafy2",
-  "name": "ssafy",
+  "nickname": "yeseul",
+  "name": "예슬",
   "email": "dbtjsdn980818@naver.com",
-  "loginId": "abcdef",
+  "loginId": "yeseul",
   "password": "abc123",
   "memberRole": "user"
 }
