@@ -50,7 +50,7 @@ public class AuthController {
         final AuthToken authToken = authService.login(loginRequest, now());
         final ResponseCookie cookie = ResponseCookie.from("refresh-token", authToken.refreshToken())
             .maxAge(COOKIE_MAX_AGE_SECONDS)
-            .httpOnly(true)
+            .httpOnly(false)
             .sameSite("None")
             .secure(false)
             .build();
