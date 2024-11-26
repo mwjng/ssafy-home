@@ -40,7 +40,12 @@ public class HouseQueryRepository {
                         house.type))
                 .from(house)
                 .join(house.region, region)
-                .where(nameContains(condition.name()), typeEq(condition.types()))
+                .where(
+                        sidoEq(condition.sido()),
+                        gugunEq(condition.gugun()),
+                        dongEq(condition.dong()),
+                        nameContains(condition.name()),
+                        typeEq(condition.types()))
                 .fetch();
     }
 

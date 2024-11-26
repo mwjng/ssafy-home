@@ -10,14 +10,16 @@ import java.util.Objects;
 public record SearchHouseNameRequest(
         @NotBlank(message = "house 이름을 입력해주세요.")
         String name,
-
+        String sido,
+        String gugun,
+        String dong,
         List<String> types) {
 
     public HouseNameSearchCondition toHouseNameSearchCondition() {
         if (types == null || types.isEmpty()) {
-            return new HouseNameSearchCondition(name, null);
+            return new HouseNameSearchCondition(name, sido, gugun, dong, null);
         }
-        return new HouseNameSearchCondition(name, getHouseType());
+        return new HouseNameSearchCondition(name, sido, gugun, dong, getHouseType());
     }
 
     private List<HouseType> getHouseType() {
